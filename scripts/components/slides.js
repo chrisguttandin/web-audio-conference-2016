@@ -1,4 +1,4 @@
-System.register(['angular2/core', './slide'], function(exports_1, context_1) {
+System.register(['angular2/core', './slide.js'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -54,7 +54,7 @@ System.register(['angular2/core', './slide'], function(exports_1, context_1) {
                     this.slides.first.isDisplayed = true;
                 };
                 __decorate([
-                    core_1.ContentChildren(slide_1.SlideComponent), 
+                    core_1.ContentChildren(slide_1.SlideComponent),
                     __metadata('design:type', core_1.QueryList)
                 ], SlidesComponent.prototype, "slides", void 0);
                 SlidesComponent = __decorate([
@@ -62,7 +62,7 @@ System.register(['angular2/core', './slide'], function(exports_1, context_1) {
                         selector: 'slides',
                         styles: ["\n        div {\n            height: 100%;\n            width: 100%;\n        }\n    "],
                         template: "\n        <div (window:keyup)=\"handleKeyUp($event)\">\n            <ng-content></ng-content>\n        </div>\n    "
-                    }), 
+                    }),
                     __metadata('design:paramtypes', [])
                 ], SlidesComponent);
                 return SlidesComponent;
