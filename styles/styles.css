@@ -1,0 +1,44 @@
+body {
+    background-color: #333;
+    color: #FFD;
+    font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    line-height: 8vmin;
+    margin: 4vmin;
+}
+
+a {
+    color: #FFD;
+}
+
+.center {
+    text-align: center;
+}
+
+span.center {
+    display: block;
+}
+
+h1 {
+    font-size: 10vmin;
+    line-height: 16vmin;
+}
+
+h2 {
+    font-size: 8vmin;
+}
+
+h3,
+li,
+p,
+span.center {
+    font-size: 5vmin;
+}
+
+code {
+    font-size: 3.5vmin;
+}
+
+pre[class*="language-"] {
+    padding: 0.5em 1em !important;
+}
