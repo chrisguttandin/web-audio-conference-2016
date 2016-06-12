@@ -8,15 +8,14 @@ body {
 }
 
 a {
-    color: #FFD;
+    color: inherit;
 }
 
-.center {
-    text-align: center;
-}
-
-span.center {
-    display: block;
+div,
+h3,
+li,
+p {
+    font-size: 5vmin;
 }
 
 h1 {
@@ -26,19 +25,4 @@ h1 {
 
 h2 {
     font-size: 8vmin;
-}
-
-h3,
-li,
-p,
-span.center {
-    font-size: 5vmin;
-}
-
-code {
-    font-size: 3.5vmin;
-}
-
-pre[class*="language-"] {
-    padding: 0.5em 1em !important;
 }
