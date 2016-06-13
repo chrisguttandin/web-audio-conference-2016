@@ -6403,7 +6403,7 @@ System.register("app/components/slide-one/component.js", ["@angular/core"], func
           moduleId: __moduleName,
           selector: 'slide-one',
           styles: ['a,h1,h2,span{text-align:center}a,span{display:block}'],
-          template: `<h1>*Non Audio Signal Processing*</h1>
+          template: `<h1>Non Audio Signal Processing</h1>
 <span>or</span>
 <h2>What else can we do<br>with the Web Audio API?</h2>
 <a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>
