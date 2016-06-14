@@ -6,7 +6,8 @@ for(var t=0;t<d.length;t++)d[t].script==g&&(s&&s.script==g&&(s=null),d.splice(t,
 //# sourceMappingURL=system-csp-production.js.map
 
 System.config({
-    bundles: {
+    baseURL: '/web-audio-conference-2016,
+                    bundles: {
         'app/bundle.js': [
             'app/main.js'
         ]
