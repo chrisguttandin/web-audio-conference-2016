@@ -1790,7 +1790,7 @@ System.register("app/components/slides/component.js", ["@angular/router", "@angu
           this._router = router;
         }
         SlidesComponent.prototype._goToNextSlide = function() {
-          if (this._index < routes_1.SlidesRoutes.length) {
+          if (this._index < routes_1.SlidesRoutes.length - 1) {
             this._router.navigate([("" + (this._index + 1))], {relativeTo: this._activatedRoute});
           }
         };
@@ -1827,7 +1827,6 @@ System.register("app/components/slides/component.js", ["@angular/router", "@angu
         SlidesComponent = __decorate([core_1.Component({
           directives: [router_1.ROUTER_DIRECTIVES],
           moduleId: __moduleName,
-          selector: 'slides',
           styles: ['div{height:100%;width:100%}'],
           template: `<div (swipeleft)="handleSwipeLeft()" (swiperight)="handleSwipeRight()" (window:keyup)="handleKeyUp($event)">
     <router-outlet></router-outlet>
@@ -1875,7 +1874,6 @@ System.register("app/components/slide-eight/component.js", ["@angular/core", "..
         SlideEightComponent = __decorate([core_1.Component({
           directives: [component_1.PrismComponent],
           moduleId: __moduleName,
-          selector: 'slide-eight',
           template: `<h2>Downsampling</h2>
 <prism language="javascript">var downsampleContext = new OfflineAudioContext(
         anyValidNumber,
@@ -1924,7 +1922,6 @@ System.register("app/components/slide-eighteen/component.js", ["@angular/core"],
         function SlideEighteenComponent() {}
         SlideEighteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-eighteen',
           template: `<h2>Not so good parts</h2>
 <ul>
     <li>current state is broken</li>
@@ -1969,7 +1966,6 @@ System.register("app/components/slide-eleven/component.js", ["@angular/core"], f
         function SlideElevenComponent() {}
         SlideElevenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-eleven',
           template: `<h2>Apply FFT</h2>
 <ul>
     <li>will not work</li>
@@ -2014,7 +2010,6 @@ System.register("app/components/slide-fifteen/component.js", ["@angular/core"], 
         function SlideFifteenComponent() {}
         SlideFifteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-fifteen',
           template: `<h2>Apply Gate</h2>
 <ul>
     <li>no native support (yet)</li>
@@ -2060,7 +2055,6 @@ System.register("app/components/slide-five/component.js", ["@angular/core"], fun
         function SlideFiveComponent() {}
         SlideFiveComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-five',
           template: `<h2>audfprint</h2>
 <ul>
     <li>uses landmark based fingerprinting</li>
@@ -2106,7 +2100,6 @@ System.register("app/components/slide-four/component.js", ["@angular/core"], fun
         function SlideFourComponent() {}
         SlideFourComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-four',
           template: `<h2>Audio Fingerprinting</h2>
 <ul>
     <li>retrieve (a) unique value(s) from an audio signal</li>
@@ -2152,7 +2145,6 @@ System.register("app/components/slide-fourteen/component.js", ["@angular/core"],
         function SlideFourteenComponent() {}
         SlideFourteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-fourteen',
           template: `<h2>Find Maximum</h2>
 <ul>
     <li>no native support</li>
@@ -2197,7 +2189,6 @@ System.register("app/components/slide-nine/component.js", ["@angular/core"], fun
         function SlideNineComponent() {}
         SlideNineComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-nine',
           template: `<h2>Downmixing</h2>
 <ul>
     <li>works as well</li>
@@ -2242,7 +2233,6 @@ System.register("app/components/slide-nineteen/component.js", ["@angular/core"],
         function SlideNineteenComponent() {}
         SlideNineteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-nineteen',
           template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2>
 <ul>
     <li>sends serial data via the audio output</li>
@@ -2286,7 +2276,6 @@ System.register("app/components/slide-one/component.js", ["@angular/core"], func
         function SlideOneComponent() {}
         SlideOneComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-one',
           styles: ['a,h1,h2,span{text-align:center}a,span{display:block}'],
           template: `<h1>Non Audio Signal Processing</h1>
 <span>or</span>
@@ -2331,7 +2320,6 @@ System.register("app/components/slide-seven/component.js", ["@angular/core"], fu
         function SlideSevenComponent() {}
         SlideSevenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-seven',
           template: `<h2>Downsampling</h2>
 <ul>
     <li>can be done easily</li>
@@ -2376,7 +2364,6 @@ System.register("app/components/slide-seventeen/component.js", ["@angular/core"]
         function SlideSeventeenComponent() {}
         SlideSeventeenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-seventeen',
           template: `<h2>Good parts</h2>
 <ul>
     <li>runs possibly faster because it's natively implemented</li>
@@ -2424,7 +2411,6 @@ System.register("app/components/slide-six/component.js", ["@angular/core"], func
         function SlideSixComponent() {}
         SlideSixComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-six',
           template: `<h2>audfprint's algorithm</h2>
 <ul>
     <li>downsample audio to 11025 Hz</li>
@@ -2475,7 +2461,6 @@ System.register("app/components/slide-sixteen/component.js", ["@angular/core"], 
         function SlideSixteenComponent() {}
         SlideSixteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-sixteen',
           template: `<h2>Apply IIR Filter</h2>
 <ul>
     <li>works now in Chrome &amp; Opera</li>
@@ -2525,7 +2510,6 @@ System.register("app/components/slide-ten/component.js", ["@angular/core", "../p
         SlideTenComponent = __decorate([core_1.Component({
           directives: [component_1.PrismComponent],
           moduleId: __moduleName,
-          selector: 'slide-ten',
           template: `<h2>Downmixing</h2>
 <prism language="javascript">var downmixContext = new OfflineAudioContext(
         1,
@@ -2579,7 +2563,6 @@ System.register("app/components/slide-thirteen/component.js", ["@angular/core"],
         function SlideThirteenComponent() {}
         SlideThirteenComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-thirteen',
           template: `<h2>Apply FFT</h2>
 <ul>
     <li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li>
@@ -2624,7 +2607,6 @@ System.register("app/components/slide-three/component.js", ["@angular/core"], fu
         function SlideThreeComponent() {}
         SlideThreeComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-three',
           template: `<h2>Agenda</h2>
 <ul>
     <li>Audio Fingerprinting with audfprint</li>
@@ -2728,7 +2710,6 @@ System.register("app/components/slide-twelve/component.js", ["@angular/core", ".
         SlideTwelveComponent = __decorate([core_1.Component({
           directives: [component_1.PrismComponent],
           moduleId: __moduleName,
-          selector: 'slide-twelve',
           template: `<h2>Apply FFT</h2>
 <prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
 var buffer = new Float32Array(analyser.fftSize);
@@ -2784,7 +2765,6 @@ System.register("app/components/slide-twenty/component.js", ["@angular/core"], f
         function SlideTwentyComponent() {}
         SlideTwentyComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-twenty',
           template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2>
 <ul>
     <li>detecting motion by playing frequencies above the audible range and analyzing their response</li>
@@ -2828,7 +2808,6 @@ System.register("app/components/slide-twenty-one/component.js", ["@angular/core"
         function SlideTwentyOneComponent() {}
         SlideTwentyOneComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-twenty-one',
           styles: ['h1{text-align:center}'],
           template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>
 `
@@ -2870,7 +2849,6 @@ System.register("app/components/slide-twenty-three/component.js", ["@angular/cor
         function SlideTwentyThreeComponent() {}
         SlideTwentyThreeComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-twenty-three',
           template: `<h2>Thank you</h2>
 <h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3>
 <h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3>
@@ -2914,7 +2892,6 @@ System.register("app/components/slide-twenty-two/component.js", ["@angular/core"
         function SlideTwentyTwoComponent() {}
         SlideTwentyTwoComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-twenty-two',
           styles: ['h1{text-align:center}'],
           template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>
 `
@@ -2956,7 +2933,6 @@ System.register("app/components/slide-two/component.js", ["@angular/core"], func
         function SlideTwoComponent() {}
         SlideTwoComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
-          selector: 'slide-two',
           template: `<h2>About me</h2>
 <h3>Christoph Guttandin</h3>
 <ul>
@@ -3112,28 +3088,12 @@ System.register("app/routes.js", ["@angular/router", "./components/app/routes"],
   };
 });
 
-System.registerDynamic("npm:@angular/router/directives/router_link.js", ["@angular/common", "@angular/core", "../router", "../router_state"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/directives/router_link.js", ["@angular/common", "@angular/core", "../router", "../router_state"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var common_1 = $__require('@angular/common');
   var core_1 = $__require('@angular/core');
   var router_1 = $__require('../router');
@@ -3179,41 +3139,34 @@ System.registerDynamic("npm:@angular/router/directives/router_link.js", ["@angul
         this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
       }
     };
-    __decorate([core_1.Input(), __metadata('design:type', String)], RouterLink.prototype, "target", void 0);
-    __decorate([core_1.Input(), __metadata('design:type', Object)], RouterLink.prototype, "queryParams", void 0);
-    __decorate([core_1.Input(), __metadata('design:type', String)], RouterLink.prototype, "fragment", void 0);
-    __decorate([core_1.HostBinding(), __metadata('design:type', String)], RouterLink.prototype, "href", void 0);
-    __decorate([core_1.Input(), __metadata('design:type', Object), __metadata('design:paramtypes', [Object])], RouterLink.prototype, "routerLink", null);
-    __decorate([core_1.HostListener('click', ['$event.button', '$event.ctrlKey', '$event.metaKey']), __metadata('design:type', Function), __metadata('design:paramtypes', [Number, Boolean, Boolean]), __metadata('design:returntype', Boolean)], RouterLink.prototype, "onClick", null);
-    RouterLink = __decorate([core_1.Directive({selector: '[routerLink]'}), __metadata('design:paramtypes', [router_1.Router, router_state_1.ActivatedRoute, common_1.LocationStrategy])], RouterLink);
+    RouterLink.decorators = [{
+      type: core_1.Directive,
+      args: [{selector: '[routerLink]'}]
+    }];
+    RouterLink.ctorParameters = [{type: router_1.Router}, {type: router_state_1.ActivatedRoute}, {type: common_1.LocationStrategy}];
+    RouterLink.propDecorators = {
+      'target': [{type: core_1.Input}],
+      'queryParams': [{type: core_1.Input}],
+      'fragment': [{type: core_1.Input}],
+      'href': [{type: core_1.HostBinding}],
+      'routerLink': [{type: core_1.Input}],
+      'onClick': [{
+        type: core_1.HostListener,
+        args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey']]
+      }]
+    };
     return RouterLink;
   }());
   exports.RouterLink = RouterLink;
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/directives/router_link_active.js", ["@angular/core", "../router", "../url_tree", "./router_link"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/directives/router_link_active.js", ["@angular/core", "../router", "../url_tree", "./router_link"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
   var core_1 = $__require('@angular/core');
   var router_1 = $__require('../router');
   var url_tree_1 = $__require('../url_tree');
@@ -3225,7 +3178,7 @@ System.registerDynamic("npm:@angular/router/directives/router_link_active.js", [
       this.element = element;
       this.renderer = renderer;
       this.classes = [];
-      this.routerLinkActiveOptions = {exact: true};
+      this.routerLinkActiveOptions = {exact: false};
       this.subscription = router.events.subscribe(function(s) {
         if (s instanceof router_1.NavigationEnd) {
           _this.update();
@@ -3268,43 +3221,31 @@ System.registerDynamic("npm:@angular/router/directives/router_link_active.js", [
         return _this.renderer.setElementClass(_this.element.nativeElement, c, isActive);
       });
     };
-    __decorate([core_1.ContentChildren(router_link_1.RouterLink), __metadata('design:type', core_1.QueryList)], RouterLinkActive.prototype, "links", void 0);
-    __decorate([core_1.Input(), __metadata('design:type', Object)], RouterLinkActive.prototype, "routerLinkActiveOptions", void 0);
-    __decorate([core_1.Input(), __metadata('design:type', Object), __metadata('design:paramtypes', [Object])], RouterLinkActive.prototype, "routerLinkActive", null);
-    RouterLinkActive = __decorate([core_1.Directive({selector: '[routerLinkActive]'}), __metadata('design:paramtypes', [router_1.Router, core_1.ElementRef, core_1.Renderer])], RouterLinkActive);
+    RouterLinkActive.decorators = [{
+      type: core_1.Directive,
+      args: [{selector: '[routerLinkActive]'}]
+    }];
+    RouterLinkActive.ctorParameters = [{type: router_1.Router}, {type: core_1.ElementRef}, {type: core_1.Renderer}];
+    RouterLinkActive.propDecorators = {
+      'links': [{
+        type: core_1.ContentChildren,
+        args: [router_link_1.RouterLink]
+      }],
+      'routerLinkActiveOptions': [{type: core_1.Input}],
+      'routerLinkActive': [{type: core_1.Input}]
+    };
     return RouterLinkActive;
   }());
   exports.RouterLinkActive = RouterLinkActive;
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/directives/router_outlet.js", ["@angular/core", "../router_outlet_map", "../shared"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/directives/router_outlet.js", ["@angular/core", "../router_outlet_map", "../shared"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  var __decorate = (this && this.__decorate) || function(decorators, target, key, desc) {
-    var c = arguments.length,
-        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-        d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-      r = Reflect.decorate(decorators, target, key, desc);
-    else
-      for (var i = decorators.length - 1; i >= 0; i--)
-        if (d = decorators[i])
-          r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-  };
-  var __metadata = (this && this.__metadata) || function(k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-      return Reflect.metadata(k, v);
-  };
-  var __param = (this && this.__param) || function(paramIndex, decorator) {
-    return function(target, key) {
-      decorator(target, key, paramIndex);
-    };
-  };
   var core_1 = $__require('@angular/core');
   var router_outlet_map_1 = $__require('../router_outlet_map');
   var shared_1 = $__require('../shared');
@@ -3350,154 +3291,20 @@ System.registerDynamic("npm:@angular/router/directives/router_outlet.js", ["@ang
       var inj = core_1.ReflectiveInjector.fromResolvedProviders(providers, this.location.parentInjector);
       this.activated = this.location.createComponent(factory, this.location.length, inj, []);
     };
-    RouterOutlet = __decorate([core_1.Directive({selector: 'router-outlet'}), __param(2, core_1.Attribute('name')), __metadata('design:paramtypes', [router_outlet_map_1.RouterOutletMap, core_1.ViewContainerRef, String])], RouterOutlet);
+    RouterOutlet.decorators = [{
+      type: core_1.Directive,
+      args: [{selector: 'router-outlet'}]
+    }];
+    RouterOutlet.ctorParameters = [{type: router_outlet_map_1.RouterOutletMap}, {type: core_1.ViewContainerRef}, {
+      type: undefined,
+      decorators: [{
+        type: core_1.Attribute,
+        args: ['name']
+      }]
+    }];
     return RouterOutlet;
   }());
   exports.RouterOutlet = RouterOutlet;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/operator/scan.js", ["../Subscriber"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var Subscriber_1 = $__require('../Subscriber');
-  function scan(accumulator, seed) {
-    return this.lift(new ScanOperator(accumulator, seed));
-  }
-  exports.scan = scan;
-  var ScanOperator = (function() {
-    function ScanOperator(accumulator, seed) {
-      this.accumulator = accumulator;
-      this.seed = seed;
-    }
-    ScanOperator.prototype.call = function(subscriber, source) {
-      return source._subscribe(new ScanSubscriber(subscriber, this.accumulator, this.seed));
-    };
-    return ScanOperator;
-  }());
-  var ScanSubscriber = (function(_super) {
-    __extends(ScanSubscriber, _super);
-    function ScanSubscriber(destination, accumulator, seed) {
-      _super.call(this, destination);
-      this.accumulator = accumulator;
-      this.accumulatorSet = false;
-      this.seed = seed;
-      this.accumulator = accumulator;
-      this.accumulatorSet = typeof seed !== 'undefined';
-    }
-    Object.defineProperty(ScanSubscriber.prototype, "seed", {
-      get: function() {
-        return this._seed;
-      },
-      set: function(value) {
-        this.accumulatorSet = true;
-        this._seed = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ScanSubscriber.prototype._next = function(value) {
-      if (!this.accumulatorSet) {
-        this.seed = value;
-        this.destination.next(value);
-      } else {
-        return this._tryNext(value);
-      }
-    };
-    ScanSubscriber.prototype._tryNext = function(value) {
-      var result;
-      try {
-        result = this.accumulator(this.seed, value);
-      } catch (err) {
-        this.destination.error(err);
-      }
-      this.seed = result;
-      this.destination.next(result);
-    };
-    return ScanSubscriber;
-  }(Subscriber_1.Subscriber));
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/add/operator/scan.js", ["../../Observable", "../../operator/scan"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var Observable_1 = $__require('../../Observable');
-  var scan_1 = $__require('../../operator/scan');
-  Observable_1.Observable.prototype.scan = scan_1.scan;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/add/operator/mergeMap.js", ["../../Observable", "../../operator/mergeMap"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var Observable_1 = $__require('../../Observable');
-  var mergeMap_1 = $__require('../../operator/mergeMap');
-  Observable_1.Observable.prototype.mergeMap = mergeMap_1.mergeMap;
-  Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/operator/concat.js", ["../util/isScheduler", "../observable/ArrayObservable", "./mergeAll"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var isScheduler_1 = $__require('../util/isScheduler');
-  var ArrayObservable_1 = $__require('../observable/ArrayObservable');
-  var mergeAll_1 = $__require('./mergeAll');
-  function concat() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      observables[_i - 0] = arguments[_i];
-    }
-    return concatStatic.apply(void 0, [this].concat(observables));
-  }
-  exports.concat = concat;
-  function concatStatic() {
-    var observables = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      observables[_i - 0] = arguments[_i];
-    }
-    var scheduler = null;
-    var args = observables;
-    if (isScheduler_1.isScheduler(args[observables.length - 1])) {
-      scheduler = args.pop();
-    }
-    return new ArrayObservable_1.ArrayObservable(observables, scheduler).lift(new mergeAll_1.MergeAllOperator(1));
-  }
-  exports.concatStatic = concatStatic;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/add/operator/concat.js", ["../../Observable", "../../operator/concat"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var Observable_1 = $__require('../../Observable');
-  var concat_1 = $__require('../../operator/concat');
-  Observable_1.Observable.prototype.concat = concat_1.concat;
   return module.exports;
 });
 
@@ -3620,107 +3427,16 @@ System.registerDynamic("npm:rxjs/operator/mergeMap.js", ["../util/subscribeToRes
   return module.exports;
 });
 
-System.registerDynamic("npm:rxjs/operator/concatMap.js", ["./mergeMap"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var mergeMap_1 = $__require('./mergeMap');
-  function concatMap(project, resultSelector) {
-    return this.lift(new mergeMap_1.MergeMapOperator(project, resultSelector, 1));
-  }
-  exports.concatMap = concatMap;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/add/operator/concatMap.js", ["../../Observable", "../../operator/concatMap"], true, function($__require, exports, module) {
+System.registerDynamic("npm:rxjs/add/operator/mergeMap.js", ["../../Observable", "../../operator/mergeMap"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
   var Observable_1 = $__require('../../Observable');
-  var concatMap_1 = $__require('../../operator/concatMap');
-  Observable_1.Observable.prototype.concatMap = concatMap_1.concatMap;
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/operator/every.js", ["../Subscriber"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var Subscriber_1 = $__require('../Subscriber');
-  function every(predicate, thisArg) {
-    var source = this;
-    return source.lift(new EveryOperator(predicate, thisArg, source));
-  }
-  exports.every = every;
-  var EveryOperator = (function() {
-    function EveryOperator(predicate, thisArg, source) {
-      this.predicate = predicate;
-      this.thisArg = thisArg;
-      this.source = source;
-    }
-    EveryOperator.prototype.call = function(observer, source) {
-      return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
-    };
-    return EveryOperator;
-  }());
-  var EverySubscriber = (function(_super) {
-    __extends(EverySubscriber, _super);
-    function EverySubscriber(destination, predicate, thisArg, source) {
-      _super.call(this, destination);
-      this.predicate = predicate;
-      this.thisArg = thisArg;
-      this.source = source;
-      this.index = 0;
-      this.thisArg = thisArg || this;
-    }
-    EverySubscriber.prototype.notifyComplete = function(everyValueMatch) {
-      this.destination.next(everyValueMatch);
-      this.destination.complete();
-    };
-    EverySubscriber.prototype._next = function(value) {
-      var result = false;
-      try {
-        result = this.predicate.call(this.thisArg, value, this.index++, this.source);
-      } catch (err) {
-        this.destination.error(err);
-        return;
-      }
-      if (!result) {
-        this.notifyComplete(false);
-      }
-    };
-    EverySubscriber.prototype._complete = function() {
-      this.notifyComplete(true);
-    };
-    return EverySubscriber;
-  }(Subscriber_1.Subscriber));
-  return module.exports;
-});
-
-System.registerDynamic("npm:rxjs/add/operator/every.js", ["../../Observable", "../../operator/every"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var Observable_1 = $__require('../../Observable');
-  var every_1 = $__require('../../operator/every');
-  Observable_1.Observable.prototype.every = every_1.every;
+  var mergeMap_1 = $__require('../../operator/mergeMap');
+  Observable_1.Observable.prototype.mergeMap = mergeMap_1.mergeMap;
+  Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
   return module.exports;
 });
 
@@ -3806,6 +3522,84 @@ System.registerDynamic("npm:rxjs/add/operator/mergeAll.js", ["../../Observable",
   var Observable_1 = $__require('../../Observable');
   var mergeAll_1 = $__require('../../operator/mergeAll');
   Observable_1.Observable.prototype.mergeAll = mergeAll_1.mergeAll;
+  return module.exports;
+});
+
+System.registerDynamic("npm:rxjs/operator/every.js", ["../Subscriber"], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var Subscriber_1 = $__require('../Subscriber');
+  function every(predicate, thisArg) {
+    var source = this;
+    return source.lift(new EveryOperator(predicate, thisArg, source));
+  }
+  exports.every = every;
+  var EveryOperator = (function() {
+    function EveryOperator(predicate, thisArg, source) {
+      this.predicate = predicate;
+      this.thisArg = thisArg;
+      this.source = source;
+    }
+    EveryOperator.prototype.call = function(observer, source) {
+      return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
+    };
+    return EveryOperator;
+  }());
+  var EverySubscriber = (function(_super) {
+    __extends(EverySubscriber, _super);
+    function EverySubscriber(destination, predicate, thisArg, source) {
+      _super.call(this, destination);
+      this.predicate = predicate;
+      this.thisArg = thisArg;
+      this.source = source;
+      this.index = 0;
+      this.thisArg = thisArg || this;
+    }
+    EverySubscriber.prototype.notifyComplete = function(everyValueMatch) {
+      this.destination.next(everyValueMatch);
+      this.destination.complete();
+    };
+    EverySubscriber.prototype._next = function(value) {
+      var result = false;
+      try {
+        result = this.predicate.call(this.thisArg, value, this.index++, this.source);
+      } catch (err) {
+        this.destination.error(err);
+        return;
+      }
+      if (!result) {
+        this.notifyComplete(false);
+      }
+    };
+    EverySubscriber.prototype._complete = function() {
+      this.notifyComplete(true);
+    };
+    return EverySubscriber;
+  }(Subscriber_1.Subscriber));
+  return module.exports;
+});
+
+System.registerDynamic("npm:rxjs/add/operator/every.js", ["../../Observable", "../../operator/every"], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var Observable_1 = $__require('../../Observable');
+  var every_1 = $__require('../../operator/every');
+  Observable_1.Observable.prototype.every = every_1.every;
   return module.exports;
 });
 
@@ -4369,7 +4163,7 @@ System.registerDynamic("npm:rxjs/add/observable/from.js", ["../../Observable", "
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observable", "rxjs/observable/of", "./shared", "./url_tree"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/apply_redirects.js", ["rxjs/Observable", "rxjs/observable/of", "./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -4379,6 +4173,7 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
   var of_1 = $__require('rxjs/observable/of');
   var shared_1 = $__require('./shared');
   var url_tree_1 = $__require('./url_tree');
+  var collection_1 = $__require('./utils/collection');
   var NoMatch = (function() {
     function NoMatch(segment) {
       if (segment === void 0) {
@@ -4413,11 +4208,13 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
     var _a;
   }
   exports.applyRedirects = applyRedirects;
-  function createUrlTree(urlTree, root) {
+  function createUrlTree(urlTree, rootCandidate) {
+    var root = rootCandidate.pathsWithParams.length > 0 ? new url_tree_1.UrlSegment([], (_a = {}, _a[shared_1.PRIMARY_OUTLET] = rootCandidate, _a)) : rootCandidate;
     return of_1.of(new url_tree_1.UrlTree(root, urlTree.queryParams, urlTree.fragment));
+    var _a;
   }
   function expandSegment(routes, segment, outlet) {
-    if (segment.pathsWithParams.length === 0 && Object.keys(segment.children).length > 0) {
+    if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
       return new url_tree_1.UrlSegment([], expandSegmentChildren(routes, segment));
     } else {
       return expandPathsWithParams(segment, routes, segment.pathsWithParams, outlet, true);
@@ -4442,11 +4239,11 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
     throw new NoMatch(segment);
   }
   function expandPathsWithParamsAgainstRoute(segment, routes, route, paths, outlet, allowRedirects) {
-    if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
+    if (getOutlet(route) !== outlet)
       throw new NoMatch();
-    if (route.redirectTo && !allowRedirects)
+    if (route.redirectTo !== undefined && !allowRedirects)
       throw new NoMatch();
-    if (route.redirectTo) {
+    if (route.redirectTo !== undefined) {
       return expandPathsWithParamsAgainstRouteUsingRedirect(segment, routes, route, paths, outlet);
     } else {
       return matchPathsWithParamsAgainstRoute(segment, route, paths);
@@ -4479,20 +4276,23 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
       return expandPathsWithParams(segment, routes, newPaths.concat(paths.slice(lastChild)), outlet, false);
     }
   }
-  function matchPathsWithParamsAgainstRoute(segment, route, paths) {
+  function matchPathsWithParamsAgainstRoute(rawSegment, route, paths) {
     if (route.path === '**') {
       return new url_tree_1.UrlSegment(paths, {});
     } else {
-      var _a = match(segment, route, paths),
+      var _a = match(rawSegment, route, paths),
           consumedPaths = _a.consumedPaths,
           lastChild = _a.lastChild;
       var childConfig = route.children ? route.children : [];
-      var slicedPath = paths.slice(lastChild);
-      if (childConfig.length === 0 && slicedPath.length === 0) {
-        return new url_tree_1.UrlSegment(consumedPaths, {});
-      } else if (slicedPath.length === 0 && Object.keys(segment.children).length > 0) {
+      var rawSlicedPath = paths.slice(lastChild);
+      var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig),
+          segment = _b.segment,
+          slicedPath = _b.slicedPath;
+      if (slicedPath.length === 0 && segment.hasChildren()) {
         var children = expandSegmentChildren(childConfig, segment);
         return new url_tree_1.UrlSegment(consumedPaths, children);
+      } else if (childConfig.length === 0 && slicedPath.length === 0) {
+        return new url_tree_1.UrlSegment(consumedPaths, {});
       } else {
         var cs = expandPathsWithParams(segment, childConfig, slicedPath, shared_1.PRIMARY_OUTLET, true);
         return new url_tree_1.UrlSegment(consumedPaths.concat(cs.pathsWithParams), cs.children);
@@ -4500,8 +4300,8 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
     }
   }
   function match(segment, route, paths) {
-    if (route.index || route.path === '' || route.path === '/') {
-      if (route.terminal && (Object.keys(segment.children).length > 0 || paths.length > 0)) {
+    if (route.path === '') {
+      if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
         throw new NoMatch();
       } else {
         return {
@@ -4511,7 +4311,7 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
         };
       }
     }
-    var path = route.path.startsWith('/') ? route.path.substring(1) : route.path;
+    var path = route.path;
     var parts = path.split('/');
     var positionalParamSegments = {};
     var consumedPaths = [];
@@ -4530,7 +4330,7 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
       consumedPaths.push(current);
       currentIndex++;
     }
-    if (route.terminal && (Object.keys(segment.children).length > 0 || currentIndex < paths.length)) {
+    if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
       throw new NoMatch();
     }
     return {
@@ -4540,12 +4340,11 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
     };
   }
   function applyRedirectCommands(paths, redirectTo, posParams) {
-    if (redirectTo.startsWith('/')) {
-      var parts = redirectTo.substring(1).split('/');
-      return createPaths(redirectTo, parts, paths, posParams);
+    var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+    if (r === '') {
+      return [];
     } else {
-      var parts = redirectTo.split('/');
-      return createPaths(redirectTo, parts, paths, posParams);
+      return createPaths(redirectTo, r.split('/'), paths, posParams);
     }
   }
   function createPaths(redirectTo, parts, segments, posParams) {
@@ -4572,10 +4371,101 @@ System.registerDynamic("npm:@angular/router/apply_redirects.js", ["rxjs/Observab
       return new url_tree_1.UrlPathWithParams(part, {});
     }
   }
+  function split(segment, consumedPaths, slicedPath, config) {
+    if (slicedPath.length > 0 && containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, config)) {
+      var s = new url_tree_1.UrlSegment(consumedPaths, createChildrenForEmptyPaths(config, new url_tree_1.UrlSegment(slicedPath, segment.children)));
+      return {
+        segment: s,
+        slicedPath: []
+      };
+    } else if (slicedPath.length === 0 && containsEmptyPathRedirects(segment, slicedPath, config)) {
+      var s = new url_tree_1.UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
+      return {
+        segment: s,
+        slicedPath: slicedPath
+      };
+    } else {
+      return {
+        segment: segment,
+        slicedPath: slicedPath
+      };
+    }
+  }
+  function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+    var res = {};
+    for (var _i = 0,
+        routes_2 = routes; _i < routes_2.length; _i++) {
+      var r = routes_2[_i];
+      if (emptyPathRedirect(segment, slicedPath, r) && !children[getOutlet(r)]) {
+        res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
+      }
+    }
+    return collection_1.merge(children, res);
+  }
+  function createChildrenForEmptyPaths(routes, primarySegment) {
+    var res = {};
+    res[shared_1.PRIMARY_OUTLET] = primarySegment;
+    for (var _i = 0,
+        routes_3 = routes; _i < routes_3.length; _i++) {
+      var r = routes_3[_i];
+      if (r.path === '') {
+        res[getOutlet(r)] = new url_tree_1.UrlSegment([], {});
+      }
+    }
+    return res;
+  }
+  function containsEmptyPathRedirectsWithNamedOutlets(segment, slicedPath, routes) {
+    return routes.filter(function(r) {
+      return emptyPathRedirect(segment, slicedPath, r) && getOutlet(r) !== shared_1.PRIMARY_OUTLET;
+    }).length > 0;
+  }
+  function containsEmptyPathRedirects(segment, slicedPath, routes) {
+    return routes.filter(function(r) {
+      return emptyPathRedirect(segment, slicedPath, r);
+    }).length > 0;
+  }
+  function emptyPathRedirect(segment, slicedPath, r) {
+    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+      return false;
+    return r.path === '' && r.redirectTo !== undefined;
+  }
+  function getOutlet(route) {
+    return route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET;
+  }
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/create_router_state.js", ["rxjs/BehaviorSubject", "./router_state", "./utils/tree"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/config.js", [], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  function validateConfig(config) {
+    config.forEach(validateNode);
+  }
+  exports.validateConfig = validateConfig;
+  function validateNode(route) {
+    if (!!route.redirectTo && !!route.children) {
+      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
+    }
+    if (!!route.redirectTo && !!route.component) {
+      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
+    }
+    if (route.redirectTo === undefined && !route.component && !route.children) {
+      throw new Error("Invalid configuration of route '" + route.path + "': component, redirectTo, children must be provided");
+    }
+    if (route.path === undefined) {
+      throw new Error("Invalid route configuration: routes must have path specified");
+    }
+    if (route.path.startsWith('/')) {
+      throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
+    }
+  }
+  return module.exports;
+});
+
+System.registerDynamic("npm:@angular/router/src/create_router_state.js", ["rxjs/BehaviorSubject", "./router_state", "./utils/tree"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -4626,7 +4516,7 @@ System.registerDynamic("npm:@angular/router/create_router_state.js", ["rxjs/Beha
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/create_url_tree.js", ["./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/create_url_tree.js", ["./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -4733,7 +4623,7 @@ System.registerDynamic("npm:@angular/router/create_url_tree.js", ["./shared", ".
   }
   function getPath(command) {
     if (!(typeof command === 'string'))
-      return command;
+      return command.toString();
     var parts = command.toString().split(':');
     return parts.length > 1 ? parts[1] : command;
   }
@@ -4747,14 +4637,14 @@ System.registerDynamic("npm:@angular/router/create_url_tree.js", ["./shared", ".
     if (!segment) {
       segment = new url_tree_1.UrlSegment([], {});
     }
-    if (segment.pathsWithParams.length === 0 && Object.keys(segment.children).length > 0) {
+    if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
       return updateSegmentChildren(segment, startIndex, commands);
     }
     var m = prefixedWith(segment, startIndex, commands);
     var slicedCommands = commands.slice(m.lastIndex);
     if (m.match && slicedCommands.length === 0) {
       return new url_tree_1.UrlSegment(segment.pathsWithParams, {});
-    } else if (m.match && Object.keys(segment.children).length === 0) {
+    } else if (m.match && !segment.hasChildren()) {
       return createNewSegment(segment, startIndex, commands);
     } else if (m.match) {
       return updateSegmentChildren(segment, 0, slicedCommands);
@@ -5023,7 +4913,7 @@ System.registerDynamic("npm:rxjs/observable/of.js", ["./ArrayObservable"], true,
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "rxjs/observable/of", "./router_state", "./shared", "./url_tree", "./utils/collection", "./utils/tree"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/recognize.js", ["rxjs/Observable", "rxjs/observable/of", "./router_state", "./shared", "./url_tree", "./utils/collection", "./utils/tree"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -5047,7 +4937,7 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
   }());
   function recognize(rootComponentType, config, urlTree, url) {
     try {
-      var children = processSegment(config, urlTree.root, shared_1.PRIMARY_OUTLET);
+      var children = processSegment(config, urlTree.root, {}, shared_1.PRIMARY_OUTLET);
       var root = new router_state_1.ActivatedRouteSnapshot([], {}, shared_1.PRIMARY_OUTLET, rootComponentType, null, urlTree.root, -1);
       var rootNode = new tree_1.TreeNode(root, children);
       return of_1.of(new router_state_1.RouterStateSnapshot(url, rootNode, urlTree.queryParams, urlTree.fragment));
@@ -5064,16 +4954,16 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
     }
   }
   exports.recognize = recognize;
-  function processSegment(config, segment, outlet) {
-    if (segment.pathsWithParams.length === 0 && Object.keys(segment.children).length > 0) {
-      return processSegmentChildren(config, segment);
+  function processSegment(config, segment, extraParams, outlet) {
+    if (segment.pathsWithParams.length === 0 && segment.hasChildren()) {
+      return processSegmentChildren(config, segment, extraParams);
     } else {
-      return [processPathsWithParams(config, segment, 0, segment.pathsWithParams, outlet)];
+      return processPathsWithParams(config, segment, 0, segment.pathsWithParams, extraParams, outlet);
     }
   }
-  function processSegmentChildren(config, segment) {
+  function processSegmentChildren(config, segment, extraParams) {
     var children = url_tree_1.mapChildrenIntoArray(segment, function(child, childOutlet) {
-      return processSegment(config, child, childOutlet);
+      return processSegment(config, child, extraParams, childOutlet);
     });
     checkOutletNameUniqueness(children);
     sortActivatedRouteSnapshots(children);
@@ -5088,12 +4978,12 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
       return a.value.outlet.localeCompare(b.value.outlet);
     });
   }
-  function processPathsWithParams(config, segment, pathIndex, paths, outlet) {
+  function processPathsWithParams(config, segment, pathIndex, paths, extraParams, outlet) {
     for (var _i = 0,
         config_1 = config; _i < config_1.length; _i++) {
       var r = config_1[_i];
       try {
-        return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, outlet);
+        return processPathsWithParamsAgainstRoute(r, segment, pathIndex, paths, extraParams, outlet);
       } catch (e) {
         if (!(e instanceof NoMatch))
           throw e;
@@ -5101,46 +4991,51 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
     }
     throw new NoMatch(segment);
   }
-  function processPathsWithParamsAgainstRoute(route, segment, pathIndex, paths, outlet) {
+  function processPathsWithParamsAgainstRoute(route, rawSegment, pathIndex, paths, parentExtraParams, outlet) {
     if (route.redirectTo)
       throw new NoMatch();
     if ((route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET) !== outlet)
       throw new NoMatch();
     if (route.path === '**') {
       var params = paths.length > 0 ? collection_1.last(paths).parameters : {};
-      var snapshot_1 = new router_state_1.ActivatedRouteSnapshot(paths, params, outlet, route.component, route, segment, -1);
-      return new tree_1.TreeNode(snapshot_1, []);
+      var snapshot_1 = new router_state_1.ActivatedRouteSnapshot(paths, collection_1.merge(parentExtraParams, params), outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) - 1);
+      return [new tree_1.TreeNode(snapshot_1, [])];
     }
-    var _a = match(segment, route, paths),
+    var _a = match(rawSegment, route, paths, parentExtraParams),
         consumedPaths = _a.consumedPaths,
         parameters = _a.parameters,
+        extraParams = _a.extraParams,
         lastChild = _a.lastChild;
-    var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, segment, pathIndex + lastChild - 1);
-    var slicedPath = paths.slice(lastChild);
+    var rawSlicedPath = paths.slice(lastChild);
     var childConfig = route.children ? route.children : [];
-    if (childConfig.length === 0 && slicedPath.length === 0) {
-      return new tree_1.TreeNode(snapshot, []);
-    } else if (slicedPath.length === 0 && Object.keys(segment.children).length > 0) {
-      var children = processSegmentChildren(childConfig, segment);
-      return new tree_1.TreeNode(snapshot, children);
+    var _b = split(rawSegment, consumedPaths, rawSlicedPath, childConfig),
+        segment = _b.segment,
+        slicedPath = _b.slicedPath;
+    var snapshot = new router_state_1.ActivatedRouteSnapshot(consumedPaths, parameters, outlet, route.component, route, getSourceSegment(rawSegment), getPathIndexShift(rawSegment) + pathIndex + lastChild - 1);
+    if (slicedPath.length === 0 && segment.hasChildren()) {
+      var children = processSegmentChildren(childConfig, segment, extraParams);
+      return [new tree_1.TreeNode(snapshot, children)];
+    } else if (childConfig.length === 0 && slicedPath.length === 0) {
+      return [new tree_1.TreeNode(snapshot, [])];
     } else {
-      var child = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, shared_1.PRIMARY_OUTLET);
-      return new tree_1.TreeNode(snapshot, [child]);
+      var children = processPathsWithParams(childConfig, segment, pathIndex + lastChild, slicedPath, extraParams, shared_1.PRIMARY_OUTLET);
+      return [new tree_1.TreeNode(snapshot, children)];
     }
   }
-  function match(segment, route, paths) {
-    if (route.index || route.path === '' || route.path === '/') {
-      if (route.terminal && (Object.keys(segment.children).length > 0 || paths.length > 0)) {
+  function match(segment, route, paths, parentExtraParams) {
+    if (route.path === '') {
+      if (route.terminal && (segment.hasChildren() || paths.length > 0)) {
         throw new NoMatch();
       } else {
         return {
           consumedPaths: [],
           lastChild: 0,
-          parameters: {}
+          parameters: {},
+          extraParams: {}
         };
       }
     }
-    var path = route.path.startsWith('/') ? route.path.substring(1) : route.path;
+    var path = route.path;
     var parts = path.split('/');
     var posParameters = {};
     var consumedPaths = [];
@@ -5159,14 +5054,16 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
       consumedPaths.push(current);
       currentIndex++;
     }
-    if (route.terminal && (Object.keys(segment.children).length > 0 || currentIndex < paths.length)) {
+    if (route.terminal && (segment.hasChildren() || currentIndex < paths.length)) {
       throw new NoMatch();
     }
-    var parameters = collection_1.merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters);
+    var parameters = collection_1.merge(parentExtraParams, collection_1.merge(posParameters, consumedPaths[consumedPaths.length - 1].parameters));
+    var extraParams = route.component ? {} : parameters;
     return {
       consumedPaths: consumedPaths,
       lastChild: currentIndex,
-      parameters: parameters
+      parameters: parameters,
+      extraParams: extraParams
     };
   }
   function checkOutletNameUniqueness(nodes) {
@@ -5184,6 +5081,95 @@ System.registerDynamic("npm:@angular/router/recognize.js", ["rxjs/Observable", "
       }
       names[n.value.outlet] = n.value;
     });
+  }
+  function getSourceSegment(segment) {
+    var s = segment;
+    while (s._sourceSegment) {
+      s = s._sourceSegment;
+    }
+    return s;
+  }
+  function getPathIndexShift(segment) {
+    var s = segment;
+    var res = 0;
+    while (s._sourceSegment) {
+      s = s._sourceSegment;
+      res += segment._pathIndexShift;
+    }
+    return res;
+  }
+  function split(segment, consumedPaths, slicedPath, config) {
+    if (slicedPath.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, config)) {
+      var s = new url_tree_1.UrlSegment(consumedPaths, createChildrenForEmptyPaths(segment, consumedPaths, config, new url_tree_1.UrlSegment(slicedPath, segment.children)));
+      s._sourceSegment = segment;
+      s._pathIndexShift = 0;
+      return {
+        segment: s,
+        slicedPath: []
+      };
+    } else if (slicedPath.length === 0 && containsEmptyPathMatches(segment, slicedPath, config)) {
+      var s = new url_tree_1.UrlSegment(segment.pathsWithParams, addEmptyPathsToChildrenIfNeeded(segment, slicedPath, config, segment.children));
+      s._sourceSegment = segment;
+      s._pathIndexShift = 0;
+      return {
+        segment: s,
+        slicedPath: slicedPath
+      };
+    } else {
+      return {
+        segment: segment,
+        slicedPath: slicedPath
+      };
+    }
+  }
+  function addEmptyPathsToChildrenIfNeeded(segment, slicedPath, routes, children) {
+    var res = {};
+    for (var _i = 0,
+        routes_1 = routes; _i < routes_1.length; _i++) {
+      var r = routes_1[_i];
+      if (emptyPathMatch(segment, slicedPath, r) && !children[getOutlet(r)]) {
+        var s = new url_tree_1.UrlSegment([], {});
+        s._sourceSegment = segment;
+        s._pathIndexShift = segment.pathsWithParams.length;
+        res[getOutlet(r)] = s;
+      }
+    }
+    return collection_1.merge(children, res);
+  }
+  function createChildrenForEmptyPaths(segment, consumedPaths, routes, primarySegment) {
+    var res = {};
+    res[shared_1.PRIMARY_OUTLET] = primarySegment;
+    primarySegment._sourceSegment = segment;
+    primarySegment._pathIndexShift = consumedPaths.length;
+    for (var _i = 0,
+        routes_2 = routes; _i < routes_2.length; _i++) {
+      var r = routes_2[_i];
+      if (r.path === '') {
+        var s = new url_tree_1.UrlSegment([], {});
+        s._sourceSegment = segment;
+        s._pathIndexShift = consumedPaths.length;
+        res[getOutlet(r)] = s;
+      }
+    }
+    return res;
+  }
+  function containsEmptyPathMatchesWithNamedOutlets(segment, slicedPath, routes) {
+    return routes.filter(function(r) {
+      return emptyPathMatch(segment, slicedPath, r) && getOutlet(r) !== shared_1.PRIMARY_OUTLET;
+    }).length > 0;
+  }
+  function containsEmptyPathMatches(segment, slicedPath, routes) {
+    return routes.filter(function(r) {
+      return emptyPathMatch(segment, slicedPath, r);
+    }).length > 0;
+  }
+  function emptyPathMatch(segment, slicedPath, r) {
+    if ((segment.hasChildren() || slicedPath.length > 0) && r.terminal)
+      return false;
+    return r.path === '' && r.redirectTo === undefined;
+  }
+  function getOutlet(route) {
+    return route.outlet ? route.outlet : shared_1.PRIMARY_OUTLET;
   }
   return module.exports;
 });
@@ -5639,7 +5625,7 @@ System.registerDynamic("npm:rxjs/observable/fromPromise.js", ["./PromiseObservab
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/resolve.js", ["rxjs/add/operator/map", "rxjs/add/operator/toPromise", "rxjs/observable/forkJoin", "rxjs/observable/fromPromise"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/resolve.js", ["rxjs/add/operator/map", "rxjs/add/operator/toPromise", "rxjs/observable/forkJoin", "rxjs/observable/fromPromise"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -5657,7 +5643,7 @@ System.registerDynamic("npm:@angular/router/resolve.js", ["rxjs/add/operator/map
   exports.resolve = resolve;
   function resolveNode(resolver, node) {
     if (node.children.length === 0) {
-      return fromPromise_1.fromPromise(resolver.resolveComponent(node.value.component).then(function(factory) {
+      return fromPromise_1.fromPromise(resolveComponent(resolver, node.value).then(function(factory) {
         node.value._resolvedComponentFactory = factory;
         return node.value;
       }));
@@ -5666,35 +5652,40 @@ System.registerDynamic("npm:@angular/router/resolve.js", ["rxjs/add/operator/map
         return resolveNode(resolver, c).toPromise();
       });
       return forkJoin_1.forkJoin(c).map(function(_) {
-        return resolver.resolveComponent(node.value.component).then(function(factory) {
+        return resolveComponent(resolver, node.value).then(function(factory) {
           node.value._resolvedComponentFactory = factory;
           return node.value;
         });
       });
     }
   }
+  function resolveComponent(resolver, snapshot) {
+    if (snapshot.component && snapshot._routeConfig) {
+      return resolver.resolveComponent(snapshot.component);
+    } else {
+      return Promise.resolve(null);
+    }
+  }
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map", "rxjs/add/operator/scan", "rxjs/add/operator/mergeMap", "rxjs/add/operator/concat", "rxjs/add/operator/concatMap", "rxjs/add/operator/every", "rxjs/add/operator/mergeAll", "rxjs/add/observable/from", "@angular/core", "rxjs/Observable", "rxjs/Subject", "rxjs/observable/of", "./apply_redirects", "./create_router_state", "./create_url_tree", "./recognize", "./resolve", "./router_outlet_map", "./router_state", "./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/router.js", ["rxjs/add/operator/map", "rxjs/add/operator/mergeMap", "rxjs/add/operator/mergeAll", "rxjs/add/operator/every", "rxjs/add/observable/from", "@angular/core", "rxjs/Observable", "rxjs/Subject", "rxjs/observable/of", "./apply_redirects", "./config", "./create_router_state", "./create_url_tree", "./recognize", "./resolve", "./router_outlet_map", "./router_state", "./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
   $__require('rxjs/add/operator/map');
-  $__require('rxjs/add/operator/scan');
   $__require('rxjs/add/operator/mergeMap');
-  $__require('rxjs/add/operator/concat');
-  $__require('rxjs/add/operator/concatMap');
-  $__require('rxjs/add/operator/every');
   $__require('rxjs/add/operator/mergeAll');
+  $__require('rxjs/add/operator/every');
   $__require('rxjs/add/observable/from');
   var core_1 = $__require('@angular/core');
   var Observable_1 = $__require('rxjs/Observable');
   var Subject_1 = $__require('rxjs/Subject');
   var of_1 = $__require('rxjs/observable/of');
   var apply_redirects_1 = $__require('./apply_redirects');
+  var config_1 = $__require('./config');
   var create_router_state_1 = $__require('./create_router_state');
   var create_url_tree_1 = $__require('./create_url_tree');
   var recognize_1 = $__require('./recognize');
@@ -5771,8 +5762,8 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
       this.outletMap = outletMap;
       this.location = location;
       this.injector = injector;
-      this.config = config;
       this.navigationId = 0;
+      this.resetConfig(config);
       this.routerEvents = new Subject_1.Subject();
       this.currentUrlTree = url_tree_1.createEmptyUrlTree();
       this.currentRouterState = router_state_1.createEmptyState(this.currentUrlTree, this.rootComponentType);
@@ -5803,6 +5794,7 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
       configurable: true
     });
     Router.prototype.resetConfig = function(config) {
+      config_1.validateConfig(config);
       this.config = config;
     };
     Router.prototype.dispose = function() {
@@ -5959,23 +5951,40 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
         if (!collection_1.shallowEqual(future.params, curr.params)) {
           this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(future));
         }
-        this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null);
+        if (future.component) {
+          this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null);
+        } else {
+          this.traverseChildRoutes(futureNode, currNode, parentOutletMap);
+        }
       } else {
-        this.deactivateOutletAndItChildren(curr, outlet);
+        if (curr) {
+          if (curr.component) {
+            this.deactivateOutletAndItChildren(curr, outlet);
+          } else {
+            this.deactivateOutletMap(parentOutletMap);
+          }
+        }
         this.checks.push(new CanActivate(future));
-        this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null);
+        if (future.component) {
+          this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null);
+        } else {
+          this.traverseChildRoutes(futureNode, null, parentOutletMap);
+        }
       }
     };
     GuardChecks.prototype.deactivateOutletAndItChildren = function(route, outlet) {
-      var _this = this;
       if (outlet && outlet.isActivated) {
-        collection_1.forEach(outlet.outletMap._outlets, function(v) {
-          if (v.isActivated) {
-            _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
-          }
-        });
+        this.deactivateOutletMap(outlet.outletMap);
         this.checks.push(new CanDeactivate(outlet.component, route));
       }
+    };
+    GuardChecks.prototype.deactivateOutletMap = function(outletMap) {
+      var _this = this;
+      collection_1.forEach(outletMap._outlets, function(v) {
+        if (v.isActivated) {
+          _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
+        }
+      });
     };
     GuardChecks.prototype.runCanActivate = function(future) {
       var _this = this;
@@ -5995,7 +6004,7 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
     };
     GuardChecks.prototype.runCanDeactivate = function(component, curr) {
       var _this = this;
-      var canDeactivate = curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+      var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
       if (!canDeactivate || canDeactivate.length === 0)
         return of_1.of(true);
       return Observable_1.Observable.from(canDeactivate).map(function(c) {
@@ -6043,18 +6052,36 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
     ActivateRoutes.prototype.activateRoutes = function(futureNode, currNode, parentOutletMap) {
       var future = futureNode.value;
       var curr = currNode ? currNode.value : null;
-      var outlet = getOutlet(parentOutletMap, futureNode.value);
       if (future === curr) {
         router_state_1.advanceActivatedRoute(future);
-        this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+        if (future.component) {
+          var outlet = getOutlet(parentOutletMap, futureNode.value);
+          this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+        } else {
+          this.activateChildRoutes(futureNode, currNode, parentOutletMap);
+        }
       } else {
-        this.deactivateOutletAndItChildren(outlet);
-        var outletMap = new router_outlet_map_1.RouterOutletMap();
-        this.activateNewRoutes(outletMap, future, outlet);
-        this.activateChildRoutes(futureNode, null, outletMap);
+        if (curr) {
+          if (curr.component) {
+            var outlet = getOutlet(parentOutletMap, futureNode.value);
+            this.deactivateOutletAndItChildren(outlet);
+          } else {
+            this.deactivateOutletMap(parentOutletMap);
+          }
+        }
+        if (future.component) {
+          router_state_1.advanceActivatedRoute(future);
+          var outlet = getOutlet(parentOutletMap, futureNode.value);
+          var outletMap = new router_outlet_map_1.RouterOutletMap();
+          this.placeComponentIntoOutlet(outletMap, future, outlet);
+          this.activateChildRoutes(futureNode, null, outletMap);
+        } else {
+          router_state_1.advanceActivatedRoute(future);
+          this.activateChildRoutes(futureNode, null, parentOutletMap);
+        }
       }
     };
-    ActivateRoutes.prototype.activateNewRoutes = function(outletMap, future, outlet) {
+    ActivateRoutes.prototype.placeComponentIntoOutlet = function(outletMap, future, outlet) {
       var resolved = core_1.ReflectiveInjector.resolve([{
         provide: router_state_1.ActivatedRoute,
         useValue: future
@@ -6062,17 +6089,19 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
         provide: router_outlet_map_1.RouterOutletMap,
         useValue: outletMap
       }]);
-      router_state_1.advanceActivatedRoute(future);
       outlet.activate(future._futureSnapshot._resolvedComponentFactory, future, resolved, outletMap);
     };
     ActivateRoutes.prototype.deactivateOutletAndItChildren = function(outlet) {
-      var _this = this;
       if (outlet && outlet.isActivated) {
-        collection_1.forEach(outlet.outletMap._outlets, function(v) {
-          return _this.deactivateOutletAndItChildren(v);
-        });
+        this.deactivateOutletMap(outlet.outletMap);
         outlet.deactivate();
       }
+    };
+    ActivateRoutes.prototype.deactivateOutletMap = function(outletMap) {
+      var _this = this;
+      collection_1.forEach(outletMap._outlets, function(v) {
+        return _this.deactivateOutletAndItChildren(v);
+      });
     };
     return ActivateRoutes;
   }());
@@ -6105,7 +6134,7 @@ System.registerDynamic("npm:@angular/router/router.js", ["rxjs/add/operator/map"
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/router_outlet_map.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/router_outlet_map.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6124,7 +6153,7 @@ System.registerDynamic("npm:@angular/router/router_outlet_map.js", [], true, fun
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/common_router_providers.js", ["@angular/common", "@angular/core", "./router", "./router_outlet_map", "./router_state", "./url_serializer"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/common_router_providers.js", ["@angular/common", "@angular/core", "./router", "./router_outlet_map", "./router_state", "./url_tree"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6135,7 +6164,7 @@ System.registerDynamic("npm:@angular/router/common_router_providers.js", ["@angu
   var router_1 = $__require('./router');
   var router_outlet_map_1 = $__require('./router_outlet_map');
   var router_state_1 = $__require('./router_state');
-  var url_serializer_1 = $__require('./url_serializer');
+  var url_tree_1 = $__require('./url_tree');
   exports.ROUTER_CONFIG = new core_1.OpaqueToken('ROUTER_CONFIG');
   exports.ROUTER_OPTIONS = new core_1.OpaqueToken('ROUTER_OPTIONS');
   function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, config, opts) {
@@ -6185,12 +6214,12 @@ System.registerDynamic("npm:@angular/router/common_router_providers.js", ["@angu
       provide: common_1.LocationStrategy,
       useClass: common_1.PathLocationStrategy
     }, {
-      provide: url_serializer_1.UrlSerializer,
-      useClass: url_serializer_1.DefaultUrlSerializer
+      provide: url_tree_1.UrlSerializer,
+      useClass: url_tree_1.DefaultUrlSerializer
     }, {
       provide: router_1.Router,
       useFactory: setupRouter,
-      deps: [core_1.ApplicationRef, core_1.ComponentResolver, url_serializer_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector, exports.ROUTER_CONFIG, exports.ROUTER_OPTIONS]
+      deps: [core_1.ApplicationRef, core_1.ComponentResolver, url_tree_1.UrlSerializer, router_outlet_map_1.RouterOutletMap, common_1.Location, core_1.Injector, exports.ROUTER_CONFIG, exports.ROUTER_OPTIONS]
     }, router_outlet_map_1.RouterOutletMap, {
       provide: router_state_1.ActivatedRoute,
       useFactory: function(r) {
@@ -6208,7 +6237,7 @@ System.registerDynamic("npm:@angular/router/common_router_providers.js", ["@angu
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/router_providers.js", ["@angular/common", "@angular/platform-browser", "./common_router_providers"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/router_providers.js", ["@angular/common", "@angular/platform-browser", "./common_router_providers"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6216,7 +6245,7 @@ System.registerDynamic("npm:@angular/router/router_providers.js", ["@angular/com
       GLOBAL = this;
   var common_1 = $__require('@angular/common');
   var platform_browser_1 = $__require('@angular/platform-browser');
-  var common = $__require('./common_router_providers');
+  var common_router_providers_1 = $__require('./common_router_providers');
   function provideRouter(config, opts) {
     if (opts === void 0) {
       opts = {};
@@ -6224,7 +6253,7 @@ System.registerDynamic("npm:@angular/router/router_providers.js", ["@angular/com
     return [{
       provide: common_1.PlatformLocation,
       useClass: platform_browser_1.BrowserPlatformLocation
-    }].concat(common.provideRouter(config, opts));
+    }].concat(common_router_providers_1.provideRouter(config, opts));
   }
   exports.provideRouter = provideRouter;
   return module.exports;
@@ -6290,7 +6319,7 @@ System.registerDynamic("npm:rxjs/BehaviorSubject.js", ["./Subject", "./util/thro
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/utils/tree.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/utils/tree.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6404,7 +6433,7 @@ System.registerDynamic("npm:@angular/router/utils/tree.js", [], true, function($
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/router_state.js", ["rxjs/BehaviorSubject", "./shared", "./url_tree", "./utils/collection", "./utils/tree"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/router_state.js", ["rxjs/BehaviorSubject", "./shared", "./url_tree", "./utils/collection", "./utils/tree"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6509,10 +6538,14 @@ System.registerDynamic("npm:@angular/router/router_state.js", ["rxjs/BehaviorSub
     return "" + node.value + c;
   }
   function advanceActivatedRoute(route) {
-    if (route.snapshot && !collection_1.shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+    if (route.snapshot) {
+      if (!collection_1.shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+        route.params.next(route._futureSnapshot.params);
+      }
+      if (!collection_1.shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+        route.url.next(route._futureSnapshot.url);
+      }
       route.snapshot = route._futureSnapshot;
-      route.url.next(route.snapshot.url);
-      route.params.next(route.snapshot.params);
     } else {
       route.snapshot = route._futureSnapshot;
     }
@@ -6521,7 +6554,7 @@ System.registerDynamic("npm:@angular/router/router_state.js", ["rxjs/BehaviorSub
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/shared.js", [], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/shared.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -6531,274 +6564,22 @@ System.registerDynamic("npm:@angular/router/shared.js", [], true, function($__re
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/url_serializer.js", ["./shared", "./url_tree", "./utils/collection"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/utils/collection.js", [], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  var shared_1 = $__require('./shared');
-  var url_tree_1 = $__require('./url_tree');
-  var collection_1 = $__require('./utils/collection');
-  var UrlSerializer = (function() {
-    function UrlSerializer() {}
-    return UrlSerializer;
-  }());
-  exports.UrlSerializer = UrlSerializer;
-  var DefaultUrlSerializer = (function() {
-    function DefaultUrlSerializer() {}
-    DefaultUrlSerializer.prototype.parse = function(url) {
-      var p = new UrlParser(url);
-      return new url_tree_1.UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
-    };
-    DefaultUrlSerializer.prototype.serialize = function(tree) {
-      var segment = "/" + serializeSegment(tree.root, true);
-      var query = serializeQueryParams(tree.queryParams);
-      var fragment = tree.fragment !== null ? "#" + tree.fragment : '';
-      return "" + segment + query + fragment;
-    };
-    return DefaultUrlSerializer;
-  }());
-  exports.DefaultUrlSerializer = DefaultUrlSerializer;
-  function serializePaths(segment) {
-    return segment.pathsWithParams.map(function(p) {
-      return serializePath(p);
-    }).join('/');
-  }
-  exports.serializePaths = serializePaths;
-  function serializeSegment(segment, root) {
-    if (segment.children[shared_1.PRIMARY_OUTLET] && root) {
-      var primary = serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false);
-      var children_1 = [];
-      collection_1.forEach(segment.children, function(v, k) {
-        if (k !== shared_1.PRIMARY_OUTLET) {
-          children_1.push(k + ":" + serializeSegment(v, false));
-        }
-      });
-      if (children_1.length > 0) {
-        return primary + "(" + children_1.join('//') + ")";
-      } else {
-        return "" + primary;
-      }
-    } else if (segment.children[shared_1.PRIMARY_OUTLET] && !root) {
-      var children_2 = [serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false)];
-      collection_1.forEach(segment.children, function(v, k) {
-        if (k !== shared_1.PRIMARY_OUTLET) {
-          children_2.push(k + ":" + serializeSegment(v, false));
-        }
-      });
-      return serializePaths(segment) + "/(" + children_2.join('//') + ")";
-    } else {
-      return serializePaths(segment);
+  function shallowEqualArrays(a, b) {
+    if (a.length !== b.length)
+      return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (!shallowEqual(a[i], b[i]))
+        return false;
     }
+    return true;
   }
-  function serializeChildren(segment) {
-    if (segment.children[shared_1.PRIMARY_OUTLET]) {
-      var primary = serializePaths(segment.children[shared_1.PRIMARY_OUTLET]);
-      var secondary_1 = [];
-      collection_1.forEach(segment.children, function(v, k) {
-        if (k !== shared_1.PRIMARY_OUTLET) {
-          secondary_1.push(k + ":" + serializePaths(v) + serializeChildren(v));
-        }
-      });
-      var secondaryStr = secondary_1.length > 0 ? "(" + secondary_1.join('//') + ")" : '';
-      var primaryChildren = serializeChildren(segment.children[shared_1.PRIMARY_OUTLET]);
-      var primaryChildrenStr = primaryChildren ? "/" + primaryChildren : '';
-      return "" + primary + secondaryStr + primaryChildrenStr;
-    } else {
-      return '';
-    }
-  }
-  function serializePath(path) {
-    return "" + path.path + serializeParams(path.parameters);
-  }
-  exports.serializePath = serializePath;
-  function serializeParams(params) {
-    return pairs(params).map(function(p) {
-      return (";" + p.first + "=" + p.second);
-    }).join('');
-  }
-  function serializeQueryParams(params) {
-    var strs = pairs(params).map(function(p) {
-      return (p.first + "=" + p.second);
-    });
-    return strs.length > 0 ? "?" + strs.join("&") : '';
-  }
-  var Pair = (function() {
-    function Pair(first, second) {
-      this.first = first;
-      this.second = second;
-    }
-    return Pair;
-  }());
-  function pairs(obj) {
-    var res = [];
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        res.push(new Pair(prop, obj[prop]));
-      }
-    }
-    return res;
-  }
-  var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
-  function matchPathWithParams(str) {
-    SEGMENT_RE.lastIndex = 0;
-    var match = SEGMENT_RE.exec(str);
-    return match ? match[0] : '';
-  }
-  var QUERY_PARAM_VALUE_RE = /^[^\(\)\?;&#]+/;
-  function matchUrlQueryParamValue(str) {
-    QUERY_PARAM_VALUE_RE.lastIndex = 0;
-    var match = QUERY_PARAM_VALUE_RE.exec(str);
-    return match ? match[0] : '';
-  }
-  var UrlParser = (function() {
-    function UrlParser(remaining) {
-      this.remaining = remaining;
-    }
-    UrlParser.prototype.peekStartsWith = function(str) {
-      return this.remaining.startsWith(str);
-    };
-    UrlParser.prototype.capture = function(str) {
-      if (!this.remaining.startsWith(str)) {
-        throw new Error("Expected \"" + str + "\".");
-      }
-      this.remaining = this.remaining.substring(str.length);
-    };
-    UrlParser.prototype.parseRootSegment = function() {
-      if (this.remaining === '' || this.remaining === '/') {
-        return new url_tree_1.UrlSegment([], {});
-      } else {
-        return new url_tree_1.UrlSegment([], this.parseSegmentChildren());
-      }
-    };
-    UrlParser.prototype.parseSegmentChildren = function() {
-      if (this.remaining.length == 0) {
-        return {};
-      }
-      if (this.peekStartsWith('/')) {
-        this.capture('/');
-      }
-      var paths = [this.parsePathWithParams()];
-      while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
-        this.capture('/');
-        paths.push(this.parsePathWithParams());
-      }
-      var children = {};
-      if (this.peekStartsWith('/(')) {
-        this.capture('/');
-        children = this.parseParens(true);
-      }
-      var res = {};
-      if (this.peekStartsWith('(')) {
-        res = this.parseParens(false);
-      }
-      res[shared_1.PRIMARY_OUTLET] = new url_tree_1.UrlSegment(paths, children);
-      return res;
-    };
-    UrlParser.prototype.parsePathWithParams = function() {
-      var path = matchPathWithParams(this.remaining);
-      this.capture(path);
-      var matrixParams = {};
-      if (this.peekStartsWith(';')) {
-        matrixParams = this.parseMatrixParams();
-      }
-      return new url_tree_1.UrlPathWithParams(path, matrixParams);
-    };
-    UrlParser.prototype.parseQueryParams = function() {
-      var params = {};
-      if (this.peekStartsWith('?')) {
-        this.capture('?');
-        this.parseQueryParam(params);
-        while (this.remaining.length > 0 && this.peekStartsWith('&')) {
-          this.capture('&');
-          this.parseQueryParam(params);
-        }
-      }
-      return params;
-    };
-    UrlParser.prototype.parseFragment = function() {
-      if (this.peekStartsWith('#')) {
-        return this.remaining.substring(1);
-      } else {
-        return null;
-      }
-    };
-    UrlParser.prototype.parseMatrixParams = function() {
-      var params = {};
-      while (this.remaining.length > 0 && this.peekStartsWith(';')) {
-        this.capture(';');
-        this.parseParam(params);
-      }
-      return params;
-    };
-    UrlParser.prototype.parseParam = function(params) {
-      var key = matchPathWithParams(this.remaining);
-      if (!key) {
-        return;
-      }
-      this.capture(key);
-      var value = 'true';
-      if (this.peekStartsWith('=')) {
-        this.capture('=');
-        var valueMatch = matchPathWithParams(this.remaining);
-        if (valueMatch) {
-          value = valueMatch;
-          this.capture(value);
-        }
-      }
-      params[key] = value;
-    };
-    UrlParser.prototype.parseQueryParam = function(params) {
-      var key = matchPathWithParams(this.remaining);
-      if (!key) {
-        return;
-      }
-      this.capture(key);
-      var value = 'true';
-      if (this.peekStartsWith('=')) {
-        this.capture('=');
-        var valueMatch = matchUrlQueryParamValue(this.remaining);
-        if (valueMatch) {
-          value = valueMatch;
-          this.capture(value);
-        }
-      }
-      params[key] = value;
-    };
-    UrlParser.prototype.parseParens = function(allowPrimary) {
-      var segments = {};
-      this.capture('(');
-      while (!this.peekStartsWith(')') && this.remaining.length > 0) {
-        var path = matchPathWithParams(this.remaining);
-        var outletName = void 0;
-        if (path.indexOf(':') > -1) {
-          outletName = path.substr(0, path.indexOf(':'));
-          this.capture(outletName);
-          this.capture(':');
-        } else if (allowPrimary) {
-          outletName = shared_1.PRIMARY_OUTLET;
-        }
-        var children = this.parseSegmentChildren();
-        segments[outletName] = Object.keys(children).length === 1 ? children[shared_1.PRIMARY_OUTLET] : new url_tree_1.UrlSegment([], children);
-        if (this.peekStartsWith('//')) {
-          this.capture('//');
-        }
-      }
-      this.capture(')');
-      return segments;
-    };
-    return UrlParser;
-  }());
-  return module.exports;
-});
-
-System.registerDynamic("npm:@angular/router/utils/collection.js", [], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
+  exports.shallowEqualArrays = shallowEqualArrays;
   function shallowEqual(a, b) {
     var k1 = Object.keys(a);
     var k2 = Object.keys(b);
@@ -6865,14 +6646,13 @@ System.registerDynamic("npm:@angular/router/utils/collection.js", [], true, func
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/url_tree.js", ["./shared", "./url_serializer", "./utils/collection"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/src/url_tree.js", ["./shared", "./utils/collection"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
   var shared_1 = $__require('./shared');
-  var url_serializer_1 = $__require('./url_serializer');
   var collection_1 = $__require('./utils/collection');
   function createEmptyUrlTree() {
     return new UrlTree(new UrlSegment([], {}), {}, null);
@@ -6935,7 +6715,7 @@ System.registerDynamic("npm:@angular/router/url_tree.js", ["./shared", "./url_se
       this.fragment = fragment;
     }
     UrlTree.prototype.toString = function() {
-      return new url_serializer_1.DefaultUrlSerializer().serialize(this);
+      return new DefaultUrlSerializer().serialize(this);
     };
     return UrlTree;
   }());
@@ -6950,8 +6730,11 @@ System.registerDynamic("npm:@angular/router/url_tree.js", ["./shared", "./url_se
         return v.parent = _this;
       });
     }
+    UrlSegment.prototype.hasChildren = function() {
+      return Object.keys(this.children).length > 0;
+    };
     UrlSegment.prototype.toString = function() {
-      return url_serializer_1.serializePaths(this);
+      return serializePaths(this);
     };
     return UrlSegment;
   }());
@@ -6962,7 +6745,7 @@ System.registerDynamic("npm:@angular/router/url_tree.js", ["./shared", "./url_se
       this.parameters = parameters;
     }
     UrlPathWithParams.prototype.toString = function() {
-      return url_serializer_1.serializePath(this);
+      return serializePath(this);
     };
     return UrlPathWithParams;
   }());
@@ -7019,41 +6802,283 @@ System.registerDynamic("npm:@angular/router/url_tree.js", ["./shared", "./url_se
     return res;
   }
   exports.mapChildrenIntoArray = mapChildrenIntoArray;
+  var UrlSerializer = (function() {
+    function UrlSerializer() {}
+    return UrlSerializer;
+  }());
+  exports.UrlSerializer = UrlSerializer;
+  var DefaultUrlSerializer = (function() {
+    function DefaultUrlSerializer() {}
+    DefaultUrlSerializer.prototype.parse = function(url) {
+      var p = new UrlParser(url);
+      return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
+    };
+    DefaultUrlSerializer.prototype.serialize = function(tree) {
+      var segment = "/" + serializeSegment(tree.root, true);
+      var query = serializeQueryParams(tree.queryParams);
+      var fragment = tree.fragment !== null ? "#" + tree.fragment : '';
+      return "" + segment + query + fragment;
+    };
+    return DefaultUrlSerializer;
+  }());
+  exports.DefaultUrlSerializer = DefaultUrlSerializer;
+  function serializePaths(segment) {
+    return segment.pathsWithParams.map(function(p) {
+      return serializePath(p);
+    }).join('/');
+  }
+  exports.serializePaths = serializePaths;
+  function serializeSegment(segment, root) {
+    if (segment.children[shared_1.PRIMARY_OUTLET] && root) {
+      var primary = serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false);
+      var children_1 = [];
+      collection_1.forEach(segment.children, function(v, k) {
+        if (k !== shared_1.PRIMARY_OUTLET) {
+          children_1.push(k + ":" + serializeSegment(v, false));
+        }
+      });
+      if (children_1.length > 0) {
+        return primary + "(" + children_1.join('//') + ")";
+      } else {
+        return "" + primary;
+      }
+    } else if (segment.hasChildren() && !root) {
+      var children = mapChildrenIntoArray(segment, function(v, k) {
+        if (k === shared_1.PRIMARY_OUTLET) {
+          return [serializeSegment(segment.children[shared_1.PRIMARY_OUTLET], false)];
+        } else {
+          return [(k + ":" + serializeSegment(v, false))];
+        }
+      });
+      return serializePaths(segment) + "/(" + children.join('//') + ")";
+    } else {
+      return serializePaths(segment);
+    }
+  }
+  function serializePath(path) {
+    return "" + path.path + serializeParams(path.parameters);
+  }
+  exports.serializePath = serializePath;
+  function serializeParams(params) {
+    return pairs(params).map(function(p) {
+      return (";" + p.first + "=" + p.second);
+    }).join('');
+  }
+  function serializeQueryParams(params) {
+    var strs = pairs(params).map(function(p) {
+      return (p.first + "=" + p.second);
+    });
+    return strs.length > 0 ? "?" + strs.join("&") : '';
+  }
+  var Pair = (function() {
+    function Pair(first, second) {
+      this.first = first;
+      this.second = second;
+    }
+    return Pair;
+  }());
+  function pairs(obj) {
+    var res = [];
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        res.push(new Pair(prop, obj[prop]));
+      }
+    }
+    return res;
+  }
+  var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
+  function matchPathWithParams(str) {
+    SEGMENT_RE.lastIndex = 0;
+    var match = SEGMENT_RE.exec(str);
+    return match ? match[0] : '';
+  }
+  var QUERY_PARAM_RE = /^[^=\?&#]+/;
+  function matchQueryParams(str) {
+    QUERY_PARAM_RE.lastIndex = 0;
+    var match = SEGMENT_RE.exec(str);
+    return match ? match[0] : '';
+  }
+  var QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
+  function matchUrlQueryParamValue(str) {
+    QUERY_PARAM_VALUE_RE.lastIndex = 0;
+    var match = QUERY_PARAM_VALUE_RE.exec(str);
+    return match ? match[0] : '';
+  }
+  var UrlParser = (function() {
+    function UrlParser(remaining) {
+      this.remaining = remaining;
+    }
+    UrlParser.prototype.peekStartsWith = function(str) {
+      return this.remaining.startsWith(str);
+    };
+    UrlParser.prototype.capture = function(str) {
+      if (!this.remaining.startsWith(str)) {
+        throw new Error("Expected \"" + str + "\".");
+      }
+      this.remaining = this.remaining.substring(str.length);
+    };
+    UrlParser.prototype.parseRootSegment = function() {
+      if (this.remaining === '' || this.remaining === '/') {
+        return new UrlSegment([], {});
+      } else {
+        return new UrlSegment([], this.parseSegmentChildren());
+      }
+    };
+    UrlParser.prototype.parseSegmentChildren = function() {
+      if (this.remaining.length == 0) {
+        return {};
+      }
+      if (this.peekStartsWith('/')) {
+        this.capture('/');
+      }
+      var paths = [this.parsePathWithParams()];
+      while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
+        this.capture('/');
+        paths.push(this.parsePathWithParams());
+      }
+      var children = {};
+      if (this.peekStartsWith('/(')) {
+        this.capture('/');
+        children = this.parseParens(true);
+      }
+      var res = {};
+      if (this.peekStartsWith('(')) {
+        res = this.parseParens(false);
+      }
+      res[shared_1.PRIMARY_OUTLET] = new UrlSegment(paths, children);
+      return res;
+    };
+    UrlParser.prototype.parsePathWithParams = function() {
+      var path = matchPathWithParams(this.remaining);
+      if (path === '' && this.peekStartsWith(';')) {
+        throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
+      }
+      this.capture(path);
+      var matrixParams = {};
+      if (this.peekStartsWith(';')) {
+        matrixParams = this.parseMatrixParams();
+      }
+      return new UrlPathWithParams(path, matrixParams);
+    };
+    UrlParser.prototype.parseQueryParams = function() {
+      var params = {};
+      if (this.peekStartsWith('?')) {
+        this.capture('?');
+        this.parseQueryParam(params);
+        while (this.remaining.length > 0 && this.peekStartsWith('&')) {
+          this.capture('&');
+          this.parseQueryParam(params);
+        }
+      }
+      return params;
+    };
+    UrlParser.prototype.parseFragment = function() {
+      if (this.peekStartsWith('#')) {
+        return this.remaining.substring(1);
+      } else {
+        return null;
+      }
+    };
+    UrlParser.prototype.parseMatrixParams = function() {
+      var params = {};
+      while (this.remaining.length > 0 && this.peekStartsWith(';')) {
+        this.capture(';');
+        this.parseParam(params);
+      }
+      return params;
+    };
+    UrlParser.prototype.parseParam = function(params) {
+      var key = matchPathWithParams(this.remaining);
+      if (!key) {
+        return;
+      }
+      this.capture(key);
+      var value = 'true';
+      if (this.peekStartsWith('=')) {
+        this.capture('=');
+        var valueMatch = matchPathWithParams(this.remaining);
+        if (valueMatch) {
+          value = valueMatch;
+          this.capture(value);
+        }
+      }
+      params[key] = value;
+    };
+    UrlParser.prototype.parseQueryParam = function(params) {
+      var key = matchQueryParams(this.remaining);
+      if (!key) {
+        return;
+      }
+      this.capture(key);
+      var value = 'true';
+      if (this.peekStartsWith('=')) {
+        this.capture('=');
+        var valueMatch = matchUrlQueryParamValue(this.remaining);
+        if (valueMatch) {
+          value = valueMatch;
+          this.capture(value);
+        }
+      }
+      params[key] = value;
+    };
+    UrlParser.prototype.parseParens = function(allowPrimary) {
+      var segments = {};
+      this.capture('(');
+      while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+        var path = matchPathWithParams(this.remaining);
+        var outletName = void 0;
+        if (path.indexOf(':') > -1) {
+          outletName = path.substr(0, path.indexOf(':'));
+          this.capture(outletName);
+          this.capture(':');
+        } else if (allowPrimary) {
+          outletName = shared_1.PRIMARY_OUTLET;
+        }
+        var children = this.parseSegmentChildren();
+        segments[outletName] = Object.keys(children).length === 1 ? children[shared_1.PRIMARY_OUTLET] : new UrlSegment([], children);
+        if (this.peekStartsWith('//')) {
+          this.capture('//');
+        }
+      }
+      this.capture(')');
+      return segments;
+    };
+    return UrlParser;
+  }());
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/router/index.js", ["./directives/router_link", "./directives/router_link_active", "./directives/router_outlet", "./router", "./router_outlet_map", "./router_providers", "./router_state", "./shared", "./url_serializer", "./url_tree"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/router/index.js", ["./src/directives/router_link", "./src/directives/router_link_active", "./src/directives/router_outlet", "./src/router", "./src/router_outlet_map", "./src/router_providers", "./src/router_state", "./src/shared", "./src/url_tree"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
-  var router_link_1 = $__require('./directives/router_link');
-  var router_link_active_1 = $__require('./directives/router_link_active');
-  var router_outlet_1 = $__require('./directives/router_outlet');
-  var router_1 = $__require('./router');
+  var router_link_1 = $__require('./src/directives/router_link');
+  var router_link_active_1 = $__require('./src/directives/router_link_active');
+  var router_outlet_1 = $__require('./src/directives/router_outlet');
+  var router_1 = $__require('./src/router');
   exports.NavigationCancel = router_1.NavigationCancel;
   exports.NavigationEnd = router_1.NavigationEnd;
   exports.NavigationError = router_1.NavigationError;
   exports.NavigationStart = router_1.NavigationStart;
   exports.Router = router_1.Router;
   exports.RoutesRecognized = router_1.RoutesRecognized;
-  var router_outlet_map_1 = $__require('./router_outlet_map');
+  var router_outlet_map_1 = $__require('./src/router_outlet_map');
   exports.RouterOutletMap = router_outlet_map_1.RouterOutletMap;
-  var router_providers_1 = $__require('./router_providers');
+  var router_providers_1 = $__require('./src/router_providers');
   exports.provideRouter = router_providers_1.provideRouter;
-  var router_state_1 = $__require('./router_state');
+  var router_state_1 = $__require('./src/router_state');
   exports.ActivatedRoute = router_state_1.ActivatedRoute;
   exports.ActivatedRouteSnapshot = router_state_1.ActivatedRouteSnapshot;
   exports.RouterState = router_state_1.RouterState;
   exports.RouterStateSnapshot = router_state_1.RouterStateSnapshot;
-  var shared_1 = $__require('./shared');
+  var shared_1 = $__require('./src/shared');
   exports.PRIMARY_OUTLET = shared_1.PRIMARY_OUTLET;
-  var url_serializer_1 = $__require('./url_serializer');
-  exports.DefaultUrlSerializer = url_serializer_1.DefaultUrlSerializer;
-  exports.UrlSerializer = url_serializer_1.UrlSerializer;
-  var url_tree_1 = $__require('./url_tree');
+  var url_tree_1 = $__require('./src/url_tree');
+  exports.DefaultUrlSerializer = url_tree_1.DefaultUrlSerializer;
   exports.UrlPathWithParams = url_tree_1.UrlPathWithParams;
+  exports.UrlSerializer = url_tree_1.UrlSerializer;
   exports.UrlTree = url_tree_1.UrlTree;
   exports.ROUTER_DIRECTIVES = [router_outlet_1.RouterOutlet, router_link_1.RouterLink, router_link_active_1.RouterLinkActive];
   return module.exports;
@@ -8076,12 +8101,12 @@ System.registerDynamic("npm:@angular/platform-browser/src/dom/web_animations_dri
         start['offset'] = null;
         formattedSteps = [start, start];
       }
-      var player = this._triggerWebAnimation(anyElm, formattedSteps, {
+      var playerOptions = {
         'duration': duration,
         'delay': delay,
-        'easing': easing,
-        'fill': 'forwards'
-      });
+        'fill': 'both'
+      };
+      var player = this._triggerWebAnimation(anyElm, formattedSteps, playerOptions);
       return new web_animations_player_1.WebAnimationsPlayer(player, duration);
     };
     WebAnimationsDriver.prototype._triggerWebAnimation = function(elm, keyframes, options) {
@@ -8926,7 +8951,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/async_pipe.js", ["@angular
         name: 'async',
         pure: false
       }]
-    }, {type: core_1.Injectable}];
+    }];
     AsyncPipe.ctorParameters = [{type: core_1.ChangeDetectorRef}];
     return AsyncPipe;
   }());
@@ -8954,16 +8979,16 @@ System.registerDynamic("npm:@angular/common/src/pipes/common_pipes.js", ["./asyn
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/common/src/pipes/date_pipe.js", ["@angular/core", "../facade/lang", "../facade/intl", "../facade/collection", "./invalid_pipe_argument_exception"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/common/src/pipes/date_pipe.js", ["@angular/core", "../facade/collection", "../facade/intl", "../facade/lang", "./invalid_pipe_argument_exception"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
   var core_1 = $__require('@angular/core');
-  var lang_1 = $__require('../facade/lang');
-  var intl_1 = $__require('../facade/intl');
   var collection_1 = $__require('../facade/collection');
+  var intl_1 = $__require('../facade/intl');
+  var lang_1 = $__require('../facade/lang');
   var invalid_pipe_argument_exception_1 = $__require('./invalid_pipe_argument_exception');
   var defaultLocale = 'en-US';
   var DatePipe = (function() {
@@ -8977,8 +9002,8 @@ System.registerDynamic("npm:@angular/common/src/pipes/date_pipe.js", ["@angular/
       if (!this.supports(value)) {
         throw new invalid_pipe_argument_exception_1.InvalidPipeArgumentException(DatePipe, value);
       }
-      if (lang_1.isNumber(value)) {
-        value = lang_1.DateWrapper.fromMillis(value);
+      if (lang_1.NumberWrapper.isNumeric(value)) {
+        value = lang_1.DateWrapper.fromMillis(lang_1.NumberWrapper.parseInt(value, 10));
       } else if (lang_1.isString(value)) {
         value = lang_1.DateWrapper.fromISOString(value);
       }
@@ -8988,7 +9013,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/date_pipe.js", ["@angular/
       return intl_1.DateFormatter.format(value, defaultLocale, pattern);
     };
     DatePipe.prototype.supports = function(obj) {
-      if (lang_1.isDate(obj) || lang_1.isNumber(obj)) {
+      if (lang_1.isDate(obj) || lang_1.NumberWrapper.isNumeric(obj)) {
         return true;
       }
       if (lang_1.isString(obj) && lang_1.isDate(lang_1.DateWrapper.fromISOString(obj))) {
@@ -9012,7 +9037,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/date_pipe.js", ["@angular/
         name: 'date',
         pure: true
       }]
-    }, {type: core_1.Injectable}];
+    }];
     return DatePipe;
   }());
   exports.DatePipe = DatePipe;
@@ -9028,7 +9053,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/i18n_plural_pipe.js", ["@a
   var core_1 = $__require('@angular/core');
   var lang_1 = $__require('../facade/lang');
   var invalid_pipe_argument_exception_1 = $__require('./invalid_pipe_argument_exception');
-  var interpolationExp = lang_1.RegExpWrapper.create('#');
+  var _INTERPOLATION_REGEXP = /#/g;
   var I18nPluralPipe = (function() {
     function I18nPluralPipe() {}
     I18nPluralPipe.prototype.transform = function(value, pluralMap) {
@@ -9039,7 +9064,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/i18n_plural_pipe.js", ["@a
       }
       key = value === 0 || value === 1 ? "=" + value : 'other';
       valueStr = lang_1.isPresent(value) ? value.toString() : '';
-      return lang_1.StringWrapper.replaceAll(pluralMap[key], interpolationExp, valueStr);
+      return lang_1.StringWrapper.replaceAll(pluralMap[key], _INTERPOLATION_REGEXP, valueStr);
     };
     I18nPluralPipe.decorators = [{
       type: core_1.Pipe,
@@ -9208,9 +9233,9 @@ System.registerDynamic("npm:@angular/common/src/facade/intl.js", [], true, funct
     h: hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
     jj: datePartGetterFactory(digitCondition('hour', 2)),
     j: datePartGetterFactory(digitCondition('hour', 1)),
-    mm: datePartGetterFactory(digitCondition('minute', 2)),
+    mm: digitModifier(datePartGetterFactory(digitCondition('minute', 2))),
     m: datePartGetterFactory(digitCondition('minute', 1)),
-    ss: datePartGetterFactory(digitCondition('second', 2)),
+    ss: digitModifier(datePartGetterFactory(digitCondition('second', 2))),
     s: datePartGetterFactory(digitCondition('second', 1)),
     sss: datePartGetterFactory(digitCondition('second', 3)),
     EEEE: datePartGetterFactory(nameCondition('weekday', 4)),
@@ -9227,6 +9252,12 @@ System.registerDynamic("npm:@angular/common/src/facade/intl.js", [], true, funct
     GGG: datePartGetterFactory(nameCondition('era', 3)),
     GGGG: datePartGetterFactory(nameCondition('era', 4))
   };
+  function digitModifier(inner) {
+    return function(date, locale) {
+      var result = inner(date, locale);
+      return result.length == 1 ? '0' + result : result;
+    };
+  }
   function hourClockExtracter(inner) {
     return function(date, locale) {
       var result = inner(date, locale);
@@ -9323,7 +9354,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/number_pipe.js", ["@angula
   var lang_1 = $__require('../facade/lang');
   var invalid_pipe_argument_exception_1 = $__require('./invalid_pipe_argument_exception');
   var defaultLocale = 'en-US';
-  var _re = lang_1.RegExpWrapper.create('^(\\d+)?\\.((\\d+)(\\-(\\d+))?)?$');
+  var _NUMBER_FORMAT_REGEXP = /^(\d+)?\.((\d+)(\-(\d+))?)?$/g;
   function formatNumber(pipe, value, style, digits, currency, currencyAsSymbol) {
     if (currency === void 0) {
       currency = null;
@@ -9340,7 +9371,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/number_pipe.js", ["@angula
         minFraction = 0,
         maxFraction = 3;
     if (lang_1.isPresent(digits)) {
-      var parts = lang_1.RegExpWrapper.firstMatch(_re, digits);
+      var parts = lang_1.RegExpWrapper.firstMatch(_NUMBER_FORMAT_REGEXP, digits);
       if (lang_1.isBlank(parts)) {
         throw new exceptions_1.BaseException(digits + " is not a valid digit info for number pipes");
       }
@@ -9462,7 +9493,7 @@ System.registerDynamic("npm:@angular/common/src/pipes/replace_pipe.js", ["@angul
     ReplacePipe.decorators = [{
       type: core_1.Pipe,
       args: [{name: 'replace'}]
-    }, {type: core_1.Injectable}];
+    }];
     return ReplacePipe;
   }());
   exports.ReplacePipe = ReplacePipe;
@@ -12422,7 +12453,7 @@ System.registerDynamic("npm:@angular/common/src/forms-deprecated/directives/vali
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/common/src/forms-deprecated/model.js", ["../facade/async", "../facade/collection", "../facade/lang", "../facade/promise"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/common/src/forms-deprecated/model.js", ["../facade/async", "../facade/collection", "../facade/lang"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -12440,7 +12471,6 @@ System.registerDynamic("npm:@angular/common/src/forms-deprecated/model.js", ["..
   var async_1 = $__require('../facade/async');
   var collection_1 = $__require('../facade/collection');
   var lang_1 = $__require('../facade/lang');
-  var promise_1 = $__require('../facade/promise');
   exports.VALID = 'VALID';
   exports.INVALID = 'INVALID';
   exports.PENDING = 'PENDING';
@@ -12468,7 +12498,7 @@ System.registerDynamic("npm:@angular/common/src/forms-deprecated/model.js", ["..
     }, control);
   }
   function toObservable(r) {
-    return promise_1.PromiseWrapper.isPromise(r) ? async_1.ObservableWrapper.fromPromise(r) : r;
+    return lang_1.isPromise(r) ? async_1.ObservableWrapper.fromPromise(r) : r;
   }
   var AbstractControl = (function() {
     function AbstractControl(validator, asyncValidator) {
@@ -12957,7 +12987,7 @@ System.registerDynamic("npm:@angular/common/src/forms-deprecated/validators.js",
   }());
   exports.Validators = Validators;
   function _convertToPromise(obj) {
-    return promise_1.PromiseWrapper.isPromise(obj) ? obj : async_1.ObservableWrapper.toPromise(obj);
+    return lang_1.isPromise(obj) ? obj : async_1.ObservableWrapper.toPromise(obj);
   }
   function _executeValidators(control, validators) {
     return validators.map(function(v) {
@@ -13990,23 +14020,6 @@ System.registerDynamic("npm:@angular/common/src/facade/lang.js", [], true, funct
   exports.getTypeNameForDebugging = getTypeNameForDebugging;
   exports.Math = _global.Math;
   exports.Date = _global.Date;
-  var _devMode = true;
-  var _modeLocked = false;
-  function lockMode() {
-    _modeLocked = true;
-  }
-  exports.lockMode = lockMode;
-  function enableProdMode() {
-    if (_modeLocked) {
-      throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-  }
-  exports.enableProdMode = enableProdMode;
-  function assertionsEnabled() {
-    return _devMode;
-  }
-  exports.assertionsEnabled = assertionsEnabled;
   _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
@@ -14237,6 +14250,9 @@ System.registerDynamic("npm:@angular/common/src/facade/lang.js", [], true, funct
       enumerable: true,
       configurable: true
     });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
     NumberWrapper.isNaN = function(value) {
       return isNaN(value);
     };
@@ -14442,22 +14458,14 @@ System.registerDynamic("npm:@angular/common/src/facade/lang.js", [], true, funct
     return value.constructor === type;
   }
   exports.hasConstructor = hasConstructor;
-  function bitWiseOr(values) {
-    return values.reduce(function(a, b) {
-      return a | b;
-    });
-  }
-  exports.bitWiseOr = bitWiseOr;
-  function bitWiseAnd(values) {
-    return values.reduce(function(a, b) {
-      return a & b;
-    });
-  }
-  exports.bitWiseAnd = bitWiseAnd;
   function escape(s) {
     return _global.encodeURI(s);
   }
   exports.escape = escape;
+  function escapeRegExp(s) {
+    return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
+  exports.escapeRegExp = escapeRegExp;
   return module.exports;
 });
 
@@ -14508,9 +14516,6 @@ System.registerDynamic("npm:@angular/common/src/facade/promise.js", [], true, fu
     };
     PromiseWrapper.scheduleMicrotask = function(computation) {
       PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function(_) {});
-    };
-    PromiseWrapper.isPromise = function(obj) {
-      return obj instanceof Promise;
     };
     PromiseWrapper.completer = function() {
       return new PromiseCompleter();
@@ -14588,7 +14593,7 @@ System.registerDynamic("npm:@angular/common/src/facade/async.js", ["rxjs/Subject
       subscription.unsubscribe();
     };
     ObservableWrapper.callNext = function(emitter, value) {
-      emitter.next(value);
+      emitter.emit(value);
     };
     ObservableWrapper.callEmit = function(emitter, value) {
       emitter.emit(value);
@@ -15070,7 +15075,7 @@ System.registerDynamic("npm:@angular/platform-browser/src/browser/testability.js
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/platform-browser/src/dom/debug/ng_probe.js", ["@angular/core", "../../../core_private", "../../facade/lang", "../dom_adapter", "../dom_renderer"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/platform-browser/src/dom/debug/ng_probe.js", ["@angular/core", "../../../core_private", "../dom_adapter", "../dom_renderer"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -15078,7 +15083,6 @@ System.registerDynamic("npm:@angular/platform-browser/src/dom/debug/ng_probe.js"
       GLOBAL = this;
   var core_1 = $__require('@angular/core');
   var core_private_1 = $__require('../../../core_private');
-  var lang_1 = $__require('../../facade/lang');
   var dom_adapter_1 = $__require('../dom_adapter');
   var dom_renderer_1 = $__require('../dom_renderer');
   var CORE_TOKENS = {
@@ -15092,7 +15096,7 @@ System.registerDynamic("npm:@angular/platform-browser/src/dom/debug/ng_probe.js"
   }
   exports.inspectNativeElement = inspectNativeElement;
   function _createConditionalRootRenderer(rootRenderer) {
-    if (lang_1.assertionsEnabled()) {
+    if (core_1.isDevMode()) {
       return _createRootRenderer(rootRenderer);
     }
     return rootRenderer;
@@ -15438,14 +15442,14 @@ System.registerDynamic("npm:@angular/platform-browser/src/dom/events/key_events.
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/platform-browser/src/security/html_sanitizer.js", ["../dom/dom_adapter", "../facade/lang", "./url_sanitizer"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/platform-browser/src/security/html_sanitizer.js", ["@angular/core", "../dom/dom_adapter", "./url_sanitizer"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
+  var core_1 = $__require('@angular/core');
   var dom_adapter_1 = $__require('../dom/dom_adapter');
-  var lang_1 = $__require('../facade/lang');
   var url_sanitizer_1 = $__require('./url_sanitizer');
   var inertElement = null;
   var DOM = null;
@@ -15615,7 +15619,7 @@ System.registerDynamic("npm:@angular/platform-browser/src/security/html_sanitize
         var child = _a[_i];
         DOM.removeChild(parent_1, child);
       }
-      if (lang_1.assertionsEnabled() && safeHtml !== unsafeHtml) {
+      if (core_1.isDevMode() && safeHtml !== unsafeHtml) {
         DOM.log('WARNING: sanitizing HTML stripped some content.');
       }
       return safeHtml;
@@ -15628,14 +15632,14 @@ System.registerDynamic("npm:@angular/platform-browser/src/security/html_sanitize
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/platform-browser/src/security/style_sanitizer.js", ["../dom/dom_adapter", "../facade/lang", "./url_sanitizer"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/platform-browser/src/security/style_sanitizer.js", ["@angular/core", "../dom/dom_adapter", "./url_sanitizer"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
+  var core_1 = $__require('@angular/core');
   var dom_adapter_1 = $__require('../dom/dom_adapter');
-  var lang_1 = $__require('../facade/lang');
   var url_sanitizer_1 = $__require('./url_sanitizer');
   var VALUES = '[-,."\'%_!# a-zA-Z0-9]+';
   var TRANSFORMATION_FNS = '(?:matrix|translate|scale|rotate|skew|perspective)(?:X|Y|3d)?';
@@ -15662,7 +15666,7 @@ System.registerDynamic("npm:@angular/platform-browser/src/security/style_sanitiz
     if ((urlMatch && url_sanitizer_1.sanitizeUrl(urlMatch[1]) === urlMatch[1]) || value.match(SAFE_STYLE_VALUE) && hasBalancedQuotes(value)) {
       return value;
     }
-    if (lang_1.assertionsEnabled())
+    if (core_1.isDevMode())
       dom_adapter_1.getDOM().log('WARNING: sanitizing unsafe style value ' + value);
     return 'unsafe';
   }
@@ -15670,21 +15674,21 @@ System.registerDynamic("npm:@angular/platform-browser/src/security/style_sanitiz
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/platform-browser/src/security/url_sanitizer.js", ["../dom/dom_adapter", "../facade/lang"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/platform-browser/src/security/url_sanitizer.js", ["@angular/core", "../dom/dom_adapter"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
+  var core_1 = $__require('@angular/core');
   var dom_adapter_1 = $__require('../dom/dom_adapter');
-  var lang_1 = $__require('../facade/lang');
   var SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^&:/?#]*(?:[/?#]|$))/gi;
   var DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm));base64,[a-z0-9+\/]+=*$/i;
   function sanitizeUrl(url) {
     url = String(url);
     if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN))
       return url;
-    if (lang_1.assertionsEnabled())
+    if (core_1.isDevMode())
       dom_adapter_1.getDOM().log('WARNING: sanitizing unsafe URL value ' + url);
     return 'unsafe:' + url;
   }
@@ -15787,6 +15791,9 @@ System.registerDynamic("npm:@angular/platform-browser/src/security/dom_sanitizat
     function SafeValueImpl(changingThisBreaksApplicationSecurity) {
       this.changingThisBreaksApplicationSecurity = changingThisBreaksApplicationSecurity;
     }
+    SafeValueImpl.prototype.toString = function() {
+      return "SafeValue must use [property]=binding: " + this.changingThisBreaksApplicationSecurity;
+    };
     return SafeValueImpl;
   }());
   var SafeHtmlImpl = (function(_super) {
@@ -16281,9 +16288,6 @@ System.registerDynamic("npm:@angular/platform-browser/src/facade/promise.js", []
     PromiseWrapper.scheduleMicrotask = function(computation) {
       PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function(_) {});
     };
-    PromiseWrapper.isPromise = function(obj) {
-      return obj instanceof Promise;
-    };
     PromiseWrapper.completer = function() {
       return new PromiseCompleter();
     };
@@ -16360,7 +16364,7 @@ System.registerDynamic("npm:@angular/platform-browser/src/facade/async.js", ["rx
       subscription.unsubscribe();
     };
     ObservableWrapper.callNext = function(emitter, value) {
-      emitter.next(value);
+      emitter.emit(value);
     };
     ObservableWrapper.callEmit = function(emitter, value) {
       emitter.emit(value);
@@ -18708,23 +18712,6 @@ System.registerDynamic("npm:@angular/platform-browser/src/facade/lang.js", [], t
   exports.getTypeNameForDebugging = getTypeNameForDebugging;
   exports.Math = _global.Math;
   exports.Date = _global.Date;
-  var _devMode = true;
-  var _modeLocked = false;
-  function lockMode() {
-    _modeLocked = true;
-  }
-  exports.lockMode = lockMode;
-  function enableProdMode() {
-    if (_modeLocked) {
-      throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-  }
-  exports.enableProdMode = enableProdMode;
-  function assertionsEnabled() {
-    return _devMode;
-  }
-  exports.assertionsEnabled = assertionsEnabled;
   _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
@@ -18955,6 +18942,9 @@ System.registerDynamic("npm:@angular/platform-browser/src/facade/lang.js", [], t
       enumerable: true,
       configurable: true
     });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
     NumberWrapper.isNaN = function(value) {
       return isNaN(value);
     };
@@ -19160,22 +19150,14 @@ System.registerDynamic("npm:@angular/platform-browser/src/facade/lang.js", [], t
     return value.constructor === type;
   }
   exports.hasConstructor = hasConstructor;
-  function bitWiseOr(values) {
-    return values.reduce(function(a, b) {
-      return a | b;
-    });
-  }
-  exports.bitWiseOr = bitWiseOr;
-  function bitWiseAnd(values) {
-    return values.reduce(function(a, b) {
-      return a & b;
-    });
-  }
-  exports.bitWiseAnd = bitWiseAnd;
   function escape(s) {
     return _global.encodeURI(s);
   }
   exports.escape = escape;
+  function escapeRegExp(s) {
+    return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
+  exports.escapeRegExp = escapeRegExp;
   return module.exports;
 });
 
@@ -19484,7 +19466,7 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/src/facade/async.j
       subscription.unsubscribe();
     };
     ObservableWrapper.callNext = function(emitter, value) {
-      emitter.next(value);
+      emitter.emit(value);
     };
     ObservableWrapper.callEmit = function(emitter, value) {
       emitter.emit(value);
@@ -21946,9 +21928,6 @@ System.registerDynamic("npm:@angular/compiler/src/facade/promise.js", [], true, 
     PromiseWrapper.scheduleMicrotask = function(computation) {
       PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function(_) {});
     };
-    PromiseWrapper.isPromise = function(obj) {
-      return obj instanceof Promise;
-    };
     PromiseWrapper.completer = function() {
       return new PromiseCompleter();
     };
@@ -22025,7 +22004,7 @@ System.registerDynamic("npm:@angular/compiler/src/facade/async.js", ["rxjs/Subje
       subscription.unsubscribe();
     };
     ObservableWrapper.callNext = function(emitter, value) {
-      emitter.next(value);
+      emitter.emit(value);
     };
     ObservableWrapper.callEmit = function(emitter, value) {
       emitter.emit(value);
@@ -22245,7 +22224,8 @@ System.registerDynamic("npm:@angular/compiler/src/directive_normalizer.js", ["@a
         styles: allResolvedStyles,
         styleUrls: allStyleAbsUrls,
         ngContentSelectors: visitor.ngContentSelectors,
-        animations: templateMeta.animations
+        animations: templateMeta.animations,
+        interpolation: templateMeta.interpolation
       });
     };
     DirectiveNormalizer.decorators = [{type: core_1.Injectable}];
@@ -22312,7 +22292,81 @@ System.registerDynamic("npm:@angular/compiler/src/directive_normalizer.js", ["@a
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", ["../facade/collection", "../facade/exceptions", "../facade/lang", "../html_ast", "../html_parser", "./expander", "./message", "./shared"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/i18n/expander.js", ["../facade/exceptions", "../html_ast", "./shared"], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  var exceptions_1 = $__require('../facade/exceptions');
+  var html_ast_1 = $__require('../html_ast');
+  var shared_1 = $__require('./shared');
+  var PLURAL_CASES = ['zero', 'one', 'two', 'few', 'many', 'other'];
+  function expandNodes(nodes) {
+    var expander = new _Expander();
+    return new ExpansionResult(html_ast_1.htmlVisitAll(expander, nodes), expander.isExpanded, expander.errors);
+  }
+  exports.expandNodes = expandNodes;
+  var ExpansionResult = (function() {
+    function ExpansionResult(nodes, expanded, errors) {
+      this.nodes = nodes;
+      this.expanded = expanded;
+      this.errors = errors;
+    }
+    return ExpansionResult;
+  }());
+  exports.ExpansionResult = ExpansionResult;
+  var _Expander = (function() {
+    function _Expander() {
+      this.isExpanded = false;
+      this.errors = [];
+    }
+    _Expander.prototype.visitElement = function(ast, context) {
+      return new html_ast_1.HtmlElementAst(ast.name, ast.attrs, html_ast_1.htmlVisitAll(this, ast.children), ast.sourceSpan, ast.startSourceSpan, ast.endSourceSpan);
+    };
+    _Expander.prototype.visitAttr = function(ast, context) {
+      return ast;
+    };
+    _Expander.prototype.visitText = function(ast, context) {
+      return ast;
+    };
+    _Expander.prototype.visitComment = function(ast, context) {
+      return ast;
+    };
+    _Expander.prototype.visitExpansion = function(ast, context) {
+      this.isExpanded = true;
+      return ast.type == 'plural' ? _expandPluralForm(ast, this.errors) : _expandDefaultForm(ast, this.errors);
+    };
+    _Expander.prototype.visitExpansionCase = function(ast, context) {
+      throw new exceptions_1.BaseException('Should not be reached');
+    };
+    return _Expander;
+  }());
+  function _expandPluralForm(ast, errors) {
+    var children = ast.cases.map(function(c) {
+      if (PLURAL_CASES.indexOf(c.value) == -1 && !c.value.match(/^=\d+$/)) {
+        errors.push(new shared_1.I18nError(c.valueSourceSpan, "Plural cases should be \"=<number>\" or one of " + PLURAL_CASES.join(", ")));
+      }
+      var expansionResult = expandNodes(c.expression);
+      errors.push.apply(errors, expansionResult.errors);
+      return new html_ast_1.HtmlElementAst("template", [new html_ast_1.HtmlAttrAst('ngPluralCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
+    });
+    var switchAttr = new html_ast_1.HtmlAttrAst('[ngPlural]', ast.switchValue, ast.switchValueSourceSpan);
+    return new html_ast_1.HtmlElementAst('ng-container', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
+  }
+  function _expandDefaultForm(ast, errors) {
+    var children = ast.cases.map(function(c) {
+      var expansionResult = expandNodes(c.expression);
+      errors.push.apply(errors, expansionResult.errors);
+      return new html_ast_1.HtmlElementAst("template", [new html_ast_1.HtmlAttrAst('ngSwitchCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
+    });
+    var switchAttr = new html_ast_1.HtmlAttrAst('[ngSwitch]', ast.switchValue, ast.switchValueSourceSpan);
+    return new html_ast_1.HtmlElementAst('ng-container', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
+  }
+  return module.exports;
+});
+
+System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", ["../facade/collection", "../facade/exceptions", "../facade/lang", "../html_ast", "../html_parser", "../interpolation_config", "./expander", "./message", "./shared"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -22323,6 +22377,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
   var lang_1 = $__require('../facade/lang');
   var html_ast_1 = $__require('../html_ast');
   var html_parser_1 = $__require('../html_parser');
+  var interpolation_config_1 = $__require('../interpolation_config');
   var expander_1 = $__require('./expander');
   var message_1 = $__require('./message');
   var shared_1 = $__require('./shared');
@@ -22338,11 +22393,15 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
       this._implicitTags = _implicitTags;
       this._implicitAttrs = _implicitAttrs;
     }
-    I18nHtmlParser.prototype.parse = function(sourceContent, sourceUrl, parseExpansionForms) {
+    I18nHtmlParser.prototype.parse = function(sourceContent, sourceUrl, parseExpansionForms, interpolationConfig) {
       if (parseExpansionForms === void 0) {
         parseExpansionForms = false;
       }
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
       this.errors = [];
+      this._interpolationConfig = interpolationConfig;
       var res = this._htmlParser.parse(sourceContent, sourceUrl, true);
       if (res.errors.length > 0) {
         return res;
@@ -22367,7 +22426,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
       }
     };
     I18nHtmlParser.prototype._mergeI18Part = function(part) {
-      var message = part.createMessage(this._parser);
+      var message = part.createMessage(this._parser, this._interpolationConfig);
       var messageId = message_1.id(message);
       if (!collection_1.StringMapWrapper.contains(this._messages, messageId)) {
         throw new shared_1.I18nError(part.sourceSpan, "Cannot find message for id '" + messageId + "', content '" + message.content + "'.");
@@ -22446,7 +22505,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
       return names[0].value;
     };
     I18nHtmlParser.prototype._mergeTextInterpolation = function(t, originalNode) {
-      var split = this._parser.splitInterpolation(originalNode.value, originalNode.sourceSpan.toString());
+      var split = this._parser.splitInterpolation(originalNode.value, originalNode.sourceSpan.toString(), this._interpolationConfig);
       var exps = lang_1.isPresent(split) ? split.expressions : [];
       var messageSubstring = this._messagesContent.substring(t.startSourceSpan.end.offset, t.endSourceSpan.start.offset);
       var translated = this._replacePlaceholdersWithExpressions(messageSubstring, exps, originalNode.sourceSpan);
@@ -22472,9 +22531,9 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
             res.push(attr);
             return;
           }
-          message = shared_1.messageFromAttribute(_this._parser, attr);
+          message = shared_1.messageFromAttribute(_this._parser, _this._interpolationConfig, attr);
         } else {
-          message = shared_1.messageFromI18nAttribute(_this._parser, el, i18ns[0]);
+          message = shared_1.messageFromI18nAttribute(_this._parser, _this._interpolationConfig, el, i18ns[0]);
         }
         var messageId = message_1.id(message);
         if (collection_1.StringMapWrapper.contains(_this._messages, messageId)) {
@@ -22487,7 +22546,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
       return res;
     };
     I18nHtmlParser.prototype._replaceInterpolationInAttr = function(attr, msg) {
-      var split = this._parser.splitInterpolation(attr.value, attr.sourceSpan.toString());
+      var split = this._parser.splitInterpolation(attr.value, attr.sourceSpan.toString(), this._interpolationConfig);
       var exps = lang_1.isPresent(split) ? split.expressions : [];
       var first = msg[0];
       var last = msg[msg.length - 1];
@@ -22517,7 +22576,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
     };
     I18nHtmlParser.prototype._convertIntoExpression = function(name, expMap, sourceSpan) {
       if (expMap.has(name)) {
-        return "{{" + expMap.get(name) + "}}";
+        return "" + this._interpolationConfig.start + expMap.get(name) + this._interpolationConfig.end;
       } else {
         throw new shared_1.I18nError(sourceSpan, "Invalid interpolation name '" + name + "'");
       }
@@ -22555,82 +22614,6 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/i18n_html_parser.js", [".
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/i18n/expander.js", ["../facade/exceptions", "../html_ast", "./shared"], true, function($__require, exports, module) {
-  "use strict";
-  ;
-  var define,
-      global = this,
-      GLOBAL = this;
-  var exceptions_1 = $__require('../facade/exceptions');
-  var html_ast_1 = $__require('../html_ast');
-  var shared_1 = $__require('./shared');
-  var PLURAL_CASES = ['zero', 'one', 'two', 'few', 'many', 'other'];
-  function expandNodes(nodes) {
-    var e = new _Expander();
-    var n = html_ast_1.htmlVisitAll(e, nodes);
-    return new ExpansionResult(n, e.expanded, e.errors);
-  }
-  exports.expandNodes = expandNodes;
-  var ExpansionResult = (function() {
-    function ExpansionResult(nodes, expanded, errors) {
-      this.nodes = nodes;
-      this.expanded = expanded;
-      this.errors = errors;
-    }
-    return ExpansionResult;
-  }());
-  exports.ExpansionResult = ExpansionResult;
-  var _Expander = (function() {
-    function _Expander() {
-      this.expanded = false;
-      this.errors = [];
-    }
-    _Expander.prototype.visitElement = function(ast, context) {
-      return new html_ast_1.HtmlElementAst(ast.name, ast.attrs, html_ast_1.htmlVisitAll(this, ast.children), ast.sourceSpan, ast.startSourceSpan, ast.endSourceSpan);
-    };
-    _Expander.prototype.visitAttr = function(ast, context) {
-      return ast;
-    };
-    _Expander.prototype.visitText = function(ast, context) {
-      return ast;
-    };
-    _Expander.prototype.visitComment = function(ast, context) {
-      return ast;
-    };
-    _Expander.prototype.visitExpansion = function(ast, context) {
-      this.expanded = true;
-      return ast.type == 'plural' ? _expandPluralForm(ast, this.errors) : _expandDefaultForm(ast);
-    };
-    _Expander.prototype.visitExpansionCase = function(ast, context) {
-      throw new exceptions_1.BaseException('Should not be reached');
-    };
-    return _Expander;
-  }());
-  function _expandPluralForm(ast, errors) {
-    var children = ast.cases.map(function(c) {
-      if (PLURAL_CASES.indexOf(c.value) == -1 && !c.value.match(/^=\d+$/)) {
-        errors.push(new shared_1.I18nError(c.valueSourceSpan, "Plural cases should be \"=<number>\" or one of " + PLURAL_CASES.join(", ")));
-      }
-      var expansionResult = expandNodes(c.expression);
-      errors.push.apply(errors, expansionResult.errors);
-      var i18nAttrs = expansionResult.expanded ? [] : [new html_ast_1.HtmlAttrAst('i18n', ast.type + "_" + c.value, c.valueSourceSpan)];
-      return new html_ast_1.HtmlElementAst("template", [new html_ast_1.HtmlAttrAst('ngPluralCase', c.value, c.valueSourceSpan)], [new html_ast_1.HtmlElementAst("li", i18nAttrs, expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan)], c.sourceSpan, c.sourceSpan, c.sourceSpan);
-    });
-    var switchAttr = new html_ast_1.HtmlAttrAst('[ngPlural]', ast.switchValue, ast.switchValueSourceSpan);
-    return new html_ast_1.HtmlElementAst('ul', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
-  }
-  function _expandDefaultForm(ast) {
-    var children = ast.cases.map(function(c) {
-      var expansionResult = expandNodes(c.expression);
-      var i18nAttrs = expansionResult.expanded ? [] : [new html_ast_1.HtmlAttrAst('i18n', ast.type + "_" + c.value, c.valueSourceSpan)];
-      return new html_ast_1.HtmlElementAst("template", [new html_ast_1.HtmlAttrAst('ngSwitchWhen', c.value, c.valueSourceSpan)], [new html_ast_1.HtmlElementAst("li", i18nAttrs, expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan)], c.sourceSpan, c.sourceSpan, c.sourceSpan);
-    });
-    var switchAttr = new html_ast_1.HtmlAttrAst('[ngSwitch]', ast.switchValue, ast.switchValueSourceSpan);
-    return new html_ast_1.HtmlElementAst('ul', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
-  }
-  return module.exports;
-});
-
 System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/lang", "../html_ast", "../parse_util", "./message"], true, function($__require, exports, module) {
   "use strict";
   ;
@@ -22664,25 +22647,24 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
   function partition(nodes, errors, implicitTags) {
     var parts = [];
     for (var i = 0; i < nodes.length; ++i) {
-      var n = nodes[i];
-      var temp = [];
-      if (_isOpeningComment(n)) {
-        var i18n = n.value.replace(/^i18n:?/, '').trim();
-        i++;
-        while (!_isClosingComment(nodes[i])) {
-          temp.push(nodes[i++]);
-          if (i === nodes.length) {
-            errors.push(new I18nError(n.sourceSpan, 'Missing closing \'i18n\' comment.'));
-            break;
-          }
+      var node = nodes[i];
+      var msgNodes = [];
+      if (_isOpeningComment(node)) {
+        var i18n = node.value.replace(/^i18n:?/, '').trim();
+        while (++i < nodes.length && !_isClosingComment(nodes[i])) {
+          msgNodes.push(nodes[i]);
         }
-        parts.push(new Part(null, null, temp, i18n, true));
-      } else if (n instanceof html_ast_1.HtmlElementAst) {
-        var i18n = _findI18nAttr(n);
-        var hasI18n = lang_1.isPresent(i18n) || implicitTags.indexOf(n.name) > -1;
-        parts.push(new Part(n, null, n.children, lang_1.isPresent(i18n) ? i18n.value : null, hasI18n));
-      } else if (n instanceof html_ast_1.HtmlTextAst) {
-        parts.push(new Part(null, n, null, null, false));
+        if (i === nodes.length) {
+          errors.push(new I18nError(node.sourceSpan, 'Missing closing \'i18n\' comment.'));
+          break;
+        }
+        parts.push(new Part(null, null, msgNodes, i18n, true));
+      } else if (node instanceof html_ast_1.HtmlElementAst) {
+        var i18n = _findI18nAttr(node);
+        var hasI18n = lang_1.isPresent(i18n) || implicitTags.indexOf(node.name) > -1;
+        parts.push(new Part(node, null, node.children, lang_1.isPresent(i18n) ? i18n.value : null, hasI18n));
+      } else if (node instanceof html_ast_1.HtmlTextAst) {
+        parts.push(new Part(null, node, null, null, false));
       }
     }
     return parts;
@@ -22709,8 +22691,8 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
       enumerable: true,
       configurable: true
     });
-    Part.prototype.createMessage = function(parser) {
-      return new message_1.Message(stringifyNodes(this.children, parser), meaning(this.i18n), description(this.i18n));
+    Part.prototype.createMessage = function(parser, interpolationConfig) {
+      return new message_1.Message(stringifyNodes(this.children, parser, interpolationConfig), meaning(this.i18n), description(this.i18n));
     };
     return Part;
   }());
@@ -22719,7 +22701,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
     return n instanceof html_ast_1.HtmlCommentAst && lang_1.isPresent(n.value) && n.value.startsWith('i18n');
   }
   function _isClosingComment(n) {
-    return n instanceof html_ast_1.HtmlCommentAst && lang_1.isPresent(n.value) && n.value == '/i18n';
+    return n instanceof html_ast_1.HtmlCommentAst && lang_1.isPresent(n.value) && n.value === '/i18n';
   }
   function _findI18nAttr(p) {
     var attrs = p.attrs;
@@ -22743,31 +22725,31 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
     return parts.length > 1 ? parts[1] : null;
   }
   exports.description = description;
-  function messageFromI18nAttribute(parser, p, i18nAttr) {
+  function messageFromI18nAttribute(parser, interpolationConfig, p, i18nAttr) {
     var expectedName = i18nAttr.name.substring(5);
     var attr = p.attrs.find(function(a) {
       return a.name == expectedName;
     });
     if (attr) {
-      return messageFromAttribute(parser, attr, meaning(i18nAttr.value), description(i18nAttr.value));
+      return messageFromAttribute(parser, interpolationConfig, attr, meaning(i18nAttr.value), description(i18nAttr.value));
     }
     throw new I18nError(p.sourceSpan, "Missing attribute '" + expectedName + "'.");
   }
   exports.messageFromI18nAttribute = messageFromI18nAttribute;
-  function messageFromAttribute(parser, attr, meaning, description) {
+  function messageFromAttribute(parser, interpolationConfig, attr, meaning, description) {
     if (meaning === void 0) {
       meaning = null;
     }
     if (description === void 0) {
       description = null;
     }
-    var value = removeInterpolation(attr.value, attr.sourceSpan, parser);
+    var value = removeInterpolation(attr.value, attr.sourceSpan, parser, interpolationConfig);
     return new message_1.Message(value, meaning, description);
   }
   exports.messageFromAttribute = messageFromAttribute;
-  function removeInterpolation(value, source, parser) {
+  function removeInterpolation(value, source, parser, interpolationConfig) {
     try {
-      var parsed = parser.splitInterpolation(value, source.toString());
+      var parsed = parser.splitInterpolation(value, source.toString(), interpolationConfig);
       var usedNames = new Map();
       if (lang_1.isPresent(parsed)) {
         var res = '';
@@ -22804,14 +22786,15 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
     }
   }
   exports.dedupePhName = dedupePhName;
-  function stringifyNodes(nodes, parser) {
-    var visitor = new _StringifyVisitor(parser);
+  function stringifyNodes(nodes, parser, interpolationConfig) {
+    var visitor = new _StringifyVisitor(parser, interpolationConfig);
     return html_ast_1.htmlVisitAll(visitor, nodes).join('');
   }
   exports.stringifyNodes = stringifyNodes;
   var _StringifyVisitor = (function() {
-    function _StringifyVisitor(_parser) {
+    function _StringifyVisitor(_parser, _interpolationConfig) {
       this._parser = _parser;
+      this._interpolationConfig = _interpolationConfig;
       this._index = 0;
     }
     _StringifyVisitor.prototype.visitElement = function(ast, context) {
@@ -22824,7 +22807,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
     };
     _StringifyVisitor.prototype.visitText = function(ast, context) {
       var index = this._index++;
-      var noInterpolation = removeInterpolation(ast.value, ast.sourceSpan, this._parser);
+      var noInterpolation = removeInterpolation(ast.value, ast.sourceSpan, this._parser, this._interpolationConfig);
       if (noInterpolation != ast.value) {
         return "<ph name=\"t" + index + "\">" + noInterpolation + "</ph>";
       }
@@ -22849,7 +22832,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/shared.js", ["../facade/l
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["../facade/collection", "../facade/lang", "../html_ast", "./expander", "./message", "./shared"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["../facade/collection", "../facade/lang", "../html_ast", "../interpolation_config", "./message", "./shared"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -22858,7 +22841,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["
   var collection_1 = $__require('../facade/collection');
   var lang_1 = $__require('../facade/lang');
   var html_ast_1 = $__require('../html_ast');
-  var expander_1 = $__require('./expander');
+  var interpolation_config_1 = $__require('../interpolation_config');
   var message_1 = $__require('./message');
   var shared_1 = $__require('./shared');
   var ExtractionResult = (function() {
@@ -22886,48 +22869,48 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["
       this._implicitTags = _implicitTags;
       this._implicitAttrs = _implicitAttrs;
     }
-    MessageExtractor.prototype.extract = function(template, sourceUrl) {
+    MessageExtractor.prototype.extract = function(template, sourceUrl, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
       this._messages = [];
       this._errors = [];
       var res = this._htmlParser.parse(template, sourceUrl, true);
-      if (res.errors.length > 0) {
-        return new ExtractionResult([], res.errors);
-      } else {
-        var expanded = expander_1.expandNodes(res.rootNodes);
-        this._recurse(expanded.nodes);
-        return new ExtractionResult(this._messages, this._errors.concat(expanded.errors));
+      if (res.errors.length == 0) {
+        this._recurse(res.rootNodes, interpolationConfig);
       }
+      return new ExtractionResult(this._messages, this._errors.concat(res.errors));
     };
-    MessageExtractor.prototype._extractMessagesFromPart = function(part) {
+    MessageExtractor.prototype._extractMessagesFromPart = function(part, interpolationConfig) {
       if (part.hasI18n) {
-        this._messages.push(part.createMessage(this._parser));
-        this._recurseToExtractMessagesFromAttributes(part.children);
+        this._messages.push(part.createMessage(this._parser, interpolationConfig));
+        this._recurseToExtractMessagesFromAttributes(part.children, interpolationConfig);
       } else {
-        this._recurse(part.children);
+        this._recurse(part.children, interpolationConfig);
       }
       if (lang_1.isPresent(part.rootElement)) {
-        this._extractMessagesFromAttributes(part.rootElement);
+        this._extractMessagesFromAttributes(part.rootElement, interpolationConfig);
       }
     };
-    MessageExtractor.prototype._recurse = function(nodes) {
+    MessageExtractor.prototype._recurse = function(nodes, interpolationConfig) {
       var _this = this;
       if (lang_1.isPresent(nodes)) {
         var parts = shared_1.partition(nodes, this._errors, this._implicitTags);
         parts.forEach(function(part) {
-          return _this._extractMessagesFromPart(part);
+          return _this._extractMessagesFromPart(part, interpolationConfig);
         });
       }
     };
-    MessageExtractor.prototype._recurseToExtractMessagesFromAttributes = function(nodes) {
+    MessageExtractor.prototype._recurseToExtractMessagesFromAttributes = function(nodes, interpolationConfig) {
       var _this = this;
       nodes.forEach(function(n) {
         if (n instanceof html_ast_1.HtmlElementAst) {
-          _this._extractMessagesFromAttributes(n);
-          _this._recurseToExtractMessagesFromAttributes(n.children);
+          _this._extractMessagesFromAttributes(n, interpolationConfig);
+          _this._recurseToExtractMessagesFromAttributes(n.children, interpolationConfig);
         }
       });
     };
-    MessageExtractor.prototype._extractMessagesFromAttributes = function(p) {
+    MessageExtractor.prototype._extractMessagesFromAttributes = function(p, interpolationConfig) {
       var _this = this;
       var transAttrs = lang_1.isPresent(this._implicitAttrs[p.name]) ? this._implicitAttrs[p.name] : [];
       var explicitAttrs = [];
@@ -22936,7 +22919,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["
       }).forEach(function(attr) {
         try {
           explicitAttrs.push(attr.name.substring(shared_1.I18N_ATTR_PREFIX.length));
-          _this._messages.push(shared_1.messageFromI18nAttribute(_this._parser, p, attr));
+          _this._messages.push(shared_1.messageFromI18nAttribute(_this._parser, interpolationConfig, p, attr));
         } catch (e) {
           if (e instanceof shared_1.I18nError) {
             _this._errors.push(e);
@@ -22952,7 +22935,7 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/message_extractor.js", ["
       }).filter(function(attr) {
         return transAttrs.indexOf(attr.name) > -1;
       }).forEach(function(attr) {
-        return _this._messages.push(shared_1.messageFromAttribute(_this._parser, attr));
+        return _this._messages.push(shared_1.messageFromAttribute(_this._parser, interpolationConfig, attr));
       });
     };
     return MessageExtractor;
@@ -23081,8 +23064,9 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/xmb_serializer.js", ["../
     return ids.length > 0 ? ids[0].value : null;
   }
   function _serializeMessage(m) {
-    var desc = lang_1.isPresent(m.description) ? " desc='" + m.description + "'" : '';
-    return "<msg id='" + message_1.id(m) + "'" + desc + ">" + m.content + "</msg>";
+    var desc = lang_1.isPresent(m.description) ? " desc='" + _escapeXml(m.description) + "'" : '';
+    var meaning = lang_1.isPresent(m.meaning) ? " meaning='" + _escapeXml(m.meaning) + "'" : '';
+    return "<msg id='" + message_1.id(m) + "'" + desc + meaning + ">" + m.content + "</msg>";
   }
   function _expandPlaceholder(input) {
     return lang_1.RegExpWrapper.replaceAll(_PLACEHOLDER_REGEXP, input, function(match) {
@@ -23090,19 +23074,26 @@ System.registerDynamic("npm:@angular/compiler/src/i18n/xmb_serializer.js", ["../
       return "<ph name=" + nameWithQuotes + "></ph>";
     });
   }
+  var _XML_ESCAPED_CHARS = [[/&/g, '&amp;'], [/"/g, '&quot;'], [/'/g, '&apos;'], [/</g, '&lt;'], [/>/g, '&gt;']];
+  function _escapeXml(value) {
+    return _XML_ESCAPED_CHARS.reduce(function(value, escape) {
+      return value.replace(escape[0], escape[1]);
+    }, value);
+  }
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/assertions.js", ["../src/facade/exceptions", "../src/facade/lang"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/assertions.js", ["@angular/core", "../src/facade/exceptions", "../src/facade/lang"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
       global = this,
       GLOBAL = this;
+  var core_1 = $__require('@angular/core');
   var exceptions_1 = $__require('../src/facade/exceptions');
   var lang_1 = $__require('../src/facade/lang');
   function assertArrayOfStrings(identifier, value) {
-    if (!lang_1.assertionsEnabled() || lang_1.isBlank(value)) {
+    if (!core_1.isDevMode() || lang_1.isBlank(value)) {
       return;
     }
     if (!lang_1.isArray(value)) {
@@ -23115,6 +23106,21 @@ System.registerDynamic("npm:@angular/compiler/src/assertions.js", ["../src/facad
     }
   }
   exports.assertArrayOfStrings = assertArrayOfStrings;
+  var INTERPOLATION_BLACKLIST_REGEXPS = [/^\s*$/g, /[<>]/g, /^[\{\}]$/g];
+  function assertInterpolationSymbols(identifier, value) {
+    if (core_1.isDevMode() && !lang_1.isBlank(value) && (!lang_1.isArray(value) || value.length != 2)) {
+      throw new exceptions_1.BaseException("Expected '" + identifier + "' to be an array, [start, end].");
+    } else if (core_1.isDevMode() && !lang_1.isBlank(value)) {
+      var start_1 = value[0];
+      var end_1 = value[1];
+      INTERPOLATION_BLACKLIST_REGEXPS.forEach(function(regexp) {
+        if (regexp.test(start_1) || regexp.test(end_1)) {
+          throw new exceptions_1.BaseException("['" + start_1 + "', '" + end_1 + "'] contains unusable interpolation symbol.");
+        }
+      });
+    }
+  }
+  exports.assertInterpolationSymbols = assertInterpolationSymbols;
   return module.exports;
 });
 
@@ -23138,7 +23144,7 @@ System.registerDynamic("npm:@angular/compiler/src/directive_lifecycle_reflector.
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/directive_resolver.js", ["@angular/core", "../core_private", "../src/facade/lang", "../src/facade/exceptions", "../src/facade/collection"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/directive_resolver.js", ["@angular/core", "../core_private", "../src/facade/collection", "../src/facade/exceptions", "../src/facade/lang"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -23146,19 +23152,18 @@ System.registerDynamic("npm:@angular/compiler/src/directive_resolver.js", ["@ang
       GLOBAL = this;
   var core_1 = $__require('@angular/core');
   var core_private_1 = $__require('../core_private');
-  var lang_1 = $__require('../src/facade/lang');
-  var exceptions_1 = $__require('../src/facade/exceptions');
   var collection_1 = $__require('../src/facade/collection');
+  var exceptions_1 = $__require('../src/facade/exceptions');
+  var lang_1 = $__require('../src/facade/lang');
   function _isDirectiveMetadata(type) {
     return type instanceof core_1.DirectiveMetadata;
   }
   var DirectiveResolver = (function() {
     function DirectiveResolver(_reflector) {
-      if (lang_1.isPresent(_reflector)) {
-        this._reflector = _reflector;
-      } else {
-        this._reflector = core_private_1.reflector;
+      if (_reflector === void 0) {
+        _reflector = core_private_1.reflector;
       }
+      this._reflector = _reflector;
     }
     DirectiveResolver.prototype.resolve = function(type) {
       var typeMetadata = this._reflector.annotations(core_1.resolveForwardRef(type));
@@ -23203,16 +23208,7 @@ System.registerDynamic("npm:@angular/compiler/src/directive_resolver.js", ["@ang
             var args = lang_1.isPresent(a.args) ? a.args.join(', ') : '';
             host[("(" + a.eventName + ")")] = propName + "(" + args + ")";
           }
-          if (a instanceof core_1.ContentChildrenMetadata) {
-            queries[propName] = a;
-          }
-          if (a instanceof core_1.ViewChildrenMetadata) {
-            queries[propName] = a;
-          }
-          if (a instanceof core_1.ContentChildMetadata) {
-            queries[propName] = a;
-          }
-          if (a instanceof core_1.ViewChildMetadata) {
+          if (a instanceof core_1.QueryMetadata) {
             queries[propName] = a;
           }
         });
@@ -23283,11 +23279,10 @@ System.registerDynamic("npm:@angular/compiler/src/pipe_resolver.js", ["@angular/
   }
   var PipeResolver = (function() {
     function PipeResolver(_reflector) {
-      if (lang_1.isPresent(_reflector)) {
-        this._reflector = _reflector;
-      } else {
-        this._reflector = core_private_1.reflector;
+      if (_reflector === void 0) {
+        _reflector = core_private_1.reflector;
       }
+      this._reflector = _reflector;
     }
     PipeResolver.prototype.resolve = function(type) {
       var metas = this._reflector.annotations(core_1.resolveForwardRef(type));
@@ -23304,7 +23299,6 @@ System.registerDynamic("npm:@angular/compiler/src/pipe_resolver.js", ["@angular/
     return PipeResolver;
   }());
   exports.PipeResolver = PipeResolver;
-  exports.CODEGEN_PIPE_RESOLVER = new PipeResolver(core_private_1.reflector);
   return module.exports;
 });
 
@@ -23321,12 +23315,11 @@ System.registerDynamic("npm:@angular/compiler/src/view_resolver.js", ["@angular/
   var collection_1 = $__require('../src/facade/collection');
   var ViewResolver = (function() {
     function ViewResolver(_reflector) {
-      this._cache = new collection_1.Map();
-      if (lang_1.isPresent(_reflector)) {
-        this._reflector = _reflector;
-      } else {
-        this._reflector = core_private_1.reflector;
+      if (_reflector === void 0) {
+        _reflector = core_private_1.reflector;
       }
+      this._reflector = _reflector;
+      this._cache = new collection_1.Map();
     }
     ViewResolver.prototype.resolve = function(component) {
       var view = this._cache.get(component);
@@ -23355,7 +23348,8 @@ System.registerDynamic("npm:@angular/compiler/src/view_resolver.js", ["@angular/
             encapsulation: compMeta.encapsulation,
             styles: compMeta.styles,
             styleUrls: compMeta.styleUrls,
-            animations: compMeta.animations
+            animations: compMeta.animations,
+            interpolation: compMeta.interpolation
           });
         }
       } else {
@@ -23401,19 +23395,18 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
   var view_resolver_1 = $__require('./view_resolver');
   var CompileMetadataResolver = (function() {
     function CompileMetadataResolver(_directiveResolver, _pipeResolver, _viewResolver, _config, _reflector) {
+      if (_reflector === void 0) {
+        _reflector = core_private_1.reflector;
+      }
       this._directiveResolver = _directiveResolver;
       this._pipeResolver = _pipeResolver;
       this._viewResolver = _viewResolver;
       this._config = _config;
+      this._reflector = _reflector;
       this._directiveCache = new Map();
       this._pipeCache = new Map();
       this._anonymousTypes = new Map();
       this._anonymousTypeIndex = 0;
-      if (lang_1.isPresent(_reflector)) {
-        this._reflector = _reflector;
-      } else {
-        this._reflector = core_private_1.reflector;
-      }
     }
     CompileMetadataResolver.prototype.sanitizeTokenName = function(token) {
       var identifier = lang_1.stringify(token);
@@ -23483,6 +23476,7 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
           var cmpMeta = dirMeta;
           var viewMeta = this._viewResolver.resolve(directiveType);
           assertions_1.assertArrayOfStrings('styles', viewMeta.styles);
+          assertions_1.assertInterpolationSymbols('interpolation', viewMeta.interpolation);
           var animations = lang_1.isPresent(viewMeta.animations) ? viewMeta.animations.map(function(e) {
             return _this.getAnimationEntryMetadata(e);
           }) : null;
@@ -23492,7 +23486,8 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
             templateUrl: viewMeta.templateUrl,
             styles: viewMeta.styles,
             styleUrls: viewMeta.styleUrls,
-            animations: animations
+            animations: animations,
+            interpolation: viewMeta.interpolation
           });
           changeDetectionStrategy = cmpMeta.changeDetection;
           if (lang_1.isPresent(dirMeta.viewProviders)) {
@@ -23542,20 +23537,26 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
         throw e;
       }
     };
-    CompileMetadataResolver.prototype.getTypeMetadata = function(type, moduleUrl) {
+    CompileMetadataResolver.prototype.getTypeMetadata = function(type, moduleUrl, dependencies) {
+      if (dependencies === void 0) {
+        dependencies = null;
+      }
       return new cpl.CompileTypeMetadata({
         name: this.sanitizeTokenName(type),
         moduleUrl: moduleUrl,
         runtime: type,
-        diDeps: this.getDependenciesMetadata(type, null)
+        diDeps: this.getDependenciesMetadata(type, dependencies)
       });
     };
-    CompileMetadataResolver.prototype.getFactoryMetadata = function(factory, moduleUrl) {
+    CompileMetadataResolver.prototype.getFactoryMetadata = function(factory, moduleUrl, dependencies) {
+      if (dependencies === void 0) {
+        dependencies = null;
+      }
       return new cpl.CompileFactoryMetadata({
         name: this.sanitizeTokenName(factory),
         moduleUrl: moduleUrl,
         runtime: factory,
-        diDeps: this.getDependenciesMetadata(factory, null)
+        diDeps: this.getDependenciesMetadata(factory, dependencies)
       });
     };
     CompileMetadataResolver.prototype.getPipeMetadata = function(pipeType) {
@@ -23608,9 +23609,6 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
         params = [];
       }
       var dependenciesMetadata = params.map(function(param) {
-        if (lang_1.isBlank(param)) {
-          return null;
-        }
         var isAttribute = false;
         var isHost = false;
         var isSelf = false;
@@ -23701,16 +23699,20 @@ System.registerDynamic("npm:@angular/compiler/src/metadata_resolver.js", ["@angu
     };
     CompileMetadataResolver.prototype.getProviderMetadata = function(provider) {
       var compileDeps;
+      var compileTypeMetadata = null;
+      var compileFactoryMetadata = null;
       if (lang_1.isPresent(provider.useClass)) {
-        compileDeps = this.getDependenciesMetadata(provider.useClass, provider.dependencies);
+        compileTypeMetadata = this.getTypeMetadata(provider.useClass, staticTypeModuleUrl(provider.useClass), provider.dependencies);
+        compileDeps = compileTypeMetadata.diDeps;
       } else if (lang_1.isPresent(provider.useFactory)) {
-        compileDeps = this.getDependenciesMetadata(provider.useFactory, provider.dependencies);
+        compileFactoryMetadata = this.getFactoryMetadata(provider.useFactory, staticTypeModuleUrl(provider.useFactory), provider.dependencies);
+        compileDeps = compileFactoryMetadata.diDeps;
       }
       return new cpl.CompileProviderMetadata({
         token: this.getTokenMetadata(provider.token),
-        useClass: lang_1.isPresent(provider.useClass) ? this.getTypeMetadata(provider.useClass, staticTypeModuleUrl(provider.useClass)) : null,
+        useClass: compileTypeMetadata,
         useValue: convertToCompileValue(provider.useValue),
-        useFactory: lang_1.isPresent(provider.useFactory) ? this.getFactoryMetadata(provider.useFactory, staticTypeModuleUrl(provider.useFactory)) : null,
+        useFactory: compileFactoryMetadata,
         useExisting: lang_1.isPresent(provider.useExisting) ? this.getTokenMetadata(provider.useExisting) : null,
         deps: compileDeps,
         multi: provider.multi
@@ -24705,6 +24707,9 @@ System.registerDynamic("npm:@angular/compiler/src/schema/dom_element_schema_regi
     }
     DomElementSchemaRegistry.prototype.hasProperty = function(tagName, propName) {
       if (tagName.indexOf('-') !== -1) {
+        if (tagName === 'ng-container' || tagName === 'ng-content') {
+          return false;
+        }
         return true;
       } else {
         var elementProperties = this.schema[tagName.toLowerCase()];
@@ -26068,7 +26073,7 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/lexer.js", [
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", ["@angular/core", "../facade/collection", "../facade/exceptions", "../facade/lang", "./ast", "./lexer"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", ["@angular/core", "../facade/collection", "../facade/exceptions", "../facade/lang", "../interpolation_config", "./ast", "./lexer"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -26087,10 +26092,10 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
   var collection_1 = $__require('../facade/collection');
   var exceptions_1 = $__require('../facade/exceptions');
   var lang_1 = $__require('../facade/lang');
+  var interpolation_config_1 = $__require('../interpolation_config');
   var ast_1 = $__require('./ast');
   var lexer_1 = $__require('./lexer');
   var _implicitReceiver = new ast_1.ImplicitReceiver();
-  var INTERPOLATION_REGEXP = /\{\{([\s\S]*?)\}\}/g;
   var ParseException = (function(_super) {
     __extends(ParseException, _super);
     function ParseException(message, input, errLocation, ctxLocation) {
@@ -26114,33 +26119,46 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
     return TemplateBindingParseResult;
   }());
   exports.TemplateBindingParseResult = TemplateBindingParseResult;
+  function _createInterpolateRegExp(config) {
+    var regexp = lang_1.escapeRegExp(config.start) + '([\\s\\S]*?)' + lang_1.escapeRegExp(config.end);
+    return lang_1.RegExpWrapper.create(regexp, 'g');
+  }
   var Parser = (function() {
     function Parser(_lexer) {
       this._lexer = _lexer;
     }
-    Parser.prototype.parseAction = function(input, location) {
-      this._checkNoInterpolation(input, location);
+    Parser.prototype.parseAction = function(input, location, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
+      this._checkNoInterpolation(input, location, interpolationConfig);
       var tokens = this._lexer.tokenize(this._stripComments(input));
       var ast = new _ParseAST(input, location, tokens, true).parseChain();
       return new ast_1.ASTWithSource(ast, input, location);
     };
-    Parser.prototype.parseBinding = function(input, location) {
-      var ast = this._parseBindingAst(input, location);
+    Parser.prototype.parseBinding = function(input, location, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
+      var ast = this._parseBindingAst(input, location, interpolationConfig);
       return new ast_1.ASTWithSource(ast, input, location);
     };
-    Parser.prototype.parseSimpleBinding = function(input, location) {
-      var ast = this._parseBindingAst(input, location);
+    Parser.prototype.parseSimpleBinding = function(input, location, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
+      var ast = this._parseBindingAst(input, location, interpolationConfig);
       if (!SimpleExpressionChecker.check(ast)) {
         throw new ParseException('Host binding expression can only contain field access and constants', input, location);
       }
       return new ast_1.ASTWithSource(ast, input, location);
     };
-    Parser.prototype._parseBindingAst = function(input, location) {
+    Parser.prototype._parseBindingAst = function(input, location, interpolationConfig) {
       var quote = this._parseQuote(input, location);
       if (lang_1.isPresent(quote)) {
         return quote;
       }
-      this._checkNoInterpolation(input, location);
+      this._checkNoInterpolation(input, location, interpolationConfig);
       var tokens = this._lexer.tokenize(this._stripComments(input));
       return new _ParseAST(input, location, tokens, false).parseChain();
     };
@@ -26160,8 +26178,11 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
       var tokens = this._lexer.tokenize(input);
       return new _ParseAST(input, location, tokens, false).parseTemplateBindings();
     };
-    Parser.prototype.parseInterpolation = function(input, location) {
-      var split = this.splitInterpolation(input, location);
+    Parser.prototype.parseInterpolation = function(input, location, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
+      var split = this.splitInterpolation(input, location, interpolationConfig);
       if (split == null)
         return null;
       var expressions = [];
@@ -26172,8 +26193,12 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
       }
       return new ast_1.ASTWithSource(new ast_1.Interpolation(split.strings, expressions), input, location);
     };
-    Parser.prototype.splitInterpolation = function(input, location) {
-      var parts = lang_1.StringWrapper.split(input, INTERPOLATION_REGEXP);
+    Parser.prototype.splitInterpolation = function(input, location, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
+      var regexp = _createInterpolateRegExp(interpolationConfig);
+      var parts = lang_1.StringWrapper.split(input, regexp);
       if (parts.length <= 1) {
         return null;
       }
@@ -26186,7 +26211,7 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
         } else if (part.trim().length > 0) {
           expressions.push(part);
         } else {
-          throw new ParseException('Blank expressions are not allowed in interpolated strings', input, "at column " + this._findInterpolationErrorColumn(parts, i) + " in", location);
+          throw new ParseException('Blank expressions are not allowed in interpolated strings', input, "at column " + this._findInterpolationErrorColumn(parts, i, interpolationConfig) + " in", location);
         }
       }
       return new SplitInterpolation(strings, expressions);
@@ -26213,16 +26238,17 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
       }
       return null;
     };
-    Parser.prototype._checkNoInterpolation = function(input, location) {
-      var parts = lang_1.StringWrapper.split(input, INTERPOLATION_REGEXP);
+    Parser.prototype._checkNoInterpolation = function(input, location, interpolationConfig) {
+      var regexp = _createInterpolateRegExp(interpolationConfig);
+      var parts = lang_1.StringWrapper.split(input, regexp);
       if (parts.length > 1) {
-        throw new ParseException('Got interpolation ({{}}) where expression was expected', input, "at column " + this._findInterpolationErrorColumn(parts, 1) + " in", location);
+        throw new ParseException("Got interpolation (" + interpolationConfig.start + interpolationConfig.end + ") where expression was expected", input, "at column " + this._findInterpolationErrorColumn(parts, 1, interpolationConfig) + " in", location);
       }
     };
-    Parser.prototype._findInterpolationErrorColumn = function(parts, partInErrIdx) {
+    Parser.prototype._findInterpolationErrorColumn = function(parts, partInErrIdx, interpolationConfig) {
       var errLocation = '';
       for (var j = 0; j < partInErrIdx; j++) {
-        errLocation += j % 2 === 0 ? parts[j] : "{{" + parts[j] + "}}";
+        errLocation += j % 2 === 0 ? parts[j] : "" + interpolationConfig.start + parts[j] + interpolationConfig.end;
       }
       return errLocation.length;
     };
@@ -26718,7 +26744,90 @@ System.registerDynamic("npm:@angular/compiler/src/expression_parser/parser.js", 
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/collection", "./facade/lang", "./html_tags", "./parse_util"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/chars.js", [], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  exports.$EOF = 0;
+  exports.$TAB = 9;
+  exports.$LF = 10;
+  exports.$VTAB = 11;
+  exports.$FF = 12;
+  exports.$CR = 13;
+  exports.$SPACE = 32;
+  exports.$BANG = 33;
+  exports.$DQ = 34;
+  exports.$HASH = 35;
+  exports.$$ = 36;
+  exports.$PERCENT = 37;
+  exports.$AMPERSAND = 38;
+  exports.$SQ = 39;
+  exports.$LPAREN = 40;
+  exports.$RPAREN = 41;
+  exports.$STAR = 42;
+  exports.$PLUS = 43;
+  exports.$COMMA = 44;
+  exports.$MINUS = 45;
+  exports.$PERIOD = 46;
+  exports.$SLASH = 47;
+  exports.$COLON = 58;
+  exports.$SEMICOLON = 59;
+  exports.$LT = 60;
+  exports.$EQ = 61;
+  exports.$GT = 62;
+  exports.$QUESTION = 63;
+  exports.$0 = 48;
+  exports.$9 = 57;
+  exports.$A = 65;
+  exports.$E = 69;
+  exports.$F = 70;
+  exports.$X = 88;
+  exports.$Z = 90;
+  exports.$LBRACKET = 91;
+  exports.$BACKSLASH = 92;
+  exports.$RBRACKET = 93;
+  exports.$CARET = 94;
+  exports.$_ = 95;
+  exports.$a = 97;
+  exports.$e = 101;
+  exports.$f = 102;
+  exports.$n = 110;
+  exports.$r = 114;
+  exports.$t = 116;
+  exports.$u = 117;
+  exports.$v = 118;
+  exports.$x = 120;
+  exports.$z = 122;
+  exports.$LBRACE = 123;
+  exports.$BAR = 124;
+  exports.$RBRACE = 125;
+  exports.$NBSP = 160;
+  exports.$PIPE = 124;
+  exports.$TILDA = 126;
+  exports.$AT = 64;
+  function isWhitespace(code) {
+    return (code >= exports.$TAB && code <= exports.$SPACE) || (code == exports.$NBSP);
+  }
+  exports.isWhitespace = isWhitespace;
+  return module.exports;
+});
+
+System.registerDynamic("npm:@angular/compiler/src/interpolation_config.js", [], true, function($__require, exports, module) {
+  "use strict";
+  ;
+  var define,
+      global = this,
+      GLOBAL = this;
+  exports.DEFAULT_INTERPOLATION_CONFIG = {
+    start: '{{',
+    end: '}}'
+  };
+  return module.exports;
+});
+
+System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./chars", "./facade/collection", "./facade/lang", "./html_tags", "./interpolation_config", "./parse_util"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -26733,9 +26842,11 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
+  var chars = $__require('./chars');
   var collection_1 = $__require('./facade/collection');
   var lang_1 = $__require('./facade/lang');
   var html_tags_1 = $__require('./html_tags');
+  var interpolation_config_1 = $__require('./interpolation_config');
   var parse_util_1 = $__require('./parse_util');
   (function(HtmlTokenType) {
     HtmlTokenType[HtmlTokenType["TAG_OPEN_START"] = 0] = "TAG_OPEN_START";
@@ -26786,52 +26897,19 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     return HtmlTokenizeResult;
   }());
   exports.HtmlTokenizeResult = HtmlTokenizeResult;
-  function tokenizeHtml(sourceContent, sourceUrl, tokenizeExpansionForms) {
+  function tokenizeHtml(sourceContent, sourceUrl, tokenizeExpansionForms, interpolationConfig) {
     if (tokenizeExpansionForms === void 0) {
       tokenizeExpansionForms = false;
     }
-    return new _HtmlTokenizer(new parse_util_1.ParseSourceFile(sourceContent, sourceUrl), tokenizeExpansionForms).tokenize();
+    if (interpolationConfig === void 0) {
+      interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+    }
+    return new _HtmlTokenizer(new parse_util_1.ParseSourceFile(sourceContent, sourceUrl), tokenizeExpansionForms, interpolationConfig).tokenize();
   }
   exports.tokenizeHtml = tokenizeHtml;
-  var $EOF = 0;
-  var $TAB = 9;
-  var $LF = 10;
-  var $FF = 12;
-  var $CR = 13;
-  var $SPACE = 32;
-  var $BANG = 33;
-  var $DQ = 34;
-  var $HASH = 35;
-  var $$ = 36;
-  var $AMPERSAND = 38;
-  var $SQ = 39;
-  var $MINUS = 45;
-  var $SLASH = 47;
-  var $0 = 48;
-  var $SEMICOLON = 59;
-  var $9 = 57;
-  var $COLON = 58;
-  var $LT = 60;
-  var $EQ = 61;
-  var $GT = 62;
-  var $QUESTION = 63;
-  var $LBRACKET = 91;
-  var $RBRACKET = 93;
-  var $LBRACE = 123;
-  var $RBRACE = 125;
-  var $COMMA = 44;
-  var $A = 65;
-  var $F = 70;
-  var $X = 88;
-  var $Z = 90;
-  var $a = 97;
-  var $f = 102;
-  var $z = 122;
-  var $x = 120;
-  var $NBSP = 160;
   var CR_OR_CRLF_REGEXP = /\r\n?/g;
   function unexpectedCharacterErrorMsg(charCode) {
-    var char = charCode === $EOF ? 'EOF' : lang_1.StringWrapper.fromCharCode(charCode);
+    var char = charCode === chars.$EOF ? 'EOF' : lang_1.StringWrapper.fromCharCode(charCode);
     return "Unexpected character \"" + char + "\"";
   }
   function unknownEntityErrorMsg(entitySrc) {
@@ -26844,9 +26922,13 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     return ControlFlowError;
   }());
   var _HtmlTokenizer = (function() {
-    function _HtmlTokenizer(file, tokenizeExpansionForms) {
+    function _HtmlTokenizer(file, tokenizeExpansionForms, interpolationConfig) {
+      if (interpolationConfig === void 0) {
+        interpolationConfig = interpolation_config_1.DEFAULT_INTERPOLATION_CONFIG;
+      }
       this.file = file;
       this.tokenizeExpansionForms = tokenizeExpansionForms;
+      this.interpolationConfig = interpolationConfig;
       this._peek = -1;
       this._nextPeek = -1;
       this._index = -1;
@@ -26863,30 +26945,30 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       return lang_1.StringWrapper.replaceAll(content, CR_OR_CRLF_REGEXP, '\n');
     };
     _HtmlTokenizer.prototype.tokenize = function() {
-      while (this._peek !== $EOF) {
+      while (this._peek !== chars.$EOF) {
         var start = this._getLocation();
         try {
-          if (this._attemptCharCode($LT)) {
-            if (this._attemptCharCode($BANG)) {
-              if (this._attemptCharCode($LBRACKET)) {
+          if (this._attemptCharCode(chars.$LT)) {
+            if (this._attemptCharCode(chars.$BANG)) {
+              if (this._attemptCharCode(chars.$LBRACKET)) {
                 this._consumeCdata(start);
-              } else if (this._attemptCharCode($MINUS)) {
+              } else if (this._attemptCharCode(chars.$MINUS)) {
                 this._consumeComment(start);
               } else {
                 this._consumeDocType(start);
               }
-            } else if (this._attemptCharCode($SLASH)) {
+            } else if (this._attemptCharCode(chars.$SLASH)) {
               this._consumeTagClose(start);
             } else {
               this._consumeTagOpen(start);
             }
-          } else if (isExpansionFormStart(this._peek, this._nextPeek) && this.tokenizeExpansionForms) {
+          } else if (isExpansionFormStart(this._input, this._index, this.interpolationConfig.start) && this.tokenizeExpansionForms) {
             this._consumeExpansionFormStart();
           } else if (isExpansionCaseStart(this._peek) && this._isInExpansionForm() && this.tokenizeExpansionForms) {
             this._consumeExpansionCaseStart();
-          } else if (this._peek === $RBRACE && this._isInExpansionCase() && this.tokenizeExpansionForms) {
+          } else if (this._peek === chars.$RBRACE && this._isInExpansionCase() && this.tokenizeExpansionForms) {
             this._consumeExpansionCaseEnd();
-          } else if (this._peek === $RBRACE && this._isInExpansionForm() && this.tokenizeExpansionForms) {
+          } else if (this._peek === chars.$RBRACE && this._isInExpansionForm() && this.tokenizeExpansionForms) {
             this._consumeExpansionFormEnd();
           } else {
             this._consumeText();
@@ -26946,17 +27028,17 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     };
     _HtmlTokenizer.prototype._advance = function() {
       if (this._index >= this._length) {
-        throw this._createError(unexpectedCharacterErrorMsg($EOF), this._getSpan());
+        throw this._createError(unexpectedCharacterErrorMsg(chars.$EOF), this._getSpan());
       }
-      if (this._peek === $LF) {
+      if (this._peek === chars.$LF) {
         this._line++;
         this._column = 0;
-      } else if (this._peek !== $LF && this._peek !== $CR) {
+      } else if (this._peek !== chars.$LF && this._peek !== chars.$CR) {
         this._column++;
       }
       this._index++;
-      this._peek = this._index >= this._length ? $EOF : lang_1.StringWrapper.charCodeAt(this._input, this._index);
-      this._nextPeek = this._index + 1 >= this._length ? $EOF : lang_1.StringWrapper.charCodeAt(this._input, this._index + 1);
+      this._peek = this._index >= this._length ? chars.$EOF : lang_1.StringWrapper.charCodeAt(this._input, this._index);
+      this._nextPeek = this._index + 1 >= this._length ? chars.$EOF : lang_1.StringWrapper.charCodeAt(this._input, this._index + 1);
     };
     _HtmlTokenizer.prototype._attemptCharCode = function(charCode) {
       if (this._peek === charCode) {
@@ -26979,14 +27061,10 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       }
     };
     _HtmlTokenizer.prototype._attemptStr = function(chars) {
-      var indexBeforeAttempt = this._index;
-      var columnBeforeAttempt = this._column;
-      var lineBeforeAttempt = this._line;
+      var initialPosition = this._savePosition();
       for (var i = 0; i < chars.length; i++) {
         if (!this._attemptCharCode(lang_1.StringWrapper.charCodeAt(chars, i))) {
-          this._index = indexBeforeAttempt;
-          this._column = columnBeforeAttempt;
-          this._line = lineBeforeAttempt;
+          this._restorePosition(initialPosition);
           return false;
         }
       }
@@ -27024,7 +27102,7 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       }
     };
     _HtmlTokenizer.prototype._readChar = function(decodeEntities) {
-      if (decodeEntities && this._peek === $AMPERSAND) {
+      if (decodeEntities && this._peek === chars.$AMPERSAND) {
         return this._decodeEntity();
       } else {
         var index = this._index;
@@ -27035,11 +27113,11 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     _HtmlTokenizer.prototype._decodeEntity = function() {
       var start = this._getLocation();
       this._advance();
-      if (this._attemptCharCode($HASH)) {
-        var isHex = this._attemptCharCode($x) || this._attemptCharCode($X);
+      if (this._attemptCharCode(chars.$HASH)) {
+        var isHex = this._attemptCharCode(chars.$x) || this._attemptCharCode(chars.$X);
         var numberStart = this._getLocation().offset;
         this._attemptCharCodeUntilFn(isDigitEntityEnd);
-        if (this._peek != $SEMICOLON) {
+        if (this._peek != chars.$SEMICOLON) {
           throw this._createError(unexpectedCharacterErrorMsg(this._peek), this._getSpan());
         }
         this._advance();
@@ -27054,7 +27132,7 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       } else {
         var startPosition = this._savePosition();
         this._attemptCharCodeUntilFn(isNamedEntityEnd);
-        if (this._peek != $SEMICOLON) {
+        if (this._peek != chars.$SEMICOLON) {
           this._restorePosition(startPosition);
           return '&';
         }
@@ -27089,9 +27167,9 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     _HtmlTokenizer.prototype._consumeComment = function(start) {
       var _this = this;
       this._beginToken(HtmlTokenType.COMMENT_START, start);
-      this._requireCharCode($MINUS);
+      this._requireCharCode(chars.$MINUS);
       this._endToken([]);
-      var textToken = this._consumeRawText(false, $MINUS, function() {
+      var textToken = this._consumeRawText(false, chars.$MINUS, function() {
         return _this._attemptStr('->');
       });
       this._beginToken(HtmlTokenType.COMMENT_END, textToken.sourceSpan.end);
@@ -27102,7 +27180,7 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       this._beginToken(HtmlTokenType.CDATA_START, start);
       this._requireStr('CDATA[');
       this._endToken([]);
-      var textToken = this._consumeRawText(false, $RBRACKET, function() {
+      var textToken = this._consumeRawText(false, chars.$RBRACKET, function() {
         return _this._attemptStr(']>');
       });
       this._beginToken(HtmlTokenType.CDATA_END, textToken.sourceSpan.end);
@@ -27110,18 +27188,18 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     };
     _HtmlTokenizer.prototype._consumeDocType = function(start) {
       this._beginToken(HtmlTokenType.DOC_TYPE, start);
-      this._attemptUntilChar($GT);
+      this._attemptUntilChar(chars.$GT);
       this._advance();
       this._endToken([this._input.substring(start.offset + 2, this._index - 1)]);
     };
     _HtmlTokenizer.prototype._consumePrefixAndName = function() {
       var nameOrPrefixStart = this._index;
       var prefix = null;
-      while (this._peek !== $COLON && !isPrefixEnd(this._peek)) {
+      while (this._peek !== chars.$COLON && !isPrefixEnd(this._peek)) {
         this._advance();
       }
       var nameStart;
-      if (this._peek === $COLON) {
+      if (this._peek === chars.$COLON) {
         this._advance();
         prefix = this._input.substring(nameOrPrefixStart, this._index - 1);
         nameStart = this._index;
@@ -27143,10 +27221,10 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
         this._consumeTagOpenStart(start);
         lowercaseTagName = this._input.substring(nameStart, this._index).toLowerCase();
         this._attemptCharCodeUntilFn(isNotWhitespace);
-        while (this._peek !== $SLASH && this._peek !== $GT) {
+        while (this._peek !== chars.$SLASH && this._peek !== chars.$GT) {
           this._consumeAttributeName();
           this._attemptCharCodeUntilFn(isNotWhitespace);
-          if (this._attemptCharCode($EQ)) {
+          if (this._attemptCharCode(chars.$EQ)) {
             this._attemptCharCodeUntilFn(isNotWhitespace);
             this._consumeAttributeValue();
           }
@@ -27171,14 +27249,14 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     };
     _HtmlTokenizer.prototype._consumeRawTextWithTagClose = function(lowercaseTagName, decodeEntities) {
       var _this = this;
-      var textToken = this._consumeRawText(decodeEntities, $LT, function() {
-        if (!_this._attemptCharCode($SLASH))
+      var textToken = this._consumeRawText(decodeEntities, chars.$LT, function() {
+        if (!_this._attemptCharCode(chars.$SLASH))
           return false;
         _this._attemptCharCodeUntilFn(isNotWhitespace);
         if (!_this._attemptStrCaseInsensitive(lowercaseTagName))
           return false;
         _this._attemptCharCodeUntilFn(isNotWhitespace);
-        if (!_this._attemptCharCode($GT))
+        if (!_this._attemptCharCode(chars.$GT))
           return false;
         return true;
       });
@@ -27198,7 +27276,7 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     _HtmlTokenizer.prototype._consumeAttributeValue = function() {
       this._beginToken(HtmlTokenType.ATTR_VALUE);
       var value;
-      if (this._peek === $SQ || this._peek === $DQ) {
+      if (this._peek === chars.$SQ || this._peek === chars.$DQ) {
         var quoteChar = this._peek;
         this._advance();
         var parts = [];
@@ -27215,9 +27293,9 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       this._endToken([this._processCarriageReturns(value)]);
     };
     _HtmlTokenizer.prototype._consumeTagOpenEnd = function() {
-      var tokenType = this._attemptCharCode($SLASH) ? HtmlTokenType.TAG_OPEN_END_VOID : HtmlTokenType.TAG_OPEN_END;
+      var tokenType = this._attemptCharCode(chars.$SLASH) ? HtmlTokenType.TAG_OPEN_END_VOID : HtmlTokenType.TAG_OPEN_END;
       this._beginToken(tokenType);
-      this._requireCharCode($GT);
+      this._requireCharCode(chars.$GT);
       this._endToken([]);
     };
     _HtmlTokenizer.prototype._consumeTagClose = function(start) {
@@ -27225,46 +27303,46 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       this._attemptCharCodeUntilFn(isNotWhitespace);
       var prefixAndName = this._consumePrefixAndName();
       this._attemptCharCodeUntilFn(isNotWhitespace);
-      this._requireCharCode($GT);
+      this._requireCharCode(chars.$GT);
       this._endToken(prefixAndName);
     };
     _HtmlTokenizer.prototype._consumeExpansionFormStart = function() {
       this._beginToken(HtmlTokenType.EXPANSION_FORM_START, this._getLocation());
-      this._requireCharCode($LBRACE);
+      this._requireCharCode(chars.$LBRACE);
       this._endToken([]);
       this._beginToken(HtmlTokenType.RAW_TEXT, this._getLocation());
-      var condition = this._readUntil($COMMA);
+      var condition = this._readUntil(chars.$COMMA);
       this._endToken([condition], this._getLocation());
-      this._requireCharCode($COMMA);
+      this._requireCharCode(chars.$COMMA);
       this._attemptCharCodeUntilFn(isNotWhitespace);
       this._beginToken(HtmlTokenType.RAW_TEXT, this._getLocation());
-      var type = this._readUntil($COMMA);
+      var type = this._readUntil(chars.$COMMA);
       this._endToken([type], this._getLocation());
-      this._requireCharCode($COMMA);
+      this._requireCharCode(chars.$COMMA);
       this._attemptCharCodeUntilFn(isNotWhitespace);
       this._expansionCaseStack.push(HtmlTokenType.EXPANSION_FORM_START);
     };
     _HtmlTokenizer.prototype._consumeExpansionCaseStart = function() {
       this._beginToken(HtmlTokenType.EXPANSION_CASE_VALUE, this._getLocation());
-      var value = this._readUntil($LBRACE).trim();
+      var value = this._readUntil(chars.$LBRACE).trim();
       this._endToken([value], this._getLocation());
       this._attemptCharCodeUntilFn(isNotWhitespace);
       this._beginToken(HtmlTokenType.EXPANSION_CASE_EXP_START, this._getLocation());
-      this._requireCharCode($LBRACE);
+      this._requireCharCode(chars.$LBRACE);
       this._endToken([], this._getLocation());
       this._attemptCharCodeUntilFn(isNotWhitespace);
       this._expansionCaseStack.push(HtmlTokenType.EXPANSION_CASE_EXP_START);
     };
     _HtmlTokenizer.prototype._consumeExpansionCaseEnd = function() {
       this._beginToken(HtmlTokenType.EXPANSION_CASE_EXP_END, this._getLocation());
-      this._requireCharCode($RBRACE);
+      this._requireCharCode(chars.$RBRACE);
       this._endToken([], this._getLocation());
       this._attemptCharCodeUntilFn(isNotWhitespace);
       this._expansionCaseStack.pop();
     };
     _HtmlTokenizer.prototype._consumeExpansionFormEnd = function() {
       this._beginToken(HtmlTokenType.EXPANSION_FORM_END, this._getLocation());
-      this._requireCharCode($RBRACE);
+      this._requireCharCode(chars.$RBRACE);
       this._endToken([]);
       this._expansionCaseStack.pop();
     };
@@ -27273,35 +27351,36 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
       this._beginToken(HtmlTokenType.TEXT, start);
       var parts = [];
       var interpolation = false;
-      if (this._peek === $LBRACE && this._nextPeek === $LBRACE) {
-        parts.push(this._readChar(true));
-        parts.push(this._readChar(true));
-        interpolation = true;
-      } else {
-        parts.push(this._readChar(true));
-      }
-      while (!this._isTextEnd(interpolation)) {
-        if (this._peek === $LBRACE && this._nextPeek === $LBRACE) {
-          parts.push(this._readChar(true));
-          parts.push(this._readChar(true));
+      do {
+        var savedPos = this._savePosition();
+        if (this._attemptStr(this.interpolationConfig.start)) {
+          this._restorePosition(savedPos);
+          for (var i = 0; i < this.interpolationConfig.start.length; i++) {
+            parts.push(this._readChar(true));
+          }
           interpolation = true;
-        } else if (this._peek === $RBRACE && this._nextPeek === $RBRACE && interpolation) {
-          parts.push(this._readChar(true));
-          parts.push(this._readChar(true));
+        } else if (this._attemptStr(this.interpolationConfig.end) && interpolation) {
+          this._restorePosition(savedPos);
+          for (var i = 0; i < this.interpolationConfig.end.length; i++) {
+            parts.push(this._readChar(true));
+          }
           interpolation = false;
         } else {
+          this._restorePosition(savedPos);
           parts.push(this._readChar(true));
         }
-      }
+      } while (!this._isTextEnd(interpolation));
       this._endToken([this._processCarriageReturns(parts.join(''))]);
     };
     _HtmlTokenizer.prototype._isTextEnd = function(interpolation) {
-      if (this._peek === $LT || this._peek === $EOF)
+      if (this._peek === chars.$LT || this._peek === chars.$EOF)
         return true;
       if (this.tokenizeExpansionForms) {
-        if (isExpansionFormStart(this._peek, this._nextPeek))
+        var savedPos = this._savePosition();
+        if (isExpansionFormStart(this._input, this._index, this.interpolationConfig.start))
           return true;
-        if (this._peek === $RBRACE && !interpolation && (this._isInExpansionCase() || this._isInExpansionForm()))
+        this._restorePosition(savedPos);
+        if (this._peek === chars.$RBRACE && !interpolation && (this._isInExpansionCase() || this._isInExpansionForm()))
           return true;
       }
       return false;
@@ -27333,40 +27412,41 @@ System.registerDynamic("npm:@angular/compiler/src/html_lexer.js", ["./facade/col
     return _HtmlTokenizer;
   }());
   function isNotWhitespace(code) {
-    return !isWhitespace(code) || code === $EOF;
+    return !isWhitespace(code) || code === chars.$EOF;
   }
   function isWhitespace(code) {
-    return (code >= $TAB && code <= $SPACE) || (code === $NBSP);
+    return (code >= chars.$TAB && code <= chars.$SPACE) || (code === chars.$NBSP);
   }
   function isNameEnd(code) {
-    return isWhitespace(code) || code === $GT || code === $SLASH || code === $SQ || code === $DQ || code === $EQ;
+    return isWhitespace(code) || code === chars.$GT || code === chars.$SLASH || code === chars.$SQ || code === chars.$DQ || code === chars.$EQ;
   }
   function isPrefixEnd(code) {
-    return (code < $a || $z < code) && (code < $A || $Z < code) && (code < $0 || code > $9);
+    return (code < chars.$a || chars.$z < code) && (code < chars.$A || chars.$Z < code) && (code < chars.$0 || code > chars.$9);
   }
   function isDigitEntityEnd(code) {
-    return code == $SEMICOLON || code == $EOF || !isAsciiHexDigit(code);
+    return code == chars.$SEMICOLON || code == chars.$EOF || !isAsciiHexDigit(code);
   }
   function isNamedEntityEnd(code) {
-    return code == $SEMICOLON || code == $EOF || !isAsciiLetter(code);
+    return code == chars.$SEMICOLON || code == chars.$EOF || !isAsciiLetter(code);
   }
-  function isExpansionFormStart(peek, nextPeek) {
-    return peek === $LBRACE && nextPeek != $LBRACE;
+  function isExpansionFormStart(input, offset, interpolationStart) {
+    var substr = input.substring(offset);
+    return lang_1.StringWrapper.charCodeAt(substr, 0) === chars.$LBRACE && lang_1.StringWrapper.charCodeAt(substr, 1) !== chars.$LBRACE && !substr.startsWith(interpolationStart);
   }
   function isExpansionCaseStart(peek) {
-    return peek === $EQ || isAsciiLetter(peek);
+    return peek === chars.$EQ || isAsciiLetter(peek);
   }
   function isAsciiLetter(code) {
-    return code >= $a && code <= $z || code >= $A && code <= $Z;
+    return code >= chars.$a && code <= chars.$z || code >= chars.$A && code <= chars.$Z;
   }
   function isAsciiHexDigit(code) {
-    return code >= $a && code <= $f || code >= $A && code <= $F || code >= $0 && code <= $9;
+    return code >= chars.$a && code <= chars.$f || code >= chars.$A && code <= chars.$F || code >= chars.$0 && code <= chars.$9;
   }
   function compareCharCodeCaseInsensitive(code1, code2) {
     return toUpperCaseCharCode(code1) == toUpperCaseCharCode(code2);
   }
   function toUpperCaseCharCode(code) {
-    return code >= $a && code <= $z ? code - $a + $A : code;
+    return code >= chars.$a && code <= chars.$z ? code - chars.$a + chars.$A : code;
   }
   function mergeTextTokens(srcTokens) {
     var dstTokens = [];
@@ -27625,16 +27705,15 @@ System.registerDynamic("npm:@angular/compiler/src/html_parser.js", ["@angular/co
         }
       }
       var tagDef = html_tags_1.getHtmlTagDefinition(el.name);
-      var parentEl = this._getParentElement();
-      if (tagDef.requireExtraParent(lang_1.isPresent(parentEl) ? parentEl.name : null)) {
-        var newParent = new html_ast_1.HtmlElementAst(tagDef.parentToAdd, [], [el], el.sourceSpan, el.startSourceSpan, el.endSourceSpan);
-        this._addToParent(newParent);
-        this.elementStack.push(newParent);
-        this.elementStack.push(el);
-      } else {
-        this._addToParent(el);
-        this.elementStack.push(el);
+      var _a = this._getParentElementSkippingContainers(),
+          parent = _a.parent,
+          container = _a.container;
+      if (lang_1.isPresent(parent) && tagDef.requireExtraParent(parent.name)) {
+        var newParent = new html_ast_1.HtmlElementAst(tagDef.parentToAdd, [], [], el.sourceSpan, el.startSourceSpan, el.endSourceSpan);
+        this._insertBeforeContainer(parent, container, newParent);
       }
+      this._addToParent(el);
+      this.elementStack.push(el);
     };
     TreeBuilder.prototype._consumeEndTag = function(endTagToken) {
       var fullName = getElementFullName(endTagToken.parts[0], endTagToken.parts[1], this._getParentElement());
@@ -27674,12 +27753,43 @@ System.registerDynamic("npm:@angular/compiler/src/html_parser.js", ["@angular/co
     TreeBuilder.prototype._getParentElement = function() {
       return this.elementStack.length > 0 ? collection_1.ListWrapper.last(this.elementStack) : null;
     };
+    TreeBuilder.prototype._getParentElementSkippingContainers = function() {
+      var container = null;
+      for (var i = this.elementStack.length - 1; i >= 0; i--) {
+        if (this.elementStack[i].name !== 'ng-container') {
+          return {
+            parent: this.elementStack[i],
+            container: container
+          };
+        }
+        container = this.elementStack[i];
+      }
+      return {
+        parent: collection_1.ListWrapper.last(this.elementStack),
+        container: container
+      };
+    };
     TreeBuilder.prototype._addToParent = function(node) {
       var parent = this._getParentElement();
       if (lang_1.isPresent(parent)) {
         parent.children.push(node);
       } else {
         this.rootNodes.push(node);
+      }
+    };
+    TreeBuilder.prototype._insertBeforeContainer = function(parent, container, node) {
+      if (!container) {
+        this._addToParent(node);
+        this.elementStack.push(node);
+      } else {
+        if (parent) {
+          var index = parent.children.indexOf(container);
+          parent.children[index] = node;
+        } else {
+          this.rootNodes.push(node);
+        }
+        node.children.push(container);
+        this.elementStack.splice(this.elementStack.indexOf(container), 0, node);
       }
     };
     return TreeBuilder;
@@ -28920,6 +29030,13 @@ System.registerDynamic("npm:@angular/compiler/src/template_parser.js", ["@angula
       this.directivesIndex = new Map();
       this.ngContentCount = 0;
       this.selectorMatcher = new selector_1.SelectorMatcher();
+      var tempMeta = providerViewContext.component.template;
+      if (lang_1.isPresent(tempMeta) && lang_1.isPresent(tempMeta.interpolation)) {
+        this._interpolationConfig = {
+          start: tempMeta.interpolation[0],
+          end: tempMeta.interpolation[1]
+        };
+      }
       collection_1.ListWrapper.forEachWithIndex(directives, function(directive, index) {
         var selector = selector_1.CssSelector.parse(directive.selector);
         _this.selectorMatcher.addSelectables(selector, directive);
@@ -28939,7 +29056,7 @@ System.registerDynamic("npm:@angular/compiler/src/template_parser.js", ["@angula
     TemplateParseVisitor.prototype._parseInterpolation = function(value, sourceSpan) {
       var sourceInfo = sourceSpan.start.toString();
       try {
-        var ast = this._exprParser.parseInterpolation(value, sourceInfo);
+        var ast = this._exprParser.parseInterpolation(value, sourceInfo, this._interpolationConfig);
         this._checkPipes(ast, sourceSpan);
         if (lang_1.isPresent(ast) && ast.ast.expressions.length > core_private_1.MAX_INTERPOLATION_VALUES) {
           throw new exceptions_1.BaseException("Only support at most " + core_private_1.MAX_INTERPOLATION_VALUES + " interpolation values!");
@@ -28953,7 +29070,7 @@ System.registerDynamic("npm:@angular/compiler/src/template_parser.js", ["@angula
     TemplateParseVisitor.prototype._parseAction = function(value, sourceSpan) {
       var sourceInfo = sourceSpan.start.toString();
       try {
-        var ast = this._exprParser.parseAction(value, sourceInfo);
+        var ast = this._exprParser.parseAction(value, sourceInfo, this._interpolationConfig);
         this._checkPipes(ast, sourceSpan);
         return ast;
       } catch (e) {
@@ -28964,7 +29081,7 @@ System.registerDynamic("npm:@angular/compiler/src/template_parser.js", ["@angula
     TemplateParseVisitor.prototype._parseBinding = function(value, sourceSpan) {
       var sourceInfo = sourceSpan.start.toString();
       try {
-        var ast = this._exprParser.parseBinding(value, sourceInfo);
+        var ast = this._exprParser.parseBinding(value, sourceInfo, this._interpolationConfig);
         this._checkPipes(ast, sourceSpan);
         return ast;
       } catch (e) {
@@ -29548,7 +29665,7 @@ System.registerDynamic("npm:@angular/compiler/src/template_parser.js", ["@angula
   return module.exports;
 });
 
-System.registerDynamic("npm:@angular/compiler/src/config.js", ["@angular/core", "../src/facade/exceptions", "../src/facade/lang", "./identifiers"], true, function($__require, exports, module) {
+System.registerDynamic("npm:@angular/compiler/src/config.js", ["@angular/core", "../src/facade/exceptions", "./identifiers"], true, function($__require, exports, module) {
   "use strict";
   ;
   var define,
@@ -29556,7 +29673,6 @@ System.registerDynamic("npm:@angular/compiler/src/config.js", ["@angular/core", 
       GLOBAL = this;
   var core_1 = $__require('@angular/core');
   var exceptions_1 = $__require('../src/facade/exceptions');
-  var lang_1 = $__require('../src/facade/lang');
   var identifiers_1 = $__require('./identifiers');
   var CompilerConfig = (function() {
     function CompilerConfig(_a) {
@@ -29565,24 +29681,36 @@ System.registerDynamic("npm:@angular/compiler/src/config.js", ["@angular/core", 
           renderTypes = _c === void 0 ? new DefaultRenderTypes() : _c,
           _d = _b.defaultEncapsulation,
           defaultEncapsulation = _d === void 0 ? core_1.ViewEncapsulation.Emulated : _d,
-          _e = _b.genDebugInfo,
-          genDebugInfo = _e === void 0 ? lang_1.assertionsEnabled() : _e,
-          _f = _b.logBindingUpdate,
-          logBindingUpdate = _f === void 0 ? lang_1.assertionsEnabled() : _f,
-          _g = _b.useJit,
-          useJit = _g === void 0 ? true : _g,
-          _h = _b.platformDirectives,
-          platformDirectives = _h === void 0 ? [] : _h,
-          _j = _b.platformPipes,
-          platformPipes = _j === void 0 ? [] : _j;
+          genDebugInfo = _b.genDebugInfo,
+          logBindingUpdate = _b.logBindingUpdate,
+          _e = _b.useJit,
+          useJit = _e === void 0 ? true : _e,
+          _f = _b.platformDirectives,
+          platformDirectives = _f === void 0 ? [] : _f,
+          _g = _b.platformPipes,
+          platformPipes = _g === void 0 ? [] : _g;
       this.renderTypes = renderTypes;
       this.defaultEncapsulation = defaultEncapsulation;
-      this.genDebugInfo = genDebugInfo;
-      this.logBindingUpdate = logBindingUpdate;
+      this._genDebugInfo = genDebugInfo;
+      this._logBindingUpdate = logBindingUpdate;
       this.useJit = useJit;
       this.platformDirectives = platformDirectives;
       this.platformPipes = platformPipes;
     }
+    Object.defineProperty(CompilerConfig.prototype, "genDebugInfo", {
+      get: function() {
+        return this._genDebugInfo === void 0 ? core_1.isDevMode() : this._genDebugInfo;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(CompilerConfig.prototype, "logBindingUpdate", {
+      get: function() {
+        return this._logBindingUpdate === void 0 ? core_1.isDevMode() : this._logBindingUpdate;
+      },
+      enumerable: true,
+      configurable: true
+    });
     return CompilerConfig;
   }());
   exports.CompilerConfig = CompilerConfig;
@@ -31027,9 +31155,9 @@ System.registerDynamic("npm:@angular/compiler/src/view_compiler/compile_query.js
     return declarationAppElement.callMethod('mapNestedViews', [o.variable(view.className), o.fn([new o.FnParam('nestedView', view.classType)], [new o.ReturnStatement(o.literalArr(adjustedExpressions))])]);
   }
   function createQueryList(query, directiveInstance, propertyName, compileView) {
-    compileView.fields.push(new o.ClassField(propertyName, o.importType(identifiers_1.Identifiers.QueryList)));
+    compileView.fields.push(new o.ClassField(propertyName, o.importType(identifiers_1.Identifiers.QueryList, [o.DYNAMIC_TYPE])));
     var expr = o.THIS_EXPR.prop(propertyName);
-    compileView.createMethod.addStmt(o.THIS_EXPR.prop(propertyName).set(o.importExpr(identifiers_1.Identifiers.QueryList).instantiate([])).toStmt());
+    compileView.createMethod.addStmt(o.THIS_EXPR.prop(propertyName).set(o.importExpr(identifiers_1.Identifiers.QueryList, [o.DYNAMIC_TYPE]).instantiate([])).toStmt());
     return expr;
   }
   exports.createQueryList = createQueryList;
@@ -34050,7 +34178,8 @@ System.registerDynamic("npm:@angular/core/src/metadata/directives.js", ["../chan
           animations = _b.animations,
           directives = _b.directives,
           pipes = _b.pipes,
-          encapsulation = _b.encapsulation;
+          encapsulation = _b.encapsulation,
+          interpolation = _b.interpolation;
       _super.call(this, {
         selector: selector,
         inputs: inputs,
@@ -34073,6 +34202,7 @@ System.registerDynamic("npm:@angular/core/src/metadata/directives.js", ["../chan
       this.encapsulation = encapsulation;
       this.moduleId = moduleId;
       this.animations = animations;
+      this.interpolation = interpolation;
     }
     Object.defineProperty(ComponentMetadata.prototype, "viewProviders", {
       get: function() {
@@ -34860,11 +34990,31 @@ System.registerDynamic("npm:@angular/core/src/application_ref.js", ["../src/faca
   var testability_1 = $__require('./testability/testability');
   var ng_zone_1 = $__require('./zone/ng_zone');
   function createNgZone() {
-    return new ng_zone_1.NgZone({enableLongStackTrace: lang_1.assertionsEnabled()});
+    return new ng_zone_1.NgZone({enableLongStackTrace: isDevMode()});
   }
   exports.createNgZone = createNgZone;
+  var _devMode = true;
+  var _runModeLocked = false;
   var _platform;
   var _inPlatformCreate = false;
+  function enableProdMode() {
+    if (_runModeLocked) {
+      throw new exceptions_1.BaseException('Cannot enable prod mode after platform setup.');
+    }
+    _devMode = false;
+  }
+  exports.enableProdMode = enableProdMode;
+  function isDevMode() {
+    if (!_runModeLocked) {
+      throw new exceptions_1.BaseException("Dev mode can't be read before bootstrap!");
+    }
+    return _devMode;
+  }
+  exports.isDevMode = isDevMode;
+  function lockRunMode() {
+    _runModeLocked = true;
+  }
+  exports.lockRunMode = lockRunMode;
   function createPlatform(injector) {
     if (_inPlatformCreate) {
       throw new exceptions_1.BaseException('Already creating a platform...');
@@ -34872,7 +35022,7 @@ System.registerDynamic("npm:@angular/core/src/application_ref.js", ["../src/faca
     if (lang_1.isPresent(_platform) && !_platform.disposed) {
       throw new exceptions_1.BaseException('There can be only one platform. Destroy the previous one to create a new one.');
     }
-    lang_1.lockMode();
+    lockRunMode();
     _inPlatformCreate = true;
     try {
       _platform = injector.get(PlatformRef);
@@ -35037,7 +35187,7 @@ System.registerDynamic("npm:@angular/core/src/application_ref.js", ["../src/faca
       this._runningTick = false;
       this._enforceNoNewChanges = false;
       var zone = _injector.get(ng_zone_1.NgZone);
-      this._enforceNoNewChanges = lang_1.assertionsEnabled();
+      this._enforceNoNewChanges = isDevMode();
       zone.run(function() {
         _this._exceptionHandler = _injector.get(exceptions_1.ExceptionHandler);
       });
@@ -35128,7 +35278,7 @@ System.registerDynamic("npm:@angular/core/src/application_ref.js", ["../src/faca
         }
         _this._loadComponent(compRef);
         var c = _this._injector.get(console_1.Console);
-        if (lang_1.assertionsEnabled()) {
+        if (isDevMode()) {
           var prodDescription = lang_1.IS_DART ? 'Production mode is disabled in Dart.' : 'Call enableProdMode() to enable the production mode.';
           c.log("Angular 2 is running in the development mode. " + prodDescription);
         }
@@ -37316,9 +37466,6 @@ System.registerDynamic("npm:@angular/core/src/facade/promise.js", [], true, func
     PromiseWrapper.scheduleMicrotask = function(computation) {
       PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function(_) {});
     };
-    PromiseWrapper.isPromise = function(obj) {
-      return obj instanceof Promise;
-    };
     PromiseWrapper.completer = function() {
       return new PromiseCompleter();
     };
@@ -37395,7 +37542,7 @@ System.registerDynamic("npm:@angular/core/src/facade/async.js", ["rxjs/Subject",
       subscription.unsubscribe();
     };
     ObservableWrapper.callNext = function(emitter, value) {
-      emitter.next(value);
+      emitter.emit(value);
     };
     ObservableWrapper.callEmit = function(emitter, value) {
       emitter.emit(value);
@@ -37555,6 +37702,7 @@ System.registerDynamic("npm:@angular/core/src/linker/view_ref.js", ["../change_d
     function ViewRef_(_view) {
       this._view = _view;
       this._view = _view;
+      this._originalMode = this._view.cdMode;
     }
     Object.defineProperty(ViewRef_.prototype, "internalView", {
       get: function() {
@@ -37597,7 +37745,7 @@ System.registerDynamic("npm:@angular/core/src/linker/view_ref.js", ["../change_d
       this._view.detectChanges(true);
     };
     ViewRef_.prototype.reattach = function() {
-      this._view.cdMode = constants_1.ChangeDetectionStrategy.CheckAlways;
+      this._view.cdMode = this._originalMode;
       this.markForCheck();
     };
     ViewRef_.prototype.onDestroy = function(callback) {
@@ -41665,7 +41813,8 @@ System.registerDynamic("npm:@angular/core/src/metadata/view.js", [], true, funct
           encapsulation = _b.encapsulation,
           styles = _b.styles,
           styleUrls = _b.styleUrls,
-          animations = _b.animations;
+          animations = _b.animations,
+          interpolation = _b.interpolation;
       this.templateUrl = templateUrl;
       this.template = template;
       this.styleUrls = styleUrls;
@@ -41674,6 +41823,7 @@ System.registerDynamic("npm:@angular/core/src/metadata/view.js", [], true, funct
       this.pipes = pipes;
       this.encapsulation = encapsulation;
       this.animations = animations;
+      this.interpolation = interpolation;
     }
     return ViewMetadata;
   }());
@@ -43449,23 +43599,6 @@ System.registerDynamic("npm:@angular/core/src/facade/lang.js", [], true, functio
   exports.getTypeNameForDebugging = getTypeNameForDebugging;
   exports.Math = _global.Math;
   exports.Date = _global.Date;
-  var _devMode = true;
-  var _modeLocked = false;
-  function lockMode() {
-    _modeLocked = true;
-  }
-  exports.lockMode = lockMode;
-  function enableProdMode() {
-    if (_modeLocked) {
-      throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-  }
-  exports.enableProdMode = enableProdMode;
-  function assertionsEnabled() {
-    return _devMode;
-  }
-  exports.assertionsEnabled = assertionsEnabled;
   _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
@@ -43696,6 +43829,9 @@ System.registerDynamic("npm:@angular/core/src/facade/lang.js", [], true, functio
       enumerable: true,
       configurable: true
     });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
     NumberWrapper.isNaN = function(value) {
       return isNaN(value);
     };
@@ -43901,22 +44037,14 @@ System.registerDynamic("npm:@angular/core/src/facade/lang.js", [], true, functio
     return value.constructor === type;
   }
   exports.hasConstructor = hasConstructor;
-  function bitWiseOr(values) {
-    return values.reduce(function(a, b) {
-      return a | b;
-    });
-  }
-  exports.bitWiseOr = bitWiseOr;
-  function bitWiseAnd(values) {
-    return values.reduce(function(a, b) {
-      return a & b;
-    });
-  }
-  exports.bitWiseAnd = bitWiseAnd;
   function escape(s) {
     return _global.encodeURI(s);
   }
   exports.escape = escape;
+  function escapeRegExp(s) {
+    return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
+  exports.escapeRegExp = escapeRegExp;
   return module.exports;
 });
 
@@ -44003,6 +44131,9 @@ System.registerDynamic("npm:@angular/core/index.js", ["./src/metadata", "./src/u
   exports.createNgZone = application_ref_1.createNgZone;
   exports.PlatformRef = application_ref_1.PlatformRef;
   exports.ApplicationRef = application_ref_1.ApplicationRef;
+  exports.enableProdMode = application_ref_1.enableProdMode;
+  exports.lockRunMode = application_ref_1.lockRunMode;
+  exports.isDevMode = application_ref_1.isDevMode;
   var application_tokens_1 = $__require('./src/application_tokens');
   exports.APP_ID = application_tokens_1.APP_ID;
   exports.APP_INITIALIZER = application_tokens_1.APP_INITIALIZER;
@@ -44028,7 +44159,6 @@ System.registerDynamic("npm:@angular/core/index.js", ["./src/metadata", "./src/u
   exports.wtfEndTimeRange = profile_1.wtfEndTimeRange;
   var lang_1 = $__require('./src/facade/lang');
   exports.Type = lang_1.Type;
-  exports.enableProdMode = lang_1.enableProdMode;
   var async_1 = $__require('./src/facade/async');
   exports.EventEmitter = async_1.EventEmitter;
   var exceptions_1 = $__require('./src/facade/exceptions');
@@ -44223,19 +44353,12 @@ System.registerDynamic("npm:@angular/compiler/src/util.js", ["./facade/collectio
   var lang_1 = $__require('./facade/lang');
   exports.MODULE_SUFFIX = lang_1.IS_DART ? '.dart' : '';
   var CAMEL_CASE_REGEXP = /([A-Z])/g;
-  var DASH_CASE_REGEXP = /-([a-z])/g;
   function camelCaseToDashCase(input) {
     return lang_1.StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function(m) {
       return '-' + m[1].toLowerCase();
     });
   }
   exports.camelCaseToDashCase = camelCaseToDashCase;
-  function dashCaseToCamelCase(input) {
-    return lang_1.StringWrapper.replaceAllMapped(input, DASH_CASE_REGEXP, function(m) {
-      return m[1].toUpperCase();
-    });
-  }
-  exports.dashCaseToCamelCase = dashCaseToCamelCase;
   function splitAtColon(input, defaultValues) {
     var parts = lang_1.StringWrapper.split(input.trim(), /\s*:\s*/g);
     if (parts.length > 1) {
@@ -44998,7 +45121,8 @@ System.registerDynamic("npm:@angular/compiler/src/compile_metadata.js", ["@angul
           styles = _b.styles,
           styleUrls = _b.styleUrls,
           animations = _b.animations,
-          ngContentSelectors = _b.ngContentSelectors;
+          ngContentSelectors = _b.ngContentSelectors,
+          interpolation = _b.interpolation;
       this.encapsulation = encapsulation;
       this.template = template;
       this.templateUrl = templateUrl;
@@ -45006,6 +45130,10 @@ System.registerDynamic("npm:@angular/compiler/src/compile_metadata.js", ["@angul
       this.styleUrls = lang_1.isPresent(styleUrls) ? styleUrls : [];
       this.animations = lang_1.isPresent(animations) ? collection_1.ListWrapper.flatten(animations) : [];
       this.ngContentSelectors = lang_1.isPresent(ngContentSelectors) ? ngContentSelectors : [];
+      if (lang_1.isPresent(interpolation) && interpolation.length != 2) {
+        throw new exceptions_1.BaseException("'interpolation' should have a start and an end symbol.");
+      }
+      this.interpolation = interpolation;
     }
     CompileTemplateMetadata.fromJson = function(data) {
       var animations = _arrayFromJson(data['animations'], metadataFromJson);
@@ -45016,7 +45144,8 @@ System.registerDynamic("npm:@angular/compiler/src/compile_metadata.js", ["@angul
         styles: data['styles'],
         styleUrls: data['styleUrls'],
         animations: animations,
-        ngContentSelectors: data['ngContentSelectors']
+        ngContentSelectors: data['ngContentSelectors'],
+        interpolation: data['interpolation']
       });
     };
     CompileTemplateMetadata.prototype.toJson = function() {
@@ -45027,7 +45156,8 @@ System.registerDynamic("npm:@angular/compiler/src/compile_metadata.js", ["@angul
         'styles': this.styles,
         'styleUrls': this.styleUrls,
         'animations': _objToJson(this.animations),
-        'ngContentSelectors': this.ngContentSelectors
+        'ngContentSelectors': this.ngContentSelectors,
+        'interpolation': this.interpolation
       };
     };
     return CompileTemplateMetadata;
@@ -46011,23 +46141,6 @@ System.registerDynamic("npm:@angular/compiler/src/facade/lang.js", [], true, fun
   exports.getTypeNameForDebugging = getTypeNameForDebugging;
   exports.Math = _global.Math;
   exports.Date = _global.Date;
-  var _devMode = true;
-  var _modeLocked = false;
-  function lockMode() {
-    _modeLocked = true;
-  }
-  exports.lockMode = lockMode;
-  function enableProdMode() {
-    if (_modeLocked) {
-      throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-  }
-  exports.enableProdMode = enableProdMode;
-  function assertionsEnabled() {
-    return _devMode;
-  }
-  exports.assertionsEnabled = assertionsEnabled;
   _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
@@ -46258,6 +46371,9 @@ System.registerDynamic("npm:@angular/compiler/src/facade/lang.js", [], true, fun
       enumerable: true,
       configurable: true
     });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
     NumberWrapper.isNaN = function(value) {
       return isNaN(value);
     };
@@ -46463,22 +46579,14 @@ System.registerDynamic("npm:@angular/compiler/src/facade/lang.js", [], true, fun
     return value.constructor === type;
   }
   exports.hasConstructor = hasConstructor;
-  function bitWiseOr(values) {
-    return values.reduce(function(a, b) {
-      return a | b;
-    });
-  }
-  exports.bitWiseOr = bitWiseOr;
-  function bitWiseAnd(values) {
-    return values.reduce(function(a, b) {
-      return a & b;
-    });
-  }
-  exports.bitWiseAnd = bitWiseAnd;
   function escape(s) {
     return _global.encodeURI(s);
   }
   exports.escape = escape;
+  function escapeRegExp(s) {
+    return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
+  exports.escapeRegExp = escapeRegExp;
   return module.exports;
 });
 
@@ -47867,23 +47975,6 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/src/facade/lang.js
   exports.getTypeNameForDebugging = getTypeNameForDebugging;
   exports.Math = _global.Math;
   exports.Date = _global.Date;
-  var _devMode = true;
-  var _modeLocked = false;
-  function lockMode() {
-    _modeLocked = true;
-  }
-  exports.lockMode = lockMode;
-  function enableProdMode() {
-    if (_modeLocked) {
-      throw 'Cannot enable prod mode after platform setup.';
-    }
-    _devMode = false;
-  }
-  exports.enableProdMode = enableProdMode;
-  function assertionsEnabled() {
-    return _devMode;
-  }
-  exports.assertionsEnabled = assertionsEnabled;
   _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
@@ -48114,6 +48205,9 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/src/facade/lang.js
       enumerable: true,
       configurable: true
     });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
     NumberWrapper.isNaN = function(value) {
       return isNaN(value);
     };
@@ -48319,22 +48413,14 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/src/facade/lang.js
     return value.constructor === type;
   }
   exports.hasConstructor = hasConstructor;
-  function bitWiseOr(values) {
-    return values.reduce(function(a, b) {
-      return a | b;
-    });
-  }
-  exports.bitWiseOr = bitWiseOr;
-  function bitWiseAnd(values) {
-    return values.reduce(function(a, b) {
-      return a & b;
-    });
-  }
-  exports.bitWiseAnd = bitWiseAnd;
   function escape(s) {
     return _global.encodeURI(s);
   }
   exports.escape = escape;
+  function escapeRegExp(s) {
+    return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  }
+  exports.escapeRegExp = escapeRegExp;
   return module.exports;
 });
 
@@ -48385,9 +48471,6 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/src/facade/promise
     };
     PromiseWrapper.scheduleMicrotask = function(computation) {
       PromiseWrapper.then(PromiseWrapper.resolve(null), computation, function(_) {});
-    };
-    PromiseWrapper.isPromise = function(obj) {
-      return obj instanceof Promise;
     };
     PromiseWrapper.completer = function() {
       return new PromiseCompleter();
