@@ -48617,20 +48617,20 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/index.js", ["@angu
   return module.exports;
 });
 
-System.register("app/main.js", ["reflect-metadata", "zone", "./routes", "@angular/core", "./components/app/component", "@angular/platform-browser-dynamic"], function(exports_1, context_1) {
+System.register("app/main.js", ["reflect-metadata", "zone", "./routes", "./components/app/component", "@angular/core", "@angular/platform-browser-dynamic"], function(exports_1, context_1) {
   "use strict";
   var __moduleName = context_1 && context_1.id;
   var routes_1,
-      core_1,
       component_1,
+      core_1,
       platform_browser_dynamic_1;
   return {
     setters: [function(_1) {}, function(_2) {}, function(routes_1_1) {
       routes_1 = routes_1_1;
-    }, function(core_1_1) {
-      core_1 = core_1_1;
     }, function(component_1_1) {
       component_1 = component_1_1;
+    }, function(core_1_1) {
+      core_1 = core_1_1;
     }, function(platform_browser_dynamic_1_1) {
       platform_browser_dynamic_1 = platform_browser_dynamic_1_1;
     }],
