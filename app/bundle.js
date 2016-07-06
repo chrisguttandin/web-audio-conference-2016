@@ -2715,7 +2715,7 @@ System.register("app/components/slide-twelve/component.js", ["@angular/core", ".
 var buffer = new Float32Array(analyser.fftSize);
 var scriptProcessor = offlineAudioContext.createScriptProcessor();
 
-scriptProcessor.onaudioprocess = () => {
+scriptProcessor.onaudioprocess = () =&gt; {
     analyser.getFloatFrequencyData(buffer);
     // CAUTION: buffer will contain random data
 };
