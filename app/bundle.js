@@ -2665,7 +2665,7 @@ System.register("app/components/prism/component.js", ["@angular/core"], function
         PrismComponent = __decorate([core_1.Component({
           moduleId: __moduleName,
           selector: 'prism',
-          styles: ['code{font-size:3.5vmin}pre[class*=language-]{padding:0 .5em!important}'],
+          styles: ['code{font-size:3.5vmin}pre[class*=language-]{line-height:1;padding:0 .5em}'],
           template: `<pre><code #element [class]="language"><ng-content></ng-content></code></pre>
 `
         }), __metadata('design:paramtypes', [])], PrismComponent);
