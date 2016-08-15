@@ -937,1276 +937,6 @@ System.registerDynamic("npm:reflect-metadata/Reflect.js", [], false, function ($
 
     return _retrieveGlobal();
 });
-System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require, exports, module) {
-  ;
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  (function(modules) {
-    var installedModules = {};
-    function __webpack_require__(moduleId) {
-      if (installedModules[moduleId])
-        return installedModules[moduleId].exports;
-      var module = installedModules[moduleId] = {
-        exports: {},
-        id: moduleId,
-        loaded: false
-      };
-      modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-      module.loaded = true;
-      return module.exports;
-    }
-    __webpack_require__.m = modules;
-    __webpack_require__.c = installedModules;
-    __webpack_require__.p = "";
-    return __webpack_require__(0);
-  })([function(module, exports, __webpack_require__) {
-    (function(global) {
-      "use strict";
-      __webpack_require__(1);
-      var event_target_1 = __webpack_require__(2);
-      var define_property_1 = __webpack_require__(4);
-      var register_element_1 = __webpack_require__(5);
-      var property_descriptor_1 = __webpack_require__(6);
-      var timers_1 = __webpack_require__(8);
-      var utils_1 = __webpack_require__(3);
-      var set = 'set';
-      var clear = 'clear';
-      var blockingMethods = ['alert', 'prompt', 'confirm'];
-      var _global = typeof window == 'undefined' ? global : window;
-      timers_1.patchTimer(_global, set, clear, 'Timeout');
-      timers_1.patchTimer(_global, set, clear, 'Interval');
-      timers_1.patchTimer(_global, set, clear, 'Immediate');
-      timers_1.patchTimer(_global, 'request', 'cancelMacroTask', 'AnimationFrame');
-      timers_1.patchTimer(_global, 'mozRequest', 'mozCancel', 'AnimationFrame');
-      timers_1.patchTimer(_global, 'webkitRequest', 'webkitCancel', 'AnimationFrame');
-      for (var i = 0; i < blockingMethods.length; i++) {
-        var name = blockingMethods[i];
-        utils_1.patchMethod(_global, name, function(delegate, symbol, name) {
-          return function(s, args) {
-            return Zone.current.run(delegate, _global, args, name);
-          };
-        });
-      }
-      event_target_1.eventTargetPatch(_global);
-      property_descriptor_1.propertyDescriptorPatch(_global);
-      utils_1.patchClass('MutationObserver');
-      utils_1.patchClass('WebKitMutationObserver');
-      utils_1.patchClass('FileReader');
-      define_property_1.propertyPatch();
-      register_element_1.registerElementPatch(_global);
-      patchXHR(_global);
-      var XHR_TASK = utils_1.zoneSymbol('xhrTask');
-      function patchXHR(window) {
-        function findPendingTask(target) {
-          var pendingTask = target[XHR_TASK];
-          return pendingTask;
-        }
-        function scheduleTask(task) {
-          var data = task.data;
-          data.target.addEventListener('readystatechange', function() {
-            if (data.target.readyState === XMLHttpRequest.DONE) {
-              if (!data.aborted) {
-                task.invoke();
-              }
-            }
-          });
-          var storedTask = data.target[XHR_TASK];
-          if (!storedTask) {
-            data.target[XHR_TASK] = task;
-          }
-          setNative.apply(data.target, data.args);
-          return task;
-        }
-        function placeholderCallback() {}
-        function clearTask(task) {
-          var data = task.data;
-          data.aborted = true;
-          return clearNative.apply(data.target, data.args);
-        }
-        var setNative = utils_1.patchMethod(window.XMLHttpRequest.prototype, 'send', function() {
-          return function(self, args) {
-            var zone = Zone.current;
-            var options = {
-              target: self,
-              isPeriodic: false,
-              delay: null,
-              args: args,
-              aborted: false
-            };
-            return zone.scheduleMacroTask('XMLHttpRequest.send', placeholderCallback, options, scheduleTask, clearTask);
-          };
-        });
-        var clearNative = utils_1.patchMethod(window.XMLHttpRequest.prototype, 'abort', function(delegate) {
-          return function(self, args) {
-            var task = findPendingTask(self);
-            if (task && typeof task.type == 'string') {
-              if (task.cancelFn == null) {
-                return;
-              }
-              task.zone.cancelTask(task);
-            }
-          };
-        });
-      }
-      if (_global['navigator'] && _global['navigator'].geolocation) {
-        utils_1.patchPrototype(_global['navigator'].geolocation, ['getCurrentPosition', 'watchPosition']);
-      }
-    }.call(exports, (function() {
-      return this;
-    }())));
-  }, function(module, exports) {
-    (function(global) {
-      ;
-      ;
-      var Zone = (function(global) {
-        var Zone = (function() {
-          function Zone(parent, zoneSpec) {
-            this._properties = null;
-            this._parent = parent;
-            this._name = zoneSpec ? zoneSpec.name || 'unnamed' : '<root>';
-            this._properties = zoneSpec && zoneSpec.properties || {};
-            this._zoneDelegate = new ZoneDelegate(this, this._parent && this._parent._zoneDelegate, zoneSpec);
-          }
-          Object.defineProperty(Zone, "current", {
-            get: function() {
-              return _currentZone;
-            },
-            enumerable: true,
-            configurable: true
-          });
-          ;
-          Object.defineProperty(Zone, "currentTask", {
-            get: function() {
-              return _currentTask;
-            },
-            enumerable: true,
-            configurable: true
-          });
-          ;
-          Object.defineProperty(Zone.prototype, "parent", {
-            get: function() {
-              return this._parent;
-            },
-            enumerable: true,
-            configurable: true
-          });
-          ;
-          Object.defineProperty(Zone.prototype, "name", {
-            get: function() {
-              return this._name;
-            },
-            enumerable: true,
-            configurable: true
-          });
-          ;
-          Zone.prototype.get = function(key) {
-            var current = this;
-            while (current) {
-              if (current._properties.hasOwnProperty(key)) {
-                return current._properties[key];
-              }
-              current = current._parent;
-            }
-          };
-          Zone.prototype.fork = function(zoneSpec) {
-            if (!zoneSpec)
-              throw new Error('ZoneSpec required!');
-            return this._zoneDelegate.fork(this, zoneSpec);
-          };
-          Zone.prototype.wrap = function(callback, source) {
-            if (typeof callback !== 'function') {
-              throw new Error('Expecting function got: ' + callback);
-            }
-            var _callback = this._zoneDelegate.intercept(this, callback, source);
-            var zone = this;
-            return function() {
-              return zone.runGuarded(_callback, this, arguments, source);
-            };
-          };
-          Zone.prototype.run = function(callback, applyThis, applyArgs, source) {
-            if (applyThis === void 0) {
-              applyThis = null;
-            }
-            if (applyArgs === void 0) {
-              applyArgs = null;
-            }
-            if (source === void 0) {
-              source = null;
-            }
-            var oldZone = _currentZone;
-            _currentZone = this;
-            try {
-              return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
-            } finally {
-              _currentZone = oldZone;
-            }
-          };
-          Zone.prototype.runGuarded = function(callback, applyThis, applyArgs, source) {
-            if (applyThis === void 0) {
-              applyThis = null;
-            }
-            if (applyArgs === void 0) {
-              applyArgs = null;
-            }
-            if (source === void 0) {
-              source = null;
-            }
-            var oldZone = _currentZone;
-            _currentZone = this;
-            try {
-              try {
-                return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
-              } catch (error) {
-                if (this._zoneDelegate.handleError(this, error)) {
-                  throw error;
-                }
-              }
-            } finally {
-              _currentZone = oldZone;
-            }
-          };
-          Zone.prototype.runTask = function(task, applyThis, applyArgs) {
-            task.runCount++;
-            if (task.zone != this)
-              throw new Error('A task can only be run in the zone which created it! (Creation: ' + task.zone.name + '; Execution: ' + this.name + ')');
-            var previousTask = _currentTask;
-            _currentTask = task;
-            var oldZone = _currentZone;
-            _currentZone = this;
-            try {
-              if (task.type == 'macroTask' && task.data && !task.data.isPeriodic) {
-                task.cancelFn = null;
-              }
-              try {
-                return this._zoneDelegate.invokeTask(this, task, applyThis, applyArgs);
-              } catch (error) {
-                if (this._zoneDelegate.handleError(this, error)) {
-                  throw error;
-                }
-              }
-            } finally {
-              _currentZone = oldZone;
-              _currentTask = previousTask;
-            }
-          };
-          Zone.prototype.scheduleMicroTask = function(source, callback, data, customSchedule) {
-            return this._zoneDelegate.scheduleTask(this, new ZoneTask('microTask', this, source, callback, data, customSchedule, null));
-          };
-          Zone.prototype.scheduleMacroTask = function(source, callback, data, customSchedule, customCancel) {
-            return this._zoneDelegate.scheduleTask(this, new ZoneTask('macroTask', this, source, callback, data, customSchedule, customCancel));
-          };
-          Zone.prototype.scheduleEventTask = function(source, callback, data, customSchedule, customCancel) {
-            return this._zoneDelegate.scheduleTask(this, new ZoneTask('eventTask', this, source, callback, data, customSchedule, customCancel));
-          };
-          Zone.prototype.cancelTask = function(task) {
-            var value = this._zoneDelegate.cancelTask(this, task);
-            task.runCount = -1;
-            task.cancelFn = null;
-            return value;
-          };
-          Zone.__symbol__ = __symbol__;
-          return Zone;
-        }());
-        ;
-        var ZoneDelegate = (function() {
-          function ZoneDelegate(zone, parentDelegate, zoneSpec) {
-            this._taskCounts = {
-              microTask: 0,
-              macroTask: 0,
-              eventTask: 0
-            };
-            this.zone = zone;
-            this._parentDelegate = parentDelegate;
-            this._forkZS = zoneSpec && (zoneSpec && zoneSpec.onFork ? zoneSpec : parentDelegate._forkZS);
-            this._forkDlgt = zoneSpec && (zoneSpec.onFork ? parentDelegate : parentDelegate._forkDlgt);
-            this._interceptZS = zoneSpec && (zoneSpec.onIntercept ? zoneSpec : parentDelegate._interceptZS);
-            this._interceptDlgt = zoneSpec && (zoneSpec.onIntercept ? parentDelegate : parentDelegate._interceptDlgt);
-            this._invokeZS = zoneSpec && (zoneSpec.onInvoke ? zoneSpec : parentDelegate._invokeZS);
-            this._invokeDlgt = zoneSpec && (zoneSpec.onInvoke ? parentDelegate : parentDelegate._invokeDlgt);
-            this._handleErrorZS = zoneSpec && (zoneSpec.onHandleError ? zoneSpec : parentDelegate._handleErrorZS);
-            this._handleErrorDlgt = zoneSpec && (zoneSpec.onHandleError ? parentDelegate : parentDelegate._handleErrorDlgt);
-            this._scheduleTaskZS = zoneSpec && (zoneSpec.onScheduleTask ? zoneSpec : parentDelegate._scheduleTaskZS);
-            this._scheduleTaskDlgt = zoneSpec && (zoneSpec.onScheduleTask ? parentDelegate : parentDelegate._scheduleTaskDlgt);
-            this._invokeTaskZS = zoneSpec && (zoneSpec.onInvokeTask ? zoneSpec : parentDelegate._invokeTaskZS);
-            this._invokeTaskDlgt = zoneSpec && (zoneSpec.onInvokeTask ? parentDelegate : parentDelegate._invokeTaskDlgt);
-            this._cancelTaskZS = zoneSpec && (zoneSpec.onCancelTask ? zoneSpec : parentDelegate._cancelTaskZS);
-            this._cancelTaskDlgt = zoneSpec && (zoneSpec.onCancelTask ? parentDelegate : parentDelegate._cancelTaskDlgt);
-            this._hasTaskZS = zoneSpec && (zoneSpec.onHasTask ? zoneSpec : parentDelegate._hasTaskZS);
-            this._hasTaskDlgt = zoneSpec && (zoneSpec.onHasTask ? parentDelegate : parentDelegate._hasTaskDlgt);
-          }
-          ZoneDelegate.prototype.fork = function(targetZone, zoneSpec) {
-            return this._forkZS ? this._forkZS.onFork(this._forkDlgt, this.zone, targetZone, zoneSpec) : new Zone(targetZone, zoneSpec);
-          };
-          ZoneDelegate.prototype.intercept = function(targetZone, callback, source) {
-            return this._interceptZS ? this._interceptZS.onIntercept(this._interceptDlgt, this.zone, targetZone, callback, source) : callback;
-          };
-          ZoneDelegate.prototype.invoke = function(targetZone, callback, applyThis, applyArgs, source) {
-            return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this.zone, targetZone, callback, applyThis, applyArgs, source) : callback.apply(applyThis, applyArgs);
-          };
-          ZoneDelegate.prototype.handleError = function(targetZone, error) {
-            return this._handleErrorZS ? this._handleErrorZS.onHandleError(this._handleErrorDlgt, this.zone, targetZone, error) : true;
-          };
-          ZoneDelegate.prototype.scheduleTask = function(targetZone, task) {
-            try {
-              if (this._scheduleTaskZS) {
-                return this._scheduleTaskZS.onScheduleTask(this._scheduleTaskDlgt, this.zone, targetZone, task);
-              } else if (task.scheduleFn) {
-                task.scheduleFn(task);
-              } else if (task.type == 'microTask') {
-                scheduleMicroTask(task);
-              } else {
-                throw new Error('Task is missing scheduleFn.');
-              }
-              return task;
-            } finally {
-              if (targetZone == this.zone) {
-                this._updateTaskCount(task.type, 1);
-              }
-            }
-          };
-          ZoneDelegate.prototype.invokeTask = function(targetZone, task, applyThis, applyArgs) {
-            try {
-              return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this.zone, targetZone, task, applyThis, applyArgs) : task.callback.apply(applyThis, applyArgs);
-            } finally {
-              if (targetZone == this.zone && (task.type != 'eventTask') && !(task.data && task.data.isPeriodic)) {
-                this._updateTaskCount(task.type, -1);
-              }
-            }
-          };
-          ZoneDelegate.prototype.cancelTask = function(targetZone, task) {
-            var value;
-            if (this._cancelTaskZS) {
-              value = this._cancelTaskZS.onCancelTask(this._cancelTaskDlgt, this.zone, targetZone, task);
-            } else if (!task.cancelFn) {
-              throw new Error('Task does not support cancellation, or is already canceled.');
-            } else {
-              value = task.cancelFn(task);
-            }
-            if (targetZone == this.zone) {
-              this._updateTaskCount(task.type, -1);
-            }
-            return value;
-          };
-          ZoneDelegate.prototype.hasTask = function(targetZone, isEmpty) {
-            return this._hasTaskZS && this._hasTaskZS.onHasTask(this._hasTaskDlgt, this.zone, targetZone, isEmpty);
-          };
-          ZoneDelegate.prototype._updateTaskCount = function(type, count) {
-            var counts = this._taskCounts;
-            var prev = counts[type];
-            var next = counts[type] = prev + count;
-            if (next < 0) {
-              throw new Error('More tasks executed then were scheduled.');
-            }
-            if (prev == 0 || next == 0) {
-              var isEmpty = {
-                microTask: counts.microTask > 0,
-                macroTask: counts.macroTask > 0,
-                eventTask: counts.eventTask > 0,
-                change: type
-              };
-              try {
-                this.hasTask(this.zone, isEmpty);
-              } finally {
-                if (this._parentDelegate) {
-                  this._parentDelegate._updateTaskCount(type, count);
-                }
-              }
-            }
-          };
-          return ZoneDelegate;
-        }());
-        var ZoneTask = (function() {
-          function ZoneTask(type, zone, source, callback, options, scheduleFn, cancelFn) {
-            this.runCount = 0;
-            this.type = type;
-            this.zone = zone;
-            this.source = source;
-            this.data = options;
-            this.scheduleFn = scheduleFn;
-            this.cancelFn = cancelFn;
-            this.callback = callback;
-            var self = this;
-            this.invoke = function() {
-              try {
-                return zone.runTask(self, this, arguments);
-              } finally {
-                drainMicroTaskQueue();
-              }
-            };
-          }
-          return ZoneTask;
-        }());
-        function __symbol__(name) {
-          return '__zone_symbol__' + name;
-        }
-        ;
-        var symbolSetTimeout = __symbol__('setTimeout');
-        var symbolPromise = __symbol__('Promise');
-        var symbolThen = __symbol__('then');
-        var _currentZone = new Zone(null, null);
-        var _currentTask = null;
-        var _microTaskQueue = [];
-        var _isDrainingMicrotaskQueue = false;
-        var _uncaughtPromiseErrors = [];
-        var _drainScheduled = false;
-        function scheduleQueueDrain() {
-          if (!_drainScheduled && !_currentTask && _microTaskQueue.length == 0) {
-            if (global[symbolPromise]) {
-              global[symbolPromise].resolve(0)[symbolThen](drainMicroTaskQueue);
-            } else {
-              global[symbolSetTimeout](drainMicroTaskQueue, 0);
-            }
-          }
-        }
-        function scheduleMicroTask(task) {
-          scheduleQueueDrain();
-          _microTaskQueue.push(task);
-        }
-        function consoleError(e) {
-          var rejection = e && e.rejection;
-          if (rejection) {
-            console.error('Unhandled Promise rejection:', rejection instanceof Error ? rejection.message : rejection, '; Zone:', e.zone.name, '; Task:', e.task && e.task.source, '; Value:', rejection);
-          }
-          console.error(e);
-        }
-        function drainMicroTaskQueue() {
-          if (!_isDrainingMicrotaskQueue) {
-            _isDrainingMicrotaskQueue = true;
-            while (_microTaskQueue.length) {
-              var queue = _microTaskQueue;
-              _microTaskQueue = [];
-              for (var i = 0; i < queue.length; i++) {
-                var task = queue[i];
-                try {
-                  task.zone.runTask(task, null, null);
-                } catch (e) {
-                  consoleError(e);
-                }
-              }
-            }
-            while (_uncaughtPromiseErrors.length) {
-              var uncaughtPromiseErrors = _uncaughtPromiseErrors;
-              _uncaughtPromiseErrors = [];
-              var _loop_1 = function(i) {
-                var uncaughtPromiseError = uncaughtPromiseErrors[i];
-                try {
-                  uncaughtPromiseError.zone.runGuarded(function() {
-                    throw uncaughtPromiseError;
-                  });
-                } catch (e) {
-                  consoleError(e);
-                }
-              };
-              for (var i = 0; i < uncaughtPromiseErrors.length; i++) {
-                _loop_1(i);
-              }
-            }
-            _isDrainingMicrotaskQueue = false;
-            _drainScheduled = false;
-          }
-        }
-        function isThenable(value) {
-          return value && value.then;
-        }
-        function forwardResolution(value) {
-          return value;
-        }
-        function forwardRejection(rejection) {
-          return ZoneAwarePromise.reject(rejection);
-        }
-        var symbolState = __symbol__('state');
-        var symbolValue = __symbol__('value');
-        var source = 'Promise.then';
-        var UNRESOLVED = null;
-        var RESOLVED = true;
-        var REJECTED = false;
-        var REJECTED_NO_CATCH = 0;
-        function makeResolver(promise, state) {
-          return function(v) {
-            resolvePromise(promise, state, v);
-          };
-        }
-        function resolvePromise(promise, state, value) {
-          if (promise[symbolState] === UNRESOLVED) {
-            if (value instanceof ZoneAwarePromise && value[symbolState] !== UNRESOLVED) {
-              clearRejectedNoCatch(value);
-              resolvePromise(promise, value[symbolState], value[symbolValue]);
-            } else if (isThenable(value)) {
-              value.then(makeResolver(promise, state), makeResolver(promise, false));
-            } else {
-              promise[symbolState] = state;
-              var queue = promise[symbolValue];
-              promise[symbolValue] = value;
-              for (var i = 0; i < queue.length; ) {
-                scheduleResolveOrReject(promise, queue[i++], queue[i++], queue[i++], queue[i++]);
-              }
-              if (queue.length == 0 && state == REJECTED) {
-                promise[symbolState] = REJECTED_NO_CATCH;
-                try {
-                  throw new Error("Uncaught (in promise): " + value);
-                } catch (e) {
-                  var error = e;
-                  error.rejection = value;
-                  error.promise = promise;
-                  error.zone = Zone.current;
-                  error.task = Zone.currentTask;
-                  _uncaughtPromiseErrors.push(error);
-                  scheduleQueueDrain();
-                }
-              }
-            }
-          }
-          return promise;
-        }
-        function clearRejectedNoCatch(promise) {
-          if (promise[symbolState] === REJECTED_NO_CATCH) {
-            promise[symbolState] = REJECTED;
-            for (var i = 0; i < _uncaughtPromiseErrors.length; i++) {
-              if (promise === _uncaughtPromiseErrors[i].promise) {
-                _uncaughtPromiseErrors.splice(i, 1);
-                break;
-              }
-            }
-          }
-        }
-        function scheduleResolveOrReject(promise, zone, chainPromise, onFulfilled, onRejected) {
-          clearRejectedNoCatch(promise);
-          var delegate = promise[symbolState] ? onFulfilled || forwardResolution : onRejected || forwardRejection;
-          zone.scheduleMicroTask(source, function() {
-            try {
-              resolvePromise(chainPromise, true, zone.run(delegate, null, [promise[symbolValue]]));
-            } catch (error) {
-              resolvePromise(chainPromise, false, error);
-            }
-          });
-        }
-        var ZoneAwarePromise = (function() {
-          function ZoneAwarePromise(executor) {
-            var promise = this;
-            promise[symbolState] = UNRESOLVED;
-            promise[symbolValue] = [];
-            try {
-              executor && executor(makeResolver(promise, RESOLVED), makeResolver(promise, REJECTED));
-            } catch (e) {
-              resolvePromise(promise, false, e);
-            }
-          }
-          ZoneAwarePromise.resolve = function(value) {
-            return resolvePromise(new this(null), RESOLVED, value);
-          };
-          ZoneAwarePromise.reject = function(error) {
-            return resolvePromise(new this(null), REJECTED, error);
-          };
-          ZoneAwarePromise.race = function(values) {
-            var resolve;
-            var reject;
-            var promise = new this(function(res, rej) {
-              resolve = res;
-              reject = rej;
-            });
-            function onResolve(value) {
-              promise && (promise = null || resolve(value));
-            }
-            function onReject(error) {
-              promise && (promise = null || reject(error));
-            }
-            for (var _i = 0,
-                values_1 = values; _i < values_1.length; _i++) {
-              var value = values_1[_i];
-              if (!isThenable(value)) {
-                value = this.resolve(value);
-              }
-              value.then(onResolve, onReject);
-            }
-            return promise;
-          };
-          ZoneAwarePromise.all = function(values) {
-            var resolve;
-            var reject;
-            var promise = new this(function(res, rej) {
-              resolve = res;
-              reject = rej;
-            });
-            var count = 0;
-            var resolvedValues = [];
-            function onReject(error) {
-              promise && reject(error);
-              promise = null;
-            }
-            for (var _i = 0,
-                values_2 = values; _i < values_2.length; _i++) {
-              var value = values_2[_i];
-              if (!isThenable(value)) {
-                value = this.resolve(value);
-              }
-              value.then((function(index) {
-                return function(value) {
-                  resolvedValues[index] = value;
-                  count--;
-                  if (promise && !count) {
-                    resolve(resolvedValues);
-                  }
-                  promise == null;
-                };
-              })(count), onReject);
-              count++;
-            }
-            if (!count)
-              resolve(resolvedValues);
-            return promise;
-          };
-          ZoneAwarePromise.prototype.then = function(onFulfilled, onRejected) {
-            var chainPromise = new ZoneAwarePromise(null);
-            var zone = Zone.current;
-            if (this[symbolState] == UNRESOLVED) {
-              this[symbolValue].push(zone, chainPromise, onFulfilled, onRejected);
-            } else {
-              scheduleResolveOrReject(this, zone, chainPromise, onFulfilled, onRejected);
-            }
-            return chainPromise;
-          };
-          ZoneAwarePromise.prototype.catch = function(onRejected) {
-            return this.then(null, onRejected);
-          };
-          return ZoneAwarePromise;
-        }());
-        var NativePromise = global[__symbol__('Promise')] = global.Promise;
-        global.Promise = ZoneAwarePromise;
-        if (NativePromise) {
-          var NativePromiseProtototype = NativePromise.prototype;
-          var NativePromiseThen_1 = NativePromiseProtototype[__symbol__('then')] = NativePromiseProtototype.then;
-          NativePromiseProtototype.then = function(onResolve, onReject) {
-            var nativePromise = this;
-            return new ZoneAwarePromise(function(resolve, reject) {
-              NativePromiseThen_1.call(nativePromise, resolve, reject);
-            }).then(onResolve, onReject);
-          };
-        }
-        return global.Zone = Zone;
-      })(typeof window === 'undefined' ? global : window);
-    }.call(exports, (function() {
-      return this;
-    }())));
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils_1 = __webpack_require__(3);
-    var WTF_ISSUE_555 = 'Anchor,Area,Audio,BR,Base,BaseFont,Body,Button,Canvas,Content,DList,Directory,Div,Embed,FieldSet,Font,Form,Frame,FrameSet,HR,Head,Heading,Html,IFrame,Image,Input,Keygen,LI,Label,Legend,Link,Map,Marquee,Media,Menu,Meta,Meter,Mod,OList,Object,OptGroup,Option,Output,Paragraph,Pre,Progress,Quote,Script,Select,Source,Span,Style,TableCaption,TableCell,TableCol,Table,TableRow,TableSection,TextArea,Title,Track,UList,Unknown,Video';
-    var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex'.split(',');
-    var EVENT_TARGET = 'EventTarget';
-    function eventTargetPatch(_global) {
-      var apis = [];
-      var isWtf = _global['wtf'];
-      if (isWtf) {
-        apis = WTF_ISSUE_555.split(',').map(function(v) {
-          return 'HTML' + v + 'Element';
-        }).concat(NO_EVENT_TARGET);
-      } else if (_global[EVENT_TARGET]) {
-        apis.push(EVENT_TARGET);
-      } else {
-        apis = NO_EVENT_TARGET;
-      }
-      for (var i = 0; i < apis.length; i++) {
-        var type = _global[apis[i]];
-        utils_1.patchEventTargetMethods(type && type.prototype);
-      }
-    }
-    exports.eventTargetPatch = eventTargetPatch;
-  }, function(module, exports) {
-    (function(global) {
-      "use strict";
-      exports.zoneSymbol = Zone['__symbol__'];
-      var _global = typeof window == 'undefined' ? global : window;
-      function bindArguments(args, source) {
-        for (var i = args.length - 1; i >= 0; i--) {
-          if (typeof args[i] === 'function') {
-            args[i] = Zone.current.wrap(args[i], source + '_' + i);
-          }
-        }
-        return args;
-      }
-      exports.bindArguments = bindArguments;
-      ;
-      function patchPrototype(prototype, fnNames) {
-        var source = prototype.constructor['name'];
-        var _loop_1 = function(i) {
-          var name_1 = fnNames[i];
-          var delegate = prototype[name_1];
-          if (delegate) {
-            prototype[name_1] = (function(delegate) {
-              return function() {
-                return delegate.apply(this, bindArguments(arguments, source + '.' + name_1));
-              };
-            })(delegate);
-          }
-        };
-        for (var i = 0; i < fnNames.length; i++) {
-          _loop_1(i);
-        }
-      }
-      exports.patchPrototype = patchPrototype;
-      ;
-      exports.isWebWorker = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope);
-      exports.isNode = (typeof process !== 'undefined' && {}.toString.call(process) === '[object process]');
-      exports.isBrowser = !exports.isNode && !exports.isWebWorker && !!(typeof window !== 'undefined' && window['HTMLElement']);
-      function patchProperty(obj, prop) {
-        var desc = Object.getOwnPropertyDescriptor(obj, prop) || {
-          enumerable: true,
-          configurable: true
-        };
-        delete desc.writable;
-        delete desc.value;
-        var eventName = prop.substr(2);
-        var _prop = '_' + prop;
-        desc.set = function(fn) {
-          if (this[_prop]) {
-            this.removeEventListener(eventName, this[_prop]);
-          }
-          if (typeof fn === 'function') {
-            var wrapFn = function(event) {
-              var result;
-              result = fn.apply(this, arguments);
-              if (result != undefined && !result)
-                event.preventDefault();
-            };
-            this[_prop] = wrapFn;
-            this.addEventListener(eventName, wrapFn, false);
-          } else {
-            this[_prop] = null;
-          }
-        };
-        desc.get = function() {
-          return this[_prop];
-        };
-        Object.defineProperty(obj, prop, desc);
-      }
-      exports.patchProperty = patchProperty;
-      ;
-      function patchOnProperties(obj, properties) {
-        var onProperties = [];
-        for (var prop in obj) {
-          if (prop.substr(0, 2) == 'on') {
-            onProperties.push(prop);
-          }
-        }
-        for (var j = 0; j < onProperties.length; j++) {
-          patchProperty(obj, onProperties[j]);
-        }
-        if (properties) {
-          for (var i = 0; i < properties.length; i++) {
-            patchProperty(obj, 'on' + properties[i]);
-          }
-        }
-      }
-      exports.patchOnProperties = patchOnProperties;
-      ;
-      var EVENT_TASKS = exports.zoneSymbol('eventTasks');
-      var ADD_EVENT_LISTENER = 'addEventListener';
-      var REMOVE_EVENT_LISTENER = 'removeEventListener';
-      var SYMBOL_ADD_EVENT_LISTENER = exports.zoneSymbol(ADD_EVENT_LISTENER);
-      var SYMBOL_REMOVE_EVENT_LISTENER = exports.zoneSymbol(REMOVE_EVENT_LISTENER);
-      function findExistingRegisteredTask(target, handler, name, capture, remove) {
-        var eventTasks = target[EVENT_TASKS];
-        if (eventTasks) {
-          for (var i = 0; i < eventTasks.length; i++) {
-            var eventTask = eventTasks[i];
-            var data = eventTask.data;
-            if (data.handler === handler && data.useCapturing === capture && data.eventName === name) {
-              if (remove) {
-                eventTasks.splice(i, 1);
-              }
-              return eventTask;
-            }
-          }
-        }
-        return null;
-      }
-      function attachRegisteredEvent(target, eventTask) {
-        var eventTasks = target[EVENT_TASKS];
-        if (!eventTasks) {
-          eventTasks = target[EVENT_TASKS] = [];
-        }
-        eventTasks.push(eventTask);
-      }
-      function scheduleEventListener(eventTask) {
-        var meta = eventTask.data;
-        attachRegisteredEvent(meta.target, eventTask);
-        return meta.target[SYMBOL_ADD_EVENT_LISTENER](meta.eventName, eventTask.invoke, meta.useCapturing);
-      }
-      function cancelEventListener(eventTask) {
-        var meta = eventTask.data;
-        findExistingRegisteredTask(meta.target, eventTask.invoke, meta.eventName, meta.useCapturing, true);
-        meta.target[SYMBOL_REMOVE_EVENT_LISTENER](meta.eventName, eventTask.invoke, meta.useCapturing);
-      }
-      function zoneAwareAddEventListener(self, args) {
-        var eventName = args[0];
-        var handler = args[1];
-        var useCapturing = args[2] || false;
-        var target = self || _global;
-        var delegate = null;
-        if (typeof handler == 'function') {
-          delegate = handler;
-        } else if (handler && handler.handleEvent) {
-          delegate = function(event) {
-            return handler.handleEvent(event);
-          };
-        }
-        var validZoneHandler = false;
-        try {
-          validZoneHandler = handler && handler.toString() === "[object FunctionWrapper]";
-        } catch (e) {
-          return;
-        }
-        if (!delegate || validZoneHandler) {
-          return target[SYMBOL_ADD_EVENT_LISTENER](eventName, handler, useCapturing);
-        }
-        var eventTask = findExistingRegisteredTask(target, handler, eventName, useCapturing, false);
-        if (eventTask) {
-          return target[SYMBOL_ADD_EVENT_LISTENER](eventName, eventTask.invoke, useCapturing);
-        }
-        var zone = Zone.current;
-        var source = target.constructor['name'] + '.addEventListener:' + eventName;
-        var data = {
-          target: target,
-          eventName: eventName,
-          name: eventName,
-          useCapturing: useCapturing,
-          handler: handler
-        };
-        zone.scheduleEventTask(source, delegate, data, scheduleEventListener, cancelEventListener);
-      }
-      function zoneAwareRemoveEventListener(self, args) {
-        var eventName = args[0];
-        var handler = args[1];
-        var useCapturing = args[2] || false;
-        var target = self || _global;
-        var eventTask = findExistingRegisteredTask(target, handler, eventName, useCapturing, true);
-        if (eventTask) {
-          eventTask.zone.cancelTask(eventTask);
-        } else {
-          target[SYMBOL_REMOVE_EVENT_LISTENER](eventName, handler, useCapturing);
-        }
-      }
-      function patchEventTargetMethods(obj) {
-        if (obj && obj.addEventListener) {
-          patchMethod(obj, ADD_EVENT_LISTENER, function() {
-            return zoneAwareAddEventListener;
-          });
-          patchMethod(obj, REMOVE_EVENT_LISTENER, function() {
-            return zoneAwareRemoveEventListener;
-          });
-          return true;
-        } else {
-          return false;
-        }
-      }
-      exports.patchEventTargetMethods = patchEventTargetMethods;
-      ;
-      var originalInstanceKey = exports.zoneSymbol('originalInstance');
-      function patchClass(className) {
-        var OriginalClass = _global[className];
-        if (!OriginalClass)
-          return;
-        _global[className] = function() {
-          var a = bindArguments(arguments, className);
-          switch (a.length) {
-            case 0:
-              this[originalInstanceKey] = new OriginalClass();
-              break;
-            case 1:
-              this[originalInstanceKey] = new OriginalClass(a[0]);
-              break;
-            case 2:
-              this[originalInstanceKey] = new OriginalClass(a[0], a[1]);
-              break;
-            case 3:
-              this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2]);
-              break;
-            case 4:
-              this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2], a[3]);
-              break;
-            default:
-              throw new Error('Arg list too long.');
-          }
-        };
-        var instance = new OriginalClass(function() {});
-        var prop;
-        for (prop in instance) {
-          (function(prop) {
-            if (typeof instance[prop] === 'function') {
-              _global[className].prototype[prop] = function() {
-                return this[originalInstanceKey][prop].apply(this[originalInstanceKey], arguments);
-              };
-            } else {
-              Object.defineProperty(_global[className].prototype, prop, {
-                set: function(fn) {
-                  if (typeof fn === 'function') {
-                    this[originalInstanceKey][prop] = Zone.current.wrap(fn, className + '.' + prop);
-                  } else {
-                    this[originalInstanceKey][prop] = fn;
-                  }
-                },
-                get: function() {
-                  return this[originalInstanceKey][prop];
-                }
-              });
-            }
-          }(prop));
-        }
-        for (prop in OriginalClass) {
-          if (prop !== 'prototype' && OriginalClass.hasOwnProperty(prop)) {
-            _global[className][prop] = OriginalClass[prop];
-          }
-        }
-      }
-      exports.patchClass = patchClass;
-      ;
-      function createNamedFn(name, delegate) {
-        try {
-          return (Function('f', "return function " + name + "(){return f(this, arguments)}"))(delegate);
-        } catch (e) {
-          return function() {
-            return delegate(this, arguments);
-          };
-        }
-      }
-      exports.createNamedFn = createNamedFn;
-      function patchMethod(target, name, patchFn) {
-        var proto = target;
-        while (proto && !proto.hasOwnProperty(name)) {
-          proto = Object.getPrototypeOf(proto);
-        }
-        if (!proto && target[name]) {
-          proto = target;
-        }
-        var delegateName = exports.zoneSymbol(name);
-        var delegate;
-        if (proto && !(delegate = proto[delegateName])) {
-          delegate = proto[delegateName] = proto[name];
-          proto[name] = createNamedFn(name, patchFn(delegate, delegateName, name));
-        }
-        return delegate;
-      }
-      exports.patchMethod = patchMethod;
-    }.call(exports, (function() {
-      return this;
-    }())));
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils_1 = __webpack_require__(3);
-    var _defineProperty = Object.defineProperty;
-    var _getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-    var _create = Object.create;
-    var unconfigurablesKey = utils_1.zoneSymbol('unconfigurables');
-    function propertyPatch() {
-      Object.defineProperty = function(obj, prop, desc) {
-        if (isUnconfigurable(obj, prop)) {
-          throw new TypeError('Cannot assign to read only property \'' + prop + '\' of ' + obj);
-        }
-        if (prop !== 'prototype') {
-          desc = rewriteDescriptor(obj, prop, desc);
-        }
-        return _defineProperty(obj, prop, desc);
-      };
-      Object.defineProperties = function(obj, props) {
-        Object.keys(props).forEach(function(prop) {
-          Object.defineProperty(obj, prop, props[prop]);
-        });
-        return obj;
-      };
-      Object.create = function(obj, proto) {
-        if (typeof proto === 'object') {
-          Object.keys(proto).forEach(function(prop) {
-            proto[prop] = rewriteDescriptor(obj, prop, proto[prop]);
-          });
-        }
-        return _create(obj, proto);
-      };
-      Object.getOwnPropertyDescriptor = function(obj, prop) {
-        var desc = _getOwnPropertyDescriptor(obj, prop);
-        if (isUnconfigurable(obj, prop)) {
-          desc.configurable = false;
-        }
-        return desc;
-      };
-    }
-    exports.propertyPatch = propertyPatch;
-    ;
-    function _redefineProperty(obj, prop, desc) {
-      desc = rewriteDescriptor(obj, prop, desc);
-      return _defineProperty(obj, prop, desc);
-    }
-    exports._redefineProperty = _redefineProperty;
-    ;
-    function isUnconfigurable(obj, prop) {
-      return obj && obj[unconfigurablesKey] && obj[unconfigurablesKey][prop];
-    }
-    function rewriteDescriptor(obj, prop, desc) {
-      desc.configurable = true;
-      if (!desc.configurable) {
-        if (!obj[unconfigurablesKey]) {
-          _defineProperty(obj, unconfigurablesKey, {
-            writable: true,
-            value: {}
-          });
-        }
-        obj[unconfigurablesKey][prop] = true;
-      }
-      return desc;
-    }
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var define_property_1 = __webpack_require__(4);
-    var utils_1 = __webpack_require__(3);
-    function registerElementPatch(_global) {
-      if (!utils_1.isBrowser || !('registerElement' in _global.document)) {
-        return;
-      }
-      var _registerElement = document.registerElement;
-      var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
-      document.registerElement = function(name, opts) {
-        if (opts && opts.prototype) {
-          callbacks.forEach(function(callback) {
-            var source = 'Document.registerElement::' + callback;
-            if (opts.prototype.hasOwnProperty(callback)) {
-              var descriptor = Object.getOwnPropertyDescriptor(opts.prototype, callback);
-              if (descriptor && descriptor.value) {
-                descriptor.value = Zone.current.wrap(descriptor.value, source);
-                define_property_1._redefineProperty(opts.prototype, callback, descriptor);
-              } else {
-                opts.prototype[callback] = Zone.current.wrap(opts.prototype[callback], source);
-              }
-            } else if (opts.prototype[callback]) {
-              opts.prototype[callback] = Zone.current.wrap(opts.prototype[callback], source);
-            }
-          });
-        }
-        return _registerElement.apply(document, [name, opts]);
-      };
-    }
-    exports.registerElementPatch = registerElementPatch;
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var webSocketPatch = __webpack_require__(7);
-    var utils_1 = __webpack_require__(3);
-    var eventNames = 'copy cut paste abort blur focus canplay canplaythrough change click contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop durationchange emptied ended input invalid keydown keypress keyup load loadeddata loadedmetadata loadstart message mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup pause play playing progress ratechange reset scroll seeked seeking select show stalled submit suspend timeupdate volumechange waiting mozfullscreenchange mozfullscreenerror mozpointerlockchange mozpointerlockerror error webglcontextrestored webglcontextlost webglcontextcreationerror'.split(' ');
-    function propertyDescriptorPatch(_global) {
-      if (utils_1.isNode) {
-        return;
-      }
-      var supportsWebSocket = typeof WebSocket !== 'undefined';
-      if (canPatchViaPropertyDescriptor()) {
-        if (utils_1.isBrowser) {
-          utils_1.patchOnProperties(HTMLElement.prototype, eventNames);
-        }
-        utils_1.patchOnProperties(XMLHttpRequest.prototype, null);
-        if (typeof IDBIndex !== 'undefined') {
-          utils_1.patchOnProperties(IDBIndex.prototype, null);
-          utils_1.patchOnProperties(IDBRequest.prototype, null);
-          utils_1.patchOnProperties(IDBOpenDBRequest.prototype, null);
-          utils_1.patchOnProperties(IDBDatabase.prototype, null);
-          utils_1.patchOnProperties(IDBTransaction.prototype, null);
-          utils_1.patchOnProperties(IDBCursor.prototype, null);
-        }
-        if (supportsWebSocket) {
-          utils_1.patchOnProperties(WebSocket.prototype, null);
-        }
-      } else {
-        patchViaCapturingAllTheEvents();
-        utils_1.patchClass('XMLHttpRequest');
-        if (supportsWebSocket) {
-          webSocketPatch.apply(_global);
-        }
-      }
-    }
-    exports.propertyDescriptorPatch = propertyDescriptorPatch;
-    function canPatchViaPropertyDescriptor() {
-      if (utils_1.isBrowser && !Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'onclick') && typeof Element !== 'undefined') {
-        var desc = Object.getOwnPropertyDescriptor(Element.prototype, 'onclick');
-        if (desc && !desc.configurable)
-          return false;
-      }
-      Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', {get: function() {
-          return true;
-        }});
-      var req = new XMLHttpRequest();
-      var result = !!req.onreadystatechange;
-      Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', {});
-      return result;
-    }
-    ;
-    var unboundKey = utils_1.zoneSymbol('unbound');
-    function patchViaCapturingAllTheEvents() {
-      var _loop_1 = function(i) {
-        var property = eventNames[i];
-        var onproperty = 'on' + property;
-        document.addEventListener(property, function(event) {
-          var elt = event.target,
-              bound,
-              source;
-          if (elt) {
-            source = elt.constructor['name'] + '.' + onproperty;
-          } else {
-            source = 'unknown.' + onproperty;
-          }
-          while (elt) {
-            if (elt[onproperty] && !elt[onproperty][unboundKey]) {
-              bound = Zone.current.wrap(elt[onproperty], source);
-              bound[unboundKey] = elt[onproperty];
-              elt[onproperty] = bound;
-            }
-            elt = elt.parentElement;
-          }
-        }, true);
-      };
-      for (var i = 0; i < eventNames.length; i++) {
-        _loop_1(i);
-      }
-      ;
-    }
-    ;
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils_1 = __webpack_require__(3);
-    function apply(_global) {
-      var WS = _global.WebSocket;
-      if (!_global.EventTarget) {
-        utils_1.patchEventTargetMethods(WS.prototype);
-      }
-      _global.WebSocket = function(a, b) {
-        var socket = arguments.length > 1 ? new WS(a, b) : new WS(a);
-        var proxySocket;
-        var onmessageDesc = Object.getOwnPropertyDescriptor(socket, 'onmessage');
-        if (onmessageDesc && onmessageDesc.configurable === false) {
-          proxySocket = Object.create(socket);
-          ['addEventListener', 'removeEventListener', 'send', 'close'].forEach(function(propName) {
-            proxySocket[propName] = function() {
-              return socket[propName].apply(socket, arguments);
-            };
-          });
-        } else {
-          proxySocket = socket;
-        }
-        utils_1.patchOnProperties(proxySocket, ['close', 'error', 'message', 'open']);
-        return proxySocket;
-      };
-      for (var prop in WS) {
-        _global.WebSocket[prop] = WS[prop];
-      }
-    }
-    exports.apply = apply;
-  }, function(module, exports, __webpack_require__) {
-    "use strict";
-    var utils_1 = __webpack_require__(3);
-    function patchTimer(window, setName, cancelName, nameSuffix) {
-      var setNative = null;
-      var clearNative = null;
-      setName += nameSuffix;
-      cancelName += nameSuffix;
-      function scheduleTask(task) {
-        var data = task.data;
-        data.args[0] = task.invoke;
-        data.handleId = setNative.apply(window, data.args);
-        return task;
-      }
-      function clearTask(task) {
-        return clearNative(task.data.handleId);
-      }
-      setNative = utils_1.patchMethod(window, setName, function(delegate) {
-        return function(self, args) {
-          if (typeof args[0] === 'function') {
-            var zone = Zone.current;
-            var options = {
-              handleId: null,
-              isPeriodic: nameSuffix === 'Interval',
-              delay: (nameSuffix === 'Timeout' || nameSuffix === 'Interval') ? args[1] || 0 : null,
-              args: args
-            };
-            return zone.scheduleMacroTask(setName, args[0], options, scheduleTask, clearTask);
-          } else {
-            return delegate.apply(window, args);
-          }
-        };
-      });
-      clearNative = utils_1.patchMethod(window, cancelName, function(delegate) {
-        return function(self, args) {
-          var task = args[0];
-          if (task && typeof task.type === 'string') {
-            if (task.cancelFn && task.data.isPeriodic || task.runCount === 0) {
-              task.zone.cancelTask(task);
-            }
-          } else {
-            delegate.apply(window, args);
-          }
-        };
-      });
-    }
-    exports.patchTimer = patchTimer;
-  }]);
-  return module.exports;
-});
-
-System.register("app/components/app/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var AppComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            AppComponent = function () {
-                function AppComponent() {}
-                AppComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    selector: 'wac-talk',
-                    template: `<router-outlet></router-outlet>
-`
-                }), __metadata('design:paramtypes', [])], AppComponent);
-                return AppComponent;
-            }();
-            exports_1("AppComponent", AppComponent);
-        }
-    };
-});
-
-System.register('app/components/app/routes.js', ['../slides/component', '../slides/routes'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var component_1, routes_1;
-    var AppRoutes;
-    return {
-        setters: [function (component_1_1) {
-            component_1 = component_1_1;
-        }, function (routes_1_1) {
-            routes_1 = routes_1_1;
-        }],
-        execute: function () {
-            exports_1("AppRoutes", AppRoutes = [{
-                children: routes_1.SlidesRoutes.slice(),
-                component: component_1.SlidesComponent,
-                path: 'slides'
-            }, {
-                path: '**',
-                redirectTo: 'slides/1'
-            }]);
-        }
-    };
-});
-
 System.register("app/components/prism/component.js", ['@angular/core'], function (exports_1, context_1) {
     "use strict";
 
@@ -2242,6 +972,7 @@ System.register("app/components/prism/component.js", ['@angular/core'], function
                 __decorate([core_1.Input(), __metadata('design:type', String)], PrismComponent.prototype, "language", void 0);
                 __decorate([core_1.ViewChild('element'), __metadata('design:type', core_1.ElementRef)], PrismComponent.prototype, "element", void 0);
                 PrismComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     selector: 'prism',
                     styles: ['code{font-size:3.5vmin}pre[class*=language-]{line-height:1;padding:0 .5em}'],
@@ -2251,6 +982,1170 @@ System.register("app/components/prism/component.js", ['@angular/core'], function
                 return PrismComponent;
             }();
             exports_1("PrismComponent", PrismComponent);
+        }
+    };
+});
+
+System.register("app/components/app/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var AppComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            AppComponent = function () {
+                function AppComponent() {}
+                AppComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    selector: 'wac-talk',
+                    template: `<router-outlet></router-outlet>
+`
+                }), __metadata('design:paramtypes', [])], AppComponent);
+                return AppComponent;
+            }();
+            exports_1("AppComponent", AppComponent);
+        }
+    };
+});
+
+System.register('app/components/slides/component.js', ['./routes', '@angular/core', '@angular/router'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var routes_1, core_1, router_1;
+    var SlidesComponent;
+    return {
+        setters: [function (routes_1_1) {
+            routes_1 = routes_1_1;
+        }, function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
+        }],
+        execute: function () {
+            SlidesComponent = function () {
+                function SlidesComponent(activatedRoute, router) {
+                    this._activatedRoute = activatedRoute;
+                    this._router = router;
+                }
+                SlidesComponent.prototype._goToNextSlide = function () {
+                    if (this._index < routes_1.slidesRoutes.length - 1) {
+                        this._router.navigate(["" + (this._index + 1)], { relativeTo: this._activatedRoute });
+                    }
+                };
+                SlidesComponent.prototype._goToPreviousSlide = function () {
+                    if (this._index > 1) {
+                        this._router.navigate(["" + (this._index - 1)], { relativeTo: this._activatedRoute });
+                    }
+                };
+                SlidesComponent.prototype.handleKeyUp = function (event) {
+                    if (event.code && event.code === 'ArrowLeft' || event.keyCode === 37) {
+                        this._goToPreviousSlide();
+                    } else if (event.code && event.code === 'ArrowRight' || event.keyCode === 39) {
+                        this._goToNextSlide();
+                    }
+                };
+                SlidesComponent.prototype.handleSwipeLeft = function () {
+                    this._goToNextSlide();
+                };
+                SlidesComponent.prototype.handleSwipeRight = function () {
+                    this._goToPreviousSlide();
+                };
+                SlidesComponent.prototype.ngOnDestroy = function () {
+                    this._routerEventsSubscription.unsubscribe();
+                };
+                SlidesComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this._routerEventsSubscription = this._router.events.subscribe(function () {
+                        var activatedChildRoute = _this._router.routerState.firstChild(_this._activatedRoute);
+                        _this._index = parseInt(activatedChildRoute.snapshot.url[0].path, 10);
+                    });
+                };
+                SlidesComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    styles: ['div{height:100%;width:100%}'],
+                    template: `<div (swipeleft)="handleSwipeLeft()" (swiperight)="handleSwipeRight()" (window:keyup)="handleKeyUp($event)">
+    <router-outlet></router-outlet>
+</div>
+`
+                }), __metadata('design:paramtypes', [router_1.ActivatedRoute, router_1.Router])], SlidesComponent);
+                return SlidesComponent;
+            }();
+            exports_1("SlidesComponent", SlidesComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-eight/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideEightComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideEightComponent = function () {
+                function SlideEightComponent() {}
+                SlideEightComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Downsampling</h2>
+<prism language="javascript">var downsampleContext = new OfflineAudioContext(
+        anyValidNumber,
+        anyValidNumber,
+        11025
+    );
+
+downsampleContext.decodeAudioData(arrayBuffer);
+// will resolve with the downsampled audioBuffer</prism>
+`
+                }), __metadata('design:paramtypes', [])], SlideEightComponent);
+                return SlideEightComponent;
+            }();
+            exports_1("SlideEightComponent", SlideEightComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-eighteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideEighteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideEighteenComponent = function () {
+                function SlideEighteenComponent() {}
+                SlideEighteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Not so good parts</h2>
+<ul>
+    <li>current state is broken</li>
+    <li>no worker support</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideEighteenComponent);
+                return SlideEighteenComponent;
+            }();
+            exports_1("SlideEighteenComponent", SlideEighteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-eleven/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideElevenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideElevenComponent = function () {
+                function SlideElevenComponent() {}
+                SlideElevenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Apply FFT</h2>
+<ul>
+    <li>will not work</li>
+    <li>the AnalyserNode is only designed to be used for real time usage</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideElevenComponent);
+                return SlideElevenComponent;
+            }();
+            exports_1("SlideElevenComponent", SlideElevenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-fifteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFifteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFifteenComponent = function () {
+                function SlideFifteenComponent() {}
+                SlideFifteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Apply Gate</h2>
+<ul>
+    <li>no native support (yet)</li>
+    <li>ScriptProcessorNode does not fire each onaudioprocess event</li>
+    <li>ScriptProcessorNode does not have any output in all browsers</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideFifteenComponent);
+                return SlideFifteenComponent;
+            }();
+            exports_1("SlideFifteenComponent", SlideFifteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-five/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFiveComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFiveComponent = function () {
+                function SlideFiveComponent() {}
+                SlideFiveComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>audfprint</h2>
+<ul>
+    <li>uses landmark based fingerprinting</li>
+    <li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li>
+    <li>open sourced in Python</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideFiveComponent);
+                return SlideFiveComponent;
+            }();
+            exports_1("SlideFiveComponent", SlideFiveComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-four/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFourComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFourComponent = function () {
+                function SlideFourComponent() {}
+                SlideFourComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Audio Fingerprinting</h2>
+<ul>
+    <li>retrieve (a) unique value(s) from an audio signal</li>
+    <li>match and query audio signals</li>
+    <li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideFourComponent);
+                return SlideFourComponent;
+            }();
+            exports_1("SlideFourComponent", SlideFourComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-fourteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFourteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFourteenComponent = function () {
+                function SlideFourteenComponent() {}
+                SlideFourteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Find Maximum</h2>
+<ul>
+    <li>no native support</li>
+    <li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideFourteenComponent);
+                return SlideFourteenComponent;
+            }();
+            exports_1("SlideFourteenComponent", SlideFourteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-nine/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideNineComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideNineComponent = function () {
+                function SlideNineComponent() {}
+                SlideNineComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Downmixing</h2>
+<ul>
+    <li>works as well</li>
+    <li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideNineComponent);
+                return SlideNineComponent;
+            }();
+            exports_1("SlideNineComponent", SlideNineComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-nineteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideNineteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideNineteenComponent = function () {
+                function SlideNineteenComponent() {}
+                SlideNineteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2>
+<ul>
+    <li>sends serial data via the audio output</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideNineteenComponent);
+                return SlideNineteenComponent;
+            }();
+            exports_1("SlideNineteenComponent", SlideNineteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-one/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideOneComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideOneComponent = function () {
+                function SlideOneComponent() {}
+                SlideOneComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    styles: ['a,h1,h2,span{text-align:center}a,span{display:block}'],
+                    template: `<h1>Non Audio Signal Processing</h1>
+<span>or</span>
+<h2>What else can we do<br>with the Web Audio API?</h2>
+<a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>
+`
+                }), __metadata('design:paramtypes', [])], SlideOneComponent);
+                return SlideOneComponent;
+            }();
+            exports_1("SlideOneComponent", SlideOneComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-seven/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSevenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSevenComponent = function () {
+                function SlideSevenComponent() {}
+                SlideSevenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Downsampling</h2>
+<ul>
+    <li>can be done easily</li>
+    <li>each browser uses a different algorithm</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideSevenComponent);
+                return SlideSevenComponent;
+            }();
+            exports_1("SlideSevenComponent", SlideSevenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-seventeen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSeventeenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSeventeenComponent = function () {
+                function SlideSeventeenComponent() {}
+                SlideSeventeenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Good parts</h2>
+<ul>
+    <li>runs possibly faster because it's natively implemented</li>
+    <li>it is already implemented</li>
+    <li>AudioWorklets will solve all current problems</li>
+    <li>suspend()/resume() allow the usage as a stream</li>
+    <li>values from -4294967296 to 4294967296 are supported</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideSeventeenComponent);
+                return SlideSeventeenComponent;
+            }();
+            exports_1("SlideSeventeenComponent", SlideSeventeenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-six/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSixComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSixComponent = function () {
+                function SlideSixComponent() {}
+                SlideSixComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>audfprint's algorithm</h2>
+<ul>
+    <li>downsample audio to 11025 Hz</li>
+    <li>downmix audio to mono</li>
+    <li>apply the FFT each 256 samples</li>
+    <li>find the largest magnitude</li>
+    <li>apply a gate</li>
+    <li>...</li>
+    <li>apply an IIR filter</li>
+    <li>... and much more</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideSixComponent);
+                return SlideSixComponent;
+            }();
+            exports_1("SlideSixComponent", SlideSixComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-sixteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSixteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSixteenComponent = function () {
+                function SlideSixteenComponent() {}
+                SlideSixteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Apply IIR Filter</h2>
+<ul>
+    <li>works now in Chrome &amp; Opera</li>
+    <li>can't be reliably reimplemted</li>
+    <li>10 times faster</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideSixteenComponent);
+                return SlideSixteenComponent;
+            }();
+            exports_1("SlideSixteenComponent", SlideSixteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-ten/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTenComponent = function () {
+                function SlideTenComponent() {}
+                SlideTenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Downmixing</h2>
+<prism language="javascript">var downmixContext = new OfflineAudioContext(
+        1,
+        audioBuffer.length,
+        11025
+    );
+var bufferSource = downmixContext.createBufferSource();
+
+bufferSource.buffer = audioBuffer;
+bufferSource.connect(downmixContext.destination);
+bufferSource.start();
+
+downmixContext.startRendering();
+// will resolve with the downmixed audioBuffer</prism>
+`
+                }), __metadata('design:paramtypes', [])], SlideTenComponent);
+                return SlideTenComponent;
+            }();
+            exports_1("SlideTenComponent", SlideTenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-thirteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideThirteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideThirteenComponent = function () {
+                function SlideThirteenComponent() {}
+                SlideThirteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Apply FFT</h2>
+<ul>
+    <li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li>
+    <li>increased performance by 400% for me</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideThirteenComponent);
+                return SlideThirteenComponent;
+            }();
+            exports_1("SlideThirteenComponent", SlideThirteenComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-three/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideThreeComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideThreeComponent = function () {
+                function SlideThreeComponent() {}
+                SlideThreeComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Agenda</h2>
+<ul>
+    <li>Audio Fingerprinting with audfprint</li>
+    <li>Non Audio Signal Processing</li>
+    <li>Bonus track: webaudio-serial-tx</li>
+    <li>Bonus track: doppler</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideThreeComponent);
+                return SlideThreeComponent;
+            }();
+            exports_1("SlideThreeComponent", SlideThreeComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-twelve/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwelveComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwelveComponent = function () {
+                function SlideTwelveComponent() {}
+                SlideTwelveComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Apply FFT</h2>
+<prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
+var buffer = new Float32Array(analyser.fftSize);
+var scriptProcessor = offlineAudioContext.createScriptProcessor();
+
+scriptProcessor.onaudioprocess = () =&gt; {{ '{' }}
+    analyser.getFloatFrequencyData(buffer);
+    // CAUTION: buffer will contain random data
+};
+
+anyNodeThatOutputsSound
+    .connect(analyser)
+    .connect(scriptProcessor)
+    .connect(offlineAudioContext.destination);
+
+offlineAudioContext.startRendering();</prism>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwelveComponent);
+                return SlideTwelveComponent;
+            }();
+            exports_1("SlideTwelveComponent", SlideTwelveComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-twenty-one/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyOneComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyOneComponent = function () {
+                function SlideTwentyOneComponent() {}
+                SlideTwentyOneComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    styles: ['h1{text-align:center}'],
+                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwentyOneComponent);
+                return SlideTwentyOneComponent;
+            }();
+            exports_1("SlideTwentyOneComponent", SlideTwentyOneComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-twenty-three/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyThreeComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyThreeComponent = function () {
+                function SlideTwentyThreeComponent() {}
+                SlideTwentyThreeComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Thank you</h2>
+<h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3>
+<h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3>
+<h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwentyThreeComponent);
+                return SlideTwentyThreeComponent;
+            }();
+            exports_1("SlideTwentyThreeComponent", SlideTwentyThreeComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-twenty-two/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyTwoComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyTwoComponent = function () {
+                function SlideTwentyTwoComponent() {}
+                SlideTwentyTwoComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    styles: ['h1{text-align:center}'],
+                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwentyTwoComponent);
+                return SlideTwentyTwoComponent;
+            }();
+            exports_1("SlideTwentyTwoComponent", SlideTwentyTwoComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-twenty/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyComponent = function () {
+                function SlideTwentyComponent() {}
+                SlideTwentyComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2>
+<ul>
+    <li>detecting motion by playing frequencies above the audible range and analyzing their response</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwentyComponent);
+                return SlideTwentyComponent;
+            }();
+            exports_1("SlideTwentyComponent", SlideTwentyComponent);
+        }
+    };
+});
+
+System.register("app/components/slide-two/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwoComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwoComponent = function () {
+                function SlideTwoComponent() {}
+                SlideTwoComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    moduleId: __moduleName,
+                    template: `<h2>About me</h2>
+<h3>Christoph Guttandin</h3>
+<ul>
+    <li>based in Berlin</li>
+    <li>self employed at Media Codings</li>
+    <li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li>
+    <li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li>
+</ul>
+`
+                }), __metadata('design:paramtypes', [])], SlideTwoComponent);
+                return SlideTwoComponent;
+            }();
+            exports_1("SlideTwoComponent", SlideTwoComponent);
+        }
+    };
+});
+
+System.register('app/components/slides/routes.js', ['../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-twenty/component', '../slide-two/component'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23;
+    var SLIDES, slideComponentsRoutes, slidesRoutes;
+    return {
+        setters: [function (component_1_1) {
+            component_1 = component_1_1;
+        }, function (component_2_1) {
+            component_2 = component_2_1;
+        }, function (component_3_1) {
+            component_3 = component_3_1;
+        }, function (component_4_1) {
+            component_4 = component_4_1;
+        }, function (component_5_1) {
+            component_5 = component_5_1;
+        }, function (component_6_1) {
+            component_6 = component_6_1;
+        }, function (component_7_1) {
+            component_7 = component_7_1;
+        }, function (component_8_1) {
+            component_8 = component_8_1;
+        }, function (component_9_1) {
+            component_9 = component_9_1;
+        }, function (component_10_1) {
+            component_10 = component_10_1;
+        }, function (component_11_1) {
+            component_11 = component_11_1;
+        }, function (component_12_1) {
+            component_12 = component_12_1;
+        }, function (component_13_1) {
+            component_13 = component_13_1;
+        }, function (component_14_1) {
+            component_14 = component_14_1;
+        }, function (component_15_1) {
+            component_15 = component_15_1;
+        }, function (component_16_1) {
+            component_16 = component_16_1;
+        }, function (component_17_1) {
+            component_17 = component_17_1;
+        }, function (component_18_1) {
+            component_18 = component_18_1;
+        }, function (component_19_1) {
+            component_19 = component_19_1;
+        }, function (component_20_1) {
+            component_20 = component_20_1;
+        }, function (component_21_1) {
+            component_21 = component_21_1;
+        }, function (component_22_1) {
+            component_22 = component_22_1;
+        }, function (component_23_1) {
+            component_23 = component_23_1;
+        }],
+        execute: function () {
+            SLIDES = [component_10.SlideOneComponent, component_23.SlideTwoComponent, component_17.SlideThreeComponent, component_6.SlideFourComponent, component_5.SlideFiveComponent, component_13.SlideSixComponent, component_11.SlideSevenComponent, component_1.SlideEightComponent, component_8.SlideNineComponent, component_15.SlideTenComponent, component_3.SlideElevenComponent, component_18.SlideTwelveComponent, component_16.SlideThirteenComponent, component_7.SlideFourteenComponent, component_4.SlideFifteenComponent, component_14.SlideSixteenComponent, component_12.SlideSeventeenComponent, component_2.SlideEighteenComponent, component_9.SlideNineteenComponent, component_22.SlideTwentyComponent, component_19.SlideTwentyOneComponent, component_21.SlideTwentyTwoComponent, component_20.SlideTwentyThreeComponent];
+            slideComponentsRoutes = SLIDES.map(function (slide, index) {
+                return {
+                    component: slide,
+                    path: "" + (index + 1)
+                };
+            });
+            exports_1("slidesRoutes", slidesRoutes = slideComponentsRoutes.concat([{
+                path: '**',
+                redirectTo: '1'
+            }]));
+        }
+    };
+});
+
+System.register('app/components/app/routes.js', ['../slides/component', '../slides/routes'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var component_1, routes_1;
+    var appRoutes;
+    return {
+        setters: [function (component_1_1) {
+            component_1 = component_1_1;
+        }, function (routes_1_1) {
+            routes_1 = routes_1_1;
+        }],
+        execute: function () {
+            exports_1("appRoutes", appRoutes = [{
+                children: routes_1.slidesRoutes.slice(),
+                component: component_1.SlidesComponent,
+                path: 'slides'
+            }, {
+                path: '**',
+                redirectTo: 'slides/1'
+            }]);
         }
     };
 });
@@ -7504,7 +7399,7 @@ System.registerDynamic("npm:@angular/router/index.js", ["./src/common_router_pro
   return module.exports;
 });
 
-System.register("app/components/slide-eight/component.js", ['@angular/core'], function (exports_1, context_1) {
+System.register('app/components/app/module.js', ['../prism/component', '../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-twenty/component', '../slide-two/component', '../slides/component', './component', './routes', '@angular/core', '@angular/platform-browser', '@angular/router'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -7518,1099 +7413,13 @@ System.register("app/components/slide-eight/component.js", ['@angular/core'], fu
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
-    var SlideEightComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideEightComponent = function () {
-                function SlideEightComponent() {}
-                SlideEightComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Downsampling</h2>
-<prism language="javascript">var downsampleContext = new OfflineAudioContext(
-        anyValidNumber,
-        anyValidNumber,
-        11025
-    );
-
-downsampleContext.decodeAudioData(arrayBuffer);
-// will resolve with the downsampled audioBuffer</prism>
-`
-                }), __metadata('design:paramtypes', [])], SlideEightComponent);
-                return SlideEightComponent;
-            }();
-            exports_1("SlideEightComponent", SlideEightComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-eighteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideEighteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideEighteenComponent = function () {
-                function SlideEighteenComponent() {}
-                SlideEighteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Not so good parts</h2>
-<ul>
-    <li>current state is broken</li>
-    <li>no worker support</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideEighteenComponent);
-                return SlideEighteenComponent;
-            }();
-            exports_1("SlideEighteenComponent", SlideEighteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-eleven/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideElevenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideElevenComponent = function () {
-                function SlideElevenComponent() {}
-                SlideElevenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<ul>
-    <li>will not work</li>
-    <li>the AnalyserNode is only designed to be used for real time usage</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideElevenComponent);
-                return SlideElevenComponent;
-            }();
-            exports_1("SlideElevenComponent", SlideElevenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-fifteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFifteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFifteenComponent = function () {
-                function SlideFifteenComponent() {}
-                SlideFifteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Apply Gate</h2>
-<ul>
-    <li>no native support (yet)</li>
-    <li>ScriptProcessorNode does not fire each onaudioprocess event</li>
-    <li>ScriptProcessorNode does not have any output in all browsers</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideFifteenComponent);
-                return SlideFifteenComponent;
-            }();
-            exports_1("SlideFifteenComponent", SlideFifteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-five/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFiveComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFiveComponent = function () {
-                function SlideFiveComponent() {}
-                SlideFiveComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>audfprint</h2>
-<ul>
-    <li>uses landmark based fingerprinting</li>
-    <li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li>
-    <li>open sourced in Python</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideFiveComponent);
-                return SlideFiveComponent;
-            }();
-            exports_1("SlideFiveComponent", SlideFiveComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-four/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFourComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFourComponent = function () {
-                function SlideFourComponent() {}
-                SlideFourComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Audio Fingerprinting</h2>
-<ul>
-    <li>retrieve (a) unique value(s) from an audio signal</li>
-    <li>match and query audio signals</li>
-    <li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideFourComponent);
-                return SlideFourComponent;
-            }();
-            exports_1("SlideFourComponent", SlideFourComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-fourteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFourteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFourteenComponent = function () {
-                function SlideFourteenComponent() {}
-                SlideFourteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Find Maximum</h2>
-<ul>
-    <li>no native support</li>
-    <li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideFourteenComponent);
-                return SlideFourteenComponent;
-            }();
-            exports_1("SlideFourteenComponent", SlideFourteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-nine/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideNineComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideNineComponent = function () {
-                function SlideNineComponent() {}
-                SlideNineComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Downmixing</h2>
-<ul>
-    <li>works as well</li>
-    <li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideNineComponent);
-                return SlideNineComponent;
-            }();
-            exports_1("SlideNineComponent", SlideNineComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-nineteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideNineteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideNineteenComponent = function () {
-                function SlideNineteenComponent() {}
-                SlideNineteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2>
-<ul>
-    <li>sends serial data via the audio output</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideNineteenComponent);
-                return SlideNineteenComponent;
-            }();
-            exports_1("SlideNineteenComponent", SlideNineteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-one/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideOneComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideOneComponent = function () {
-                function SlideOneComponent() {}
-                SlideOneComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    styles: ['a,h1,h2,span{text-align:center}a,span{display:block}'],
-                    template: `<h1>Non Audio Signal Processing</h1>
-<span>or</span>
-<h2>What else can we do<br>with the Web Audio API?</h2>
-<a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>
-`
-                }), __metadata('design:paramtypes', [])], SlideOneComponent);
-                return SlideOneComponent;
-            }();
-            exports_1("SlideOneComponent", SlideOneComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-seven/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSevenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSevenComponent = function () {
-                function SlideSevenComponent() {}
-                SlideSevenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Downsampling</h2>
-<ul>
-    <li>can be done easily</li>
-    <li>each browser uses a different algorithm</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideSevenComponent);
-                return SlideSevenComponent;
-            }();
-            exports_1("SlideSevenComponent", SlideSevenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-seventeen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSeventeenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSeventeenComponent = function () {
-                function SlideSeventeenComponent() {}
-                SlideSeventeenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Good parts</h2>
-<ul>
-    <li>runs possibly faster because it's natively implemented</li>
-    <li>it is already implemented</li>
-    <li>AudioWorklets will solve all current problems</li>
-    <li>suspend()/resume() allow the usage as a stream</li>
-    <li>values from -4294967296 to 4294967296 are supported</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideSeventeenComponent);
-                return SlideSeventeenComponent;
-            }();
-            exports_1("SlideSeventeenComponent", SlideSeventeenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-six/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSixComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSixComponent = function () {
-                function SlideSixComponent() {}
-                SlideSixComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>audfprint's algorithm</h2>
-<ul>
-    <li>downsample audio to 11025 Hz</li>
-    <li>downmix audio to mono</li>
-    <li>apply the FFT each 256 samples</li>
-    <li>find the largest magnitude</li>
-    <li>apply a gate</li>
-    <li>...</li>
-    <li>apply an IIR filter</li>
-    <li>... and much more</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideSixComponent);
-                return SlideSixComponent;
-            }();
-            exports_1("SlideSixComponent", SlideSixComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-sixteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSixteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSixteenComponent = function () {
-                function SlideSixteenComponent() {}
-                SlideSixteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Apply IIR Filter</h2>
-<ul>
-    <li>works now in Chrome &amp; Opera</li>
-    <li>can't be reliably reimplemted</li>
-    <li>10 times faster</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideSixteenComponent);
-                return SlideSixteenComponent;
-            }();
-            exports_1("SlideSixteenComponent", SlideSixteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-ten/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTenComponent = function () {
-                function SlideTenComponent() {}
-                SlideTenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Downmixing</h2>
-<prism language="javascript">var downmixContext = new OfflineAudioContext(
-        1,
-        audioBuffer.length,
-        11025
-    );
-var bufferSource = downmixContext.createBufferSource();
-
-bufferSource.buffer = audioBuffer;
-bufferSource.connect(downmixContext.destination);
-bufferSource.start();
-
-downmixContext.startRendering();
-// will resolve with the downmixed audioBuffer</prism>
-`
-                }), __metadata('design:paramtypes', [])], SlideTenComponent);
-                return SlideTenComponent;
-            }();
-            exports_1("SlideTenComponent", SlideTenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-thirteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideThirteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideThirteenComponent = function () {
-                function SlideThirteenComponent() {}
-                SlideThirteenComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<ul>
-    <li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li>
-    <li>increased performance by 400% for me</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideThirteenComponent);
-                return SlideThirteenComponent;
-            }();
-            exports_1("SlideThirteenComponent", SlideThirteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-three/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideThreeComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideThreeComponent = function () {
-                function SlideThreeComponent() {}
-                SlideThreeComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Agenda</h2>
-<ul>
-    <li>Audio Fingerprinting with audfprint</li>
-    <li>Non Audio Signal Processing</li>
-    <li>Bonus track: webaudio-serial-tx</li>
-    <li>Bonus track: doppler</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideThreeComponent);
-                return SlideThreeComponent;
-            }();
-            exports_1("SlideThreeComponent", SlideThreeComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twelve/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwelveComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwelveComponent = function () {
-                function SlideTwelveComponent() {}
-                SlideTwelveComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
-var buffer = new Float32Array(analyser.fftSize);
-var scriptProcessor = offlineAudioContext.createScriptProcessor();
-
-scriptProcessor.onaudioprocess = () =&gt; {{ '{' }}
-    analyser.getFloatFrequencyData(buffer);
-    // CAUTION: buffer will contain random data
-};
-
-anyNodeThatOutputsSound
-    .connect(analyser)
-    .connect(scriptProcessor)
-    .connect(offlineAudioContext.destination);
-
-offlineAudioContext.startRendering();</prism>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwelveComponent);
-                return SlideTwelveComponent;
-            }();
-            exports_1("SlideTwelveComponent", SlideTwelveComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyComponent = function () {
-                function SlideTwentyComponent() {}
-                SlideTwentyComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2>
-<ul>
-    <li>detecting motion by playing frequencies above the audible range and analyzing their response</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwentyComponent);
-                return SlideTwentyComponent;
-            }();
-            exports_1("SlideTwentyComponent", SlideTwentyComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-one/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyOneComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyOneComponent = function () {
-                function SlideTwentyOneComponent() {}
-                SlideTwentyOneComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    styles: ['h1{text-align:center}'],
-                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwentyOneComponent);
-                return SlideTwentyOneComponent;
-            }();
-            exports_1("SlideTwentyOneComponent", SlideTwentyOneComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-three/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyThreeComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyThreeComponent = function () {
-                function SlideTwentyThreeComponent() {}
-                SlideTwentyThreeComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>Thank you</h2>
-<h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3>
-<h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3>
-<h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwentyThreeComponent);
-                return SlideTwentyThreeComponent;
-            }();
-            exports_1("SlideTwentyThreeComponent", SlideTwentyThreeComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-two/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyTwoComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyTwoComponent = function () {
-                function SlideTwentyTwoComponent() {}
-                SlideTwentyTwoComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    styles: ['h1{text-align:center}'],
-                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwentyTwoComponent);
-                return SlideTwentyTwoComponent;
-            }();
-            exports_1("SlideTwentyTwoComponent", SlideTwentyTwoComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-two/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwoComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwoComponent = function () {
-                function SlideTwoComponent() {}
-                SlideTwoComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    template: `<h2>About me</h2>
-<h3>Christoph Guttandin</h3>
-<ul>
-    <li>based in Berlin</li>
-    <li>self employed at Media Codings</li>
-    <li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li>
-    <li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li>
-</ul>
-`
-                }), __metadata('design:paramtypes', [])], SlideTwoComponent);
-                return SlideTwoComponent;
-            }();
-            exports_1("SlideTwoComponent", SlideTwoComponent);
-        }
-    };
-});
-
-System.register('app/components/slides/routes.js', ['../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-two/component'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23;
-    var SLIDES, SlideComponentsRoutes, SlidesRoutes;
-    return {
-        setters: [function (component_1_1) {
-            component_1 = component_1_1;
-        }, function (component_2_1) {
-            component_2 = component_2_1;
-        }, function (component_3_1) {
-            component_3 = component_3_1;
-        }, function (component_4_1) {
-            component_4 = component_4_1;
-        }, function (component_5_1) {
-            component_5 = component_5_1;
-        }, function (component_6_1) {
-            component_6 = component_6_1;
-        }, function (component_7_1) {
-            component_7 = component_7_1;
-        }, function (component_8_1) {
-            component_8 = component_8_1;
-        }, function (component_9_1) {
-            component_9 = component_9_1;
-        }, function (component_10_1) {
-            component_10 = component_10_1;
-        }, function (component_11_1) {
-            component_11 = component_11_1;
-        }, function (component_12_1) {
-            component_12 = component_12_1;
-        }, function (component_13_1) {
-            component_13 = component_13_1;
-        }, function (component_14_1) {
-            component_14 = component_14_1;
-        }, function (component_15_1) {
-            component_15 = component_15_1;
-        }, function (component_16_1) {
-            component_16 = component_16_1;
-        }, function (component_17_1) {
-            component_17 = component_17_1;
-        }, function (component_18_1) {
-            component_18 = component_18_1;
-        }, function (component_19_1) {
-            component_19 = component_19_1;
-        }, function (component_20_1) {
-            component_20 = component_20_1;
-        }, function (component_21_1) {
-            component_21 = component_21_1;
-        }, function (component_22_1) {
-            component_22 = component_22_1;
-        }, function (component_23_1) {
-            component_23 = component_23_1;
-        }],
-        execute: function () {
-            SLIDES = [component_10.SlideOneComponent, component_23.SlideTwoComponent, component_17.SlideThreeComponent, component_6.SlideFourComponent, component_5.SlideFiveComponent, component_13.SlideSixComponent, component_11.SlideSevenComponent, component_1.SlideEightComponent, component_8.SlideNineComponent, component_15.SlideTenComponent, component_3.SlideElevenComponent, component_18.SlideTwelveComponent, component_16.SlideThirteenComponent, component_7.SlideFourteenComponent, component_4.SlideFifteenComponent, component_14.SlideSixteenComponent, component_12.SlideSeventeenComponent, component_2.SlideEighteenComponent, component_9.SlideNineteenComponent, component_19.SlideTwentyComponent, component_20.SlideTwentyOneComponent, component_22.SlideTwentyTwoComponent, component_21.SlideTwentyThreeComponent];
-            SlideComponentsRoutes = SLIDES.map(function (slide, index) {
-                return {
-                    component: slide,
-                    path: "" + (index + 1)
-                };
-            });
-            exports_1("SlidesRoutes", SlidesRoutes = SlideComponentsRoutes.concat([{
-                path: '**',
-                redirectTo: '1'
-            }]));
-        }
-    };
-});
-
-System.register('app/components/slides/component.js', ['@angular/router', '@angular/core', './routes'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var router_1, core_1, routes_1;
-    var SlidesComponent;
-    return {
-        setters: [function (router_1_1) {
-            router_1 = router_1_1;
-        }, function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (routes_1_1) {
-            routes_1 = routes_1_1;
-        }],
-        execute: function () {
-            SlidesComponent = function () {
-                function SlidesComponent(activatedRoute, router) {
-                    this._activatedRoute = activatedRoute;
-                    this._router = router;
-                }
-                SlidesComponent.prototype._goToNextSlide = function () {
-                    if (this._index < routes_1.SlidesRoutes.length - 1) {
-                        this._router.navigate(["" + (this._index + 1)], { relativeTo: this._activatedRoute });
-                    }
-                };
-                SlidesComponent.prototype._goToPreviousSlide = function () {
-                    if (this._index > 1) {
-                        this._router.navigate(["" + (this._index - 1)], { relativeTo: this._activatedRoute });
-                    }
-                };
-                SlidesComponent.prototype.handleKeyUp = function (event) {
-                    if (event.code && event.code === 'ArrowLeft' || event.keyCode === 37) {
-                        this._goToPreviousSlide();
-                    } else if (event.code && event.code === 'ArrowRight' || event.keyCode === 39) {
-                        this._goToNextSlide();
-                    }
-                };
-                SlidesComponent.prototype.handleSwipeLeft = function () {
-                    this._goToNextSlide();
-                };
-                SlidesComponent.prototype.handleSwipeRight = function () {
-                    this._goToPreviousSlide();
-                };
-                SlidesComponent.prototype.ngOnDestroy = function () {
-                    this._routerEventsSubscription.unsubscribe();
-                };
-                SlidesComponent.prototype.ngOnInit = function () {
-                    var _this = this;
-                    this._routerEventsSubscription = this._router.events.subscribe(function () {
-                        var activatedChildRoute = _this._router.routerState.firstChild(_this._activatedRoute);
-                        _this._index = parseInt(activatedChildRoute.snapshot.url[0].path, 10);
-                    });
-                };
-                SlidesComponent = __decorate([core_1.Component({
-                    moduleId: __moduleName,
-                    styles: ['div{height:100%;width:100%}'],
-                    template: `<div (swipeleft)="handleSwipeLeft()" (swiperight)="handleSwipeRight()" (window:keyup)="handleKeyUp($event)">
-    <router-outlet></router-outlet>
-</div>
-`
-                }), __metadata('design:paramtypes', [router_1.ActivatedRoute, router_1.Router])], SlidesComponent);
-                return SlidesComponent;
-            }();
-            exports_1("SlidesComponent", SlidesComponent);
-        }
-    };
-});
-
-System.register('app/components/app/module.js', ['./component', './routes', '@angular/platform-browser', '@angular/core', '../prism/component', '@angular/router', '../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-two/component', '../slides/component'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var component_1, routes_1, platform_browser_1, core_1, component_2, router_1, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23, component_24, component_25, component_26;
+    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23, component_24, component_25, component_26, routes_1, core_1, platform_browser_1, router_1;
     var AppModule;
     return {
         setters: [function (component_1_1) {
             component_1 = component_1_1;
-        }, function (routes_1_1) {
-            routes_1 = routes_1_1;
-        }, function (platform_browser_1_1) {
-            platform_browser_1 = platform_browser_1_1;
-        }, function (core_1_1) {
-            core_1 = core_1_1;
         }, function (component_2_1) {
             component_2 = component_2_1;
-        }, function (router_1_1) {
-            router_1 = router_1_1;
         }, function (component_3_1) {
             component_3 = component_3_1;
         }, function (component_4_1) {
@@ -8659,14 +7468,22 @@ System.register('app/components/app/module.js', ['./component', './routes', '@an
             component_25 = component_25_1;
         }, function (component_26_1) {
             component_26 = component_26_1;
+        }, function (routes_1_1) {
+            routes_1 = routes_1_1;
+        }, function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (platform_browser_1_1) {
+            platform_browser_1 = platform_browser_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
         }],
         execute: function () {
             AppModule = function () {
                 function AppModule() {}
                 AppModule = __decorate([core_1.NgModule({
-                    bootstrap: [component_1.AppComponent],
-                    declarations: [component_1.AppComponent, component_2.PrismComponent, component_3.SlideEightComponent, component_4.SlideEighteenComponent, component_5.SlideElevenComponent, component_6.SlideFifteenComponent, component_7.SlideFiveComponent, component_8.SlideFourComponent, component_9.SlideFourteenComponent, component_10.SlideNineComponent, component_11.SlideNineteenComponent, component_12.SlideOneComponent, component_13.SlideSevenComponent, component_14.SlideSeventeenComponent, component_15.SlideSixComponent, component_16.SlideSixteenComponent, component_17.SlideTenComponent, component_18.SlideThirteenComponent, component_19.SlideThreeComponent, component_20.SlideTwelveComponent, component_21.SlideTwentyComponent, component_22.SlideTwentyOneComponent, component_23.SlideTwentyThreeComponent, component_24.SlideTwentyTwoComponent, component_25.SlideTwoComponent, component_26.SlidesComponent],
-                    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(routes_1.AppRoutes)]
+                    bootstrap: [component_26.AppComponent],
+                    declarations: [component_26.AppComponent, component_1.PrismComponent, component_2.SlideEightComponent, component_3.SlideEighteenComponent, component_4.SlideElevenComponent, component_5.SlideFifteenComponent, component_6.SlideFiveComponent, component_7.SlideFourComponent, component_8.SlideFourteenComponent, component_9.SlideNineComponent, component_10.SlideNineteenComponent, component_11.SlideOneComponent, component_12.SlideSevenComponent, component_13.SlideSeventeenComponent, component_14.SlideSixComponent, component_15.SlideSixteenComponent, component_16.SlideTenComponent, component_17.SlideThirteenComponent, component_18.SlideThreeComponent, component_19.SlideTwelveComponent, component_23.SlideTwentyComponent, component_20.SlideTwentyOneComponent, component_21.SlideTwentyThreeComponent, component_22.SlideTwentyTwoComponent, component_24.SlideTwoComponent, component_25.SlidesComponent],
+                    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(routes_1.appRoutes)]
                 }), __metadata('design:paramtypes', [])], AppModule);
                 return AppModule;
             }();
@@ -51104,19 +49921,1228 @@ System.registerDynamic("npm:@angular/platform-browser-dynamic/index.js", ["@angu
   return module.exports;
 });
 
-System.register('app/main.js', ['reflect-metadata', 'zone', './components/app/module', '@angular/core', '@angular/platform-browser-dynamic'], function (exports_1, context_1) {
+System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require, exports, module) {
+  ;
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  (function(modules) {
+    var installedModules = {};
+    function __webpack_require__(moduleId) {
+      if (installedModules[moduleId])
+        return installedModules[moduleId].exports;
+      var module = installedModules[moduleId] = {
+        exports: {},
+        id: moduleId,
+        loaded: false
+      };
+      modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+      module.loaded = true;
+      return module.exports;
+    }
+    __webpack_require__.m = modules;
+    __webpack_require__.c = installedModules;
+    __webpack_require__.p = "";
+    return __webpack_require__(0);
+  })([function(module, exports, __webpack_require__) {
+    (function(global) {
+      "use strict";
+      __webpack_require__(1);
+      var event_target_1 = __webpack_require__(2);
+      var define_property_1 = __webpack_require__(4);
+      var register_element_1 = __webpack_require__(5);
+      var property_descriptor_1 = __webpack_require__(6);
+      var timers_1 = __webpack_require__(8);
+      var utils_1 = __webpack_require__(3);
+      var set = 'set';
+      var clear = 'clear';
+      var blockingMethods = ['alert', 'prompt', 'confirm'];
+      var _global = typeof window == 'undefined' ? global : window;
+      timers_1.patchTimer(_global, set, clear, 'Timeout');
+      timers_1.patchTimer(_global, set, clear, 'Interval');
+      timers_1.patchTimer(_global, set, clear, 'Immediate');
+      timers_1.patchTimer(_global, 'request', 'cancelMacroTask', 'AnimationFrame');
+      timers_1.patchTimer(_global, 'mozRequest', 'mozCancel', 'AnimationFrame');
+      timers_1.patchTimer(_global, 'webkitRequest', 'webkitCancel', 'AnimationFrame');
+      for (var i = 0; i < blockingMethods.length; i++) {
+        var name = blockingMethods[i];
+        utils_1.patchMethod(_global, name, function(delegate, symbol, name) {
+          return function(s, args) {
+            return Zone.current.run(delegate, _global, args, name);
+          };
+        });
+      }
+      event_target_1.eventTargetPatch(_global);
+      property_descriptor_1.propertyDescriptorPatch(_global);
+      utils_1.patchClass('MutationObserver');
+      utils_1.patchClass('WebKitMutationObserver');
+      utils_1.patchClass('FileReader');
+      define_property_1.propertyPatch();
+      register_element_1.registerElementPatch(_global);
+      patchXHR(_global);
+      var XHR_TASK = utils_1.zoneSymbol('xhrTask');
+      function patchXHR(window) {
+        function findPendingTask(target) {
+          var pendingTask = target[XHR_TASK];
+          return pendingTask;
+        }
+        function scheduleTask(task) {
+          var data = task.data;
+          data.target.addEventListener('readystatechange', function() {
+            if (data.target.readyState === XMLHttpRequest.DONE) {
+              if (!data.aborted) {
+                task.invoke();
+              }
+            }
+          });
+          var storedTask = data.target[XHR_TASK];
+          if (!storedTask) {
+            data.target[XHR_TASK] = task;
+          }
+          setNative.apply(data.target, data.args);
+          return task;
+        }
+        function placeholderCallback() {}
+        function clearTask(task) {
+          var data = task.data;
+          data.aborted = true;
+          return clearNative.apply(data.target, data.args);
+        }
+        var setNative = utils_1.patchMethod(window.XMLHttpRequest.prototype, 'send', function() {
+          return function(self, args) {
+            var zone = Zone.current;
+            var options = {
+              target: self,
+              isPeriodic: false,
+              delay: null,
+              args: args,
+              aborted: false
+            };
+            return zone.scheduleMacroTask('XMLHttpRequest.send', placeholderCallback, options, scheduleTask, clearTask);
+          };
+        });
+        var clearNative = utils_1.patchMethod(window.XMLHttpRequest.prototype, 'abort', function(delegate) {
+          return function(self, args) {
+            var task = findPendingTask(self);
+            if (task && typeof task.type == 'string') {
+              if (task.cancelFn == null) {
+                return;
+              }
+              task.zone.cancelTask(task);
+            }
+          };
+        });
+      }
+      if (_global['navigator'] && _global['navigator'].geolocation) {
+        utils_1.patchPrototype(_global['navigator'].geolocation, ['getCurrentPosition', 'watchPosition']);
+      }
+    }.call(exports, (function() {
+      return this;
+    }())));
+  }, function(module, exports) {
+    (function(global) {
+      ;
+      ;
+      var Zone = (function(global) {
+        var Zone = (function() {
+          function Zone(parent, zoneSpec) {
+            this._properties = null;
+            this._parent = parent;
+            this._name = zoneSpec ? zoneSpec.name || 'unnamed' : '<root>';
+            this._properties = zoneSpec && zoneSpec.properties || {};
+            this._zoneDelegate = new ZoneDelegate(this, this._parent && this._parent._zoneDelegate, zoneSpec);
+          }
+          Object.defineProperty(Zone, "current", {
+            get: function() {
+              return _currentZone;
+            },
+            enumerable: true,
+            configurable: true
+          });
+          ;
+          Object.defineProperty(Zone, "currentTask", {
+            get: function() {
+              return _currentTask;
+            },
+            enumerable: true,
+            configurable: true
+          });
+          ;
+          Object.defineProperty(Zone.prototype, "parent", {
+            get: function() {
+              return this._parent;
+            },
+            enumerable: true,
+            configurable: true
+          });
+          ;
+          Object.defineProperty(Zone.prototype, "name", {
+            get: function() {
+              return this._name;
+            },
+            enumerable: true,
+            configurable: true
+          });
+          ;
+          Zone.prototype.get = function(key) {
+            var current = this;
+            while (current) {
+              if (current._properties.hasOwnProperty(key)) {
+                return current._properties[key];
+              }
+              current = current._parent;
+            }
+          };
+          Zone.prototype.fork = function(zoneSpec) {
+            if (!zoneSpec)
+              throw new Error('ZoneSpec required!');
+            return this._zoneDelegate.fork(this, zoneSpec);
+          };
+          Zone.prototype.wrap = function(callback, source) {
+            if (typeof callback !== 'function') {
+              throw new Error('Expecting function got: ' + callback);
+            }
+            var _callback = this._zoneDelegate.intercept(this, callback, source);
+            var zone = this;
+            return function() {
+              return zone.runGuarded(_callback, this, arguments, source);
+            };
+          };
+          Zone.prototype.run = function(callback, applyThis, applyArgs, source) {
+            if (applyThis === void 0) {
+              applyThis = null;
+            }
+            if (applyArgs === void 0) {
+              applyArgs = null;
+            }
+            if (source === void 0) {
+              source = null;
+            }
+            var oldZone = _currentZone;
+            _currentZone = this;
+            try {
+              return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
+            } finally {
+              _currentZone = oldZone;
+            }
+          };
+          Zone.prototype.runGuarded = function(callback, applyThis, applyArgs, source) {
+            if (applyThis === void 0) {
+              applyThis = null;
+            }
+            if (applyArgs === void 0) {
+              applyArgs = null;
+            }
+            if (source === void 0) {
+              source = null;
+            }
+            var oldZone = _currentZone;
+            _currentZone = this;
+            try {
+              try {
+                return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
+              } catch (error) {
+                if (this._zoneDelegate.handleError(this, error)) {
+                  throw error;
+                }
+              }
+            } finally {
+              _currentZone = oldZone;
+            }
+          };
+          Zone.prototype.runTask = function(task, applyThis, applyArgs) {
+            task.runCount++;
+            if (task.zone != this)
+              throw new Error('A task can only be run in the zone which created it! (Creation: ' + task.zone.name + '; Execution: ' + this.name + ')');
+            var previousTask = _currentTask;
+            _currentTask = task;
+            var oldZone = _currentZone;
+            _currentZone = this;
+            try {
+              if (task.type == 'macroTask' && task.data && !task.data.isPeriodic) {
+                task.cancelFn = null;
+              }
+              try {
+                return this._zoneDelegate.invokeTask(this, task, applyThis, applyArgs);
+              } catch (error) {
+                if (this._zoneDelegate.handleError(this, error)) {
+                  throw error;
+                }
+              }
+            } finally {
+              _currentZone = oldZone;
+              _currentTask = previousTask;
+            }
+          };
+          Zone.prototype.scheduleMicroTask = function(source, callback, data, customSchedule) {
+            return this._zoneDelegate.scheduleTask(this, new ZoneTask('microTask', this, source, callback, data, customSchedule, null));
+          };
+          Zone.prototype.scheduleMacroTask = function(source, callback, data, customSchedule, customCancel) {
+            return this._zoneDelegate.scheduleTask(this, new ZoneTask('macroTask', this, source, callback, data, customSchedule, customCancel));
+          };
+          Zone.prototype.scheduleEventTask = function(source, callback, data, customSchedule, customCancel) {
+            return this._zoneDelegate.scheduleTask(this, new ZoneTask('eventTask', this, source, callback, data, customSchedule, customCancel));
+          };
+          Zone.prototype.cancelTask = function(task) {
+            var value = this._zoneDelegate.cancelTask(this, task);
+            task.runCount = -1;
+            task.cancelFn = null;
+            return value;
+          };
+          Zone.__symbol__ = __symbol__;
+          return Zone;
+        }());
+        ;
+        var ZoneDelegate = (function() {
+          function ZoneDelegate(zone, parentDelegate, zoneSpec) {
+            this._taskCounts = {
+              microTask: 0,
+              macroTask: 0,
+              eventTask: 0
+            };
+            this.zone = zone;
+            this._parentDelegate = parentDelegate;
+            this._forkZS = zoneSpec && (zoneSpec && zoneSpec.onFork ? zoneSpec : parentDelegate._forkZS);
+            this._forkDlgt = zoneSpec && (zoneSpec.onFork ? parentDelegate : parentDelegate._forkDlgt);
+            this._interceptZS = zoneSpec && (zoneSpec.onIntercept ? zoneSpec : parentDelegate._interceptZS);
+            this._interceptDlgt = zoneSpec && (zoneSpec.onIntercept ? parentDelegate : parentDelegate._interceptDlgt);
+            this._invokeZS = zoneSpec && (zoneSpec.onInvoke ? zoneSpec : parentDelegate._invokeZS);
+            this._invokeDlgt = zoneSpec && (zoneSpec.onInvoke ? parentDelegate : parentDelegate._invokeDlgt);
+            this._handleErrorZS = zoneSpec && (zoneSpec.onHandleError ? zoneSpec : parentDelegate._handleErrorZS);
+            this._handleErrorDlgt = zoneSpec && (zoneSpec.onHandleError ? parentDelegate : parentDelegate._handleErrorDlgt);
+            this._scheduleTaskZS = zoneSpec && (zoneSpec.onScheduleTask ? zoneSpec : parentDelegate._scheduleTaskZS);
+            this._scheduleTaskDlgt = zoneSpec && (zoneSpec.onScheduleTask ? parentDelegate : parentDelegate._scheduleTaskDlgt);
+            this._invokeTaskZS = zoneSpec && (zoneSpec.onInvokeTask ? zoneSpec : parentDelegate._invokeTaskZS);
+            this._invokeTaskDlgt = zoneSpec && (zoneSpec.onInvokeTask ? parentDelegate : parentDelegate._invokeTaskDlgt);
+            this._cancelTaskZS = zoneSpec && (zoneSpec.onCancelTask ? zoneSpec : parentDelegate._cancelTaskZS);
+            this._cancelTaskDlgt = zoneSpec && (zoneSpec.onCancelTask ? parentDelegate : parentDelegate._cancelTaskDlgt);
+            this._hasTaskZS = zoneSpec && (zoneSpec.onHasTask ? zoneSpec : parentDelegate._hasTaskZS);
+            this._hasTaskDlgt = zoneSpec && (zoneSpec.onHasTask ? parentDelegate : parentDelegate._hasTaskDlgt);
+          }
+          ZoneDelegate.prototype.fork = function(targetZone, zoneSpec) {
+            return this._forkZS ? this._forkZS.onFork(this._forkDlgt, this.zone, targetZone, zoneSpec) : new Zone(targetZone, zoneSpec);
+          };
+          ZoneDelegate.prototype.intercept = function(targetZone, callback, source) {
+            return this._interceptZS ? this._interceptZS.onIntercept(this._interceptDlgt, this.zone, targetZone, callback, source) : callback;
+          };
+          ZoneDelegate.prototype.invoke = function(targetZone, callback, applyThis, applyArgs, source) {
+            return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this.zone, targetZone, callback, applyThis, applyArgs, source) : callback.apply(applyThis, applyArgs);
+          };
+          ZoneDelegate.prototype.handleError = function(targetZone, error) {
+            return this._handleErrorZS ? this._handleErrorZS.onHandleError(this._handleErrorDlgt, this.zone, targetZone, error) : true;
+          };
+          ZoneDelegate.prototype.scheduleTask = function(targetZone, task) {
+            try {
+              if (this._scheduleTaskZS) {
+                return this._scheduleTaskZS.onScheduleTask(this._scheduleTaskDlgt, this.zone, targetZone, task);
+              } else if (task.scheduleFn) {
+                task.scheduleFn(task);
+              } else if (task.type == 'microTask') {
+                scheduleMicroTask(task);
+              } else {
+                throw new Error('Task is missing scheduleFn.');
+              }
+              return task;
+            } finally {
+              if (targetZone == this.zone) {
+                this._updateTaskCount(task.type, 1);
+              }
+            }
+          };
+          ZoneDelegate.prototype.invokeTask = function(targetZone, task, applyThis, applyArgs) {
+            try {
+              return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this.zone, targetZone, task, applyThis, applyArgs) : task.callback.apply(applyThis, applyArgs);
+            } finally {
+              if (targetZone == this.zone && (task.type != 'eventTask') && !(task.data && task.data.isPeriodic)) {
+                this._updateTaskCount(task.type, -1);
+              }
+            }
+          };
+          ZoneDelegate.prototype.cancelTask = function(targetZone, task) {
+            var value;
+            if (this._cancelTaskZS) {
+              value = this._cancelTaskZS.onCancelTask(this._cancelTaskDlgt, this.zone, targetZone, task);
+            } else if (!task.cancelFn) {
+              throw new Error('Task does not support cancellation, or is already canceled.');
+            } else {
+              value = task.cancelFn(task);
+            }
+            if (targetZone == this.zone) {
+              this._updateTaskCount(task.type, -1);
+            }
+            return value;
+          };
+          ZoneDelegate.prototype.hasTask = function(targetZone, isEmpty) {
+            return this._hasTaskZS && this._hasTaskZS.onHasTask(this._hasTaskDlgt, this.zone, targetZone, isEmpty);
+          };
+          ZoneDelegate.prototype._updateTaskCount = function(type, count) {
+            var counts = this._taskCounts;
+            var prev = counts[type];
+            var next = counts[type] = prev + count;
+            if (next < 0) {
+              throw new Error('More tasks executed then were scheduled.');
+            }
+            if (prev == 0 || next == 0) {
+              var isEmpty = {
+                microTask: counts.microTask > 0,
+                macroTask: counts.macroTask > 0,
+                eventTask: counts.eventTask > 0,
+                change: type
+              };
+              try {
+                this.hasTask(this.zone, isEmpty);
+              } finally {
+                if (this._parentDelegate) {
+                  this._parentDelegate._updateTaskCount(type, count);
+                }
+              }
+            }
+          };
+          return ZoneDelegate;
+        }());
+        var ZoneTask = (function() {
+          function ZoneTask(type, zone, source, callback, options, scheduleFn, cancelFn) {
+            this.runCount = 0;
+            this.type = type;
+            this.zone = zone;
+            this.source = source;
+            this.data = options;
+            this.scheduleFn = scheduleFn;
+            this.cancelFn = cancelFn;
+            this.callback = callback;
+            var self = this;
+            this.invoke = function() {
+              try {
+                return zone.runTask(self, this, arguments);
+              } finally {
+                drainMicroTaskQueue();
+              }
+            };
+          }
+          return ZoneTask;
+        }());
+        function __symbol__(name) {
+          return '__zone_symbol__' + name;
+        }
+        ;
+        var symbolSetTimeout = __symbol__('setTimeout');
+        var symbolPromise = __symbol__('Promise');
+        var symbolThen = __symbol__('then');
+        var _currentZone = new Zone(null, null);
+        var _currentTask = null;
+        var _microTaskQueue = [];
+        var _isDrainingMicrotaskQueue = false;
+        var _uncaughtPromiseErrors = [];
+        var _drainScheduled = false;
+        function scheduleQueueDrain() {
+          if (!_drainScheduled && !_currentTask && _microTaskQueue.length == 0) {
+            if (global[symbolPromise]) {
+              global[symbolPromise].resolve(0)[symbolThen](drainMicroTaskQueue);
+            } else {
+              global[symbolSetTimeout](drainMicroTaskQueue, 0);
+            }
+          }
+        }
+        function scheduleMicroTask(task) {
+          scheduleQueueDrain();
+          _microTaskQueue.push(task);
+        }
+        function consoleError(e) {
+          var rejection = e && e.rejection;
+          if (rejection) {
+            console.error('Unhandled Promise rejection:', rejection instanceof Error ? rejection.message : rejection, '; Zone:', e.zone.name, '; Task:', e.task && e.task.source, '; Value:', rejection);
+          }
+          console.error(e);
+        }
+        function drainMicroTaskQueue() {
+          if (!_isDrainingMicrotaskQueue) {
+            _isDrainingMicrotaskQueue = true;
+            while (_microTaskQueue.length) {
+              var queue = _microTaskQueue;
+              _microTaskQueue = [];
+              for (var i = 0; i < queue.length; i++) {
+                var task = queue[i];
+                try {
+                  task.zone.runTask(task, null, null);
+                } catch (e) {
+                  consoleError(e);
+                }
+              }
+            }
+            while (_uncaughtPromiseErrors.length) {
+              var uncaughtPromiseErrors = _uncaughtPromiseErrors;
+              _uncaughtPromiseErrors = [];
+              var _loop_1 = function(i) {
+                var uncaughtPromiseError = uncaughtPromiseErrors[i];
+                try {
+                  uncaughtPromiseError.zone.runGuarded(function() {
+                    throw uncaughtPromiseError;
+                  });
+                } catch (e) {
+                  consoleError(e);
+                }
+              };
+              for (var i = 0; i < uncaughtPromiseErrors.length; i++) {
+                _loop_1(i);
+              }
+            }
+            _isDrainingMicrotaskQueue = false;
+            _drainScheduled = false;
+          }
+        }
+        function isThenable(value) {
+          return value && value.then;
+        }
+        function forwardResolution(value) {
+          return value;
+        }
+        function forwardRejection(rejection) {
+          return ZoneAwarePromise.reject(rejection);
+        }
+        var symbolState = __symbol__('state');
+        var symbolValue = __symbol__('value');
+        var source = 'Promise.then';
+        var UNRESOLVED = null;
+        var RESOLVED = true;
+        var REJECTED = false;
+        var REJECTED_NO_CATCH = 0;
+        function makeResolver(promise, state) {
+          return function(v) {
+            resolvePromise(promise, state, v);
+          };
+        }
+        function resolvePromise(promise, state, value) {
+          if (promise[symbolState] === UNRESOLVED) {
+            if (value instanceof ZoneAwarePromise && value[symbolState] !== UNRESOLVED) {
+              clearRejectedNoCatch(value);
+              resolvePromise(promise, value[symbolState], value[symbolValue]);
+            } else if (isThenable(value)) {
+              value.then(makeResolver(promise, state), makeResolver(promise, false));
+            } else {
+              promise[symbolState] = state;
+              var queue = promise[symbolValue];
+              promise[symbolValue] = value;
+              for (var i = 0; i < queue.length; ) {
+                scheduleResolveOrReject(promise, queue[i++], queue[i++], queue[i++], queue[i++]);
+              }
+              if (queue.length == 0 && state == REJECTED) {
+                promise[symbolState] = REJECTED_NO_CATCH;
+                try {
+                  throw new Error("Uncaught (in promise): " + value);
+                } catch (e) {
+                  var error = e;
+                  error.rejection = value;
+                  error.promise = promise;
+                  error.zone = Zone.current;
+                  error.task = Zone.currentTask;
+                  _uncaughtPromiseErrors.push(error);
+                  scheduleQueueDrain();
+                }
+              }
+            }
+          }
+          return promise;
+        }
+        function clearRejectedNoCatch(promise) {
+          if (promise[symbolState] === REJECTED_NO_CATCH) {
+            promise[symbolState] = REJECTED;
+            for (var i = 0; i < _uncaughtPromiseErrors.length; i++) {
+              if (promise === _uncaughtPromiseErrors[i].promise) {
+                _uncaughtPromiseErrors.splice(i, 1);
+                break;
+              }
+            }
+          }
+        }
+        function scheduleResolveOrReject(promise, zone, chainPromise, onFulfilled, onRejected) {
+          clearRejectedNoCatch(promise);
+          var delegate = promise[symbolState] ? onFulfilled || forwardResolution : onRejected || forwardRejection;
+          zone.scheduleMicroTask(source, function() {
+            try {
+              resolvePromise(chainPromise, true, zone.run(delegate, null, [promise[symbolValue]]));
+            } catch (error) {
+              resolvePromise(chainPromise, false, error);
+            }
+          });
+        }
+        var ZoneAwarePromise = (function() {
+          function ZoneAwarePromise(executor) {
+            var promise = this;
+            promise[symbolState] = UNRESOLVED;
+            promise[symbolValue] = [];
+            try {
+              executor && executor(makeResolver(promise, RESOLVED), makeResolver(promise, REJECTED));
+            } catch (e) {
+              resolvePromise(promise, false, e);
+            }
+          }
+          ZoneAwarePromise.resolve = function(value) {
+            return resolvePromise(new this(null), RESOLVED, value);
+          };
+          ZoneAwarePromise.reject = function(error) {
+            return resolvePromise(new this(null), REJECTED, error);
+          };
+          ZoneAwarePromise.race = function(values) {
+            var resolve;
+            var reject;
+            var promise = new this(function(res, rej) {
+              resolve = res;
+              reject = rej;
+            });
+            function onResolve(value) {
+              promise && (promise = null || resolve(value));
+            }
+            function onReject(error) {
+              promise && (promise = null || reject(error));
+            }
+            for (var _i = 0,
+                values_1 = values; _i < values_1.length; _i++) {
+              var value = values_1[_i];
+              if (!isThenable(value)) {
+                value = this.resolve(value);
+              }
+              value.then(onResolve, onReject);
+            }
+            return promise;
+          };
+          ZoneAwarePromise.all = function(values) {
+            var resolve;
+            var reject;
+            var promise = new this(function(res, rej) {
+              resolve = res;
+              reject = rej;
+            });
+            var count = 0;
+            var resolvedValues = [];
+            function onReject(error) {
+              promise && reject(error);
+              promise = null;
+            }
+            for (var _i = 0,
+                values_2 = values; _i < values_2.length; _i++) {
+              var value = values_2[_i];
+              if (!isThenable(value)) {
+                value = this.resolve(value);
+              }
+              value.then((function(index) {
+                return function(value) {
+                  resolvedValues[index] = value;
+                  count--;
+                  if (promise && !count) {
+                    resolve(resolvedValues);
+                  }
+                  promise == null;
+                };
+              })(count), onReject);
+              count++;
+            }
+            if (!count)
+              resolve(resolvedValues);
+            return promise;
+          };
+          ZoneAwarePromise.prototype.then = function(onFulfilled, onRejected) {
+            var chainPromise = new ZoneAwarePromise(null);
+            var zone = Zone.current;
+            if (this[symbolState] == UNRESOLVED) {
+              this[symbolValue].push(zone, chainPromise, onFulfilled, onRejected);
+            } else {
+              scheduleResolveOrReject(this, zone, chainPromise, onFulfilled, onRejected);
+            }
+            return chainPromise;
+          };
+          ZoneAwarePromise.prototype.catch = function(onRejected) {
+            return this.then(null, onRejected);
+          };
+          return ZoneAwarePromise;
+        }());
+        var NativePromise = global[__symbol__('Promise')] = global.Promise;
+        global.Promise = ZoneAwarePromise;
+        if (NativePromise) {
+          var NativePromiseProtototype = NativePromise.prototype;
+          var NativePromiseThen_1 = NativePromiseProtototype[__symbol__('then')] = NativePromiseProtototype.then;
+          NativePromiseProtototype.then = function(onResolve, onReject) {
+            var nativePromise = this;
+            return new ZoneAwarePromise(function(resolve, reject) {
+              NativePromiseThen_1.call(nativePromise, resolve, reject);
+            }).then(onResolve, onReject);
+          };
+        }
+        return global.Zone = Zone;
+      })(typeof window === 'undefined' ? global : window);
+    }.call(exports, (function() {
+      return this;
+    }())));
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils_1 = __webpack_require__(3);
+    var WTF_ISSUE_555 = 'Anchor,Area,Audio,BR,Base,BaseFont,Body,Button,Canvas,Content,DList,Directory,Div,Embed,FieldSet,Font,Form,Frame,FrameSet,HR,Head,Heading,Html,IFrame,Image,Input,Keygen,LI,Label,Legend,Link,Map,Marquee,Media,Menu,Meta,Meter,Mod,OList,Object,OptGroup,Option,Output,Paragraph,Pre,Progress,Quote,Script,Select,Source,Span,Style,TableCaption,TableCell,TableCol,Table,TableRow,TableSection,TextArea,Title,Track,UList,Unknown,Video';
+    var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex'.split(',');
+    var EVENT_TARGET = 'EventTarget';
+    function eventTargetPatch(_global) {
+      var apis = [];
+      var isWtf = _global['wtf'];
+      if (isWtf) {
+        apis = WTF_ISSUE_555.split(',').map(function(v) {
+          return 'HTML' + v + 'Element';
+        }).concat(NO_EVENT_TARGET);
+      } else if (_global[EVENT_TARGET]) {
+        apis.push(EVENT_TARGET);
+      } else {
+        apis = NO_EVENT_TARGET;
+      }
+      for (var i = 0; i < apis.length; i++) {
+        var type = _global[apis[i]];
+        utils_1.patchEventTargetMethods(type && type.prototype);
+      }
+    }
+    exports.eventTargetPatch = eventTargetPatch;
+  }, function(module, exports) {
+    (function(global) {
+      "use strict";
+      exports.zoneSymbol = Zone['__symbol__'];
+      var _global = typeof window == 'undefined' ? global : window;
+      function bindArguments(args, source) {
+        for (var i = args.length - 1; i >= 0; i--) {
+          if (typeof args[i] === 'function') {
+            args[i] = Zone.current.wrap(args[i], source + '_' + i);
+          }
+        }
+        return args;
+      }
+      exports.bindArguments = bindArguments;
+      ;
+      function patchPrototype(prototype, fnNames) {
+        var source = prototype.constructor['name'];
+        var _loop_1 = function(i) {
+          var name_1 = fnNames[i];
+          var delegate = prototype[name_1];
+          if (delegate) {
+            prototype[name_1] = (function(delegate) {
+              return function() {
+                return delegate.apply(this, bindArguments(arguments, source + '.' + name_1));
+              };
+            })(delegate);
+          }
+        };
+        for (var i = 0; i < fnNames.length; i++) {
+          _loop_1(i);
+        }
+      }
+      exports.patchPrototype = patchPrototype;
+      ;
+      exports.isWebWorker = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope);
+      exports.isNode = (typeof process !== 'undefined' && {}.toString.call(process) === '[object process]');
+      exports.isBrowser = !exports.isNode && !exports.isWebWorker && !!(typeof window !== 'undefined' && window['HTMLElement']);
+      function patchProperty(obj, prop) {
+        var desc = Object.getOwnPropertyDescriptor(obj, prop) || {
+          enumerable: true,
+          configurable: true
+        };
+        delete desc.writable;
+        delete desc.value;
+        var eventName = prop.substr(2);
+        var _prop = '_' + prop;
+        desc.set = function(fn) {
+          if (this[_prop]) {
+            this.removeEventListener(eventName, this[_prop]);
+          }
+          if (typeof fn === 'function') {
+            var wrapFn = function(event) {
+              var result;
+              result = fn.apply(this, arguments);
+              if (result != undefined && !result)
+                event.preventDefault();
+            };
+            this[_prop] = wrapFn;
+            this.addEventListener(eventName, wrapFn, false);
+          } else {
+            this[_prop] = null;
+          }
+        };
+        desc.get = function() {
+          return this[_prop];
+        };
+        Object.defineProperty(obj, prop, desc);
+      }
+      exports.patchProperty = patchProperty;
+      ;
+      function patchOnProperties(obj, properties) {
+        var onProperties = [];
+        for (var prop in obj) {
+          if (prop.substr(0, 2) == 'on') {
+            onProperties.push(prop);
+          }
+        }
+        for (var j = 0; j < onProperties.length; j++) {
+          patchProperty(obj, onProperties[j]);
+        }
+        if (properties) {
+          for (var i = 0; i < properties.length; i++) {
+            patchProperty(obj, 'on' + properties[i]);
+          }
+        }
+      }
+      exports.patchOnProperties = patchOnProperties;
+      ;
+      var EVENT_TASKS = exports.zoneSymbol('eventTasks');
+      var ADD_EVENT_LISTENER = 'addEventListener';
+      var REMOVE_EVENT_LISTENER = 'removeEventListener';
+      var SYMBOL_ADD_EVENT_LISTENER = exports.zoneSymbol(ADD_EVENT_LISTENER);
+      var SYMBOL_REMOVE_EVENT_LISTENER = exports.zoneSymbol(REMOVE_EVENT_LISTENER);
+      function findExistingRegisteredTask(target, handler, name, capture, remove) {
+        var eventTasks = target[EVENT_TASKS];
+        if (eventTasks) {
+          for (var i = 0; i < eventTasks.length; i++) {
+            var eventTask = eventTasks[i];
+            var data = eventTask.data;
+            if (data.handler === handler && data.useCapturing === capture && data.eventName === name) {
+              if (remove) {
+                eventTasks.splice(i, 1);
+              }
+              return eventTask;
+            }
+          }
+        }
+        return null;
+      }
+      function attachRegisteredEvent(target, eventTask) {
+        var eventTasks = target[EVENT_TASKS];
+        if (!eventTasks) {
+          eventTasks = target[EVENT_TASKS] = [];
+        }
+        eventTasks.push(eventTask);
+      }
+      function scheduleEventListener(eventTask) {
+        var meta = eventTask.data;
+        attachRegisteredEvent(meta.target, eventTask);
+        return meta.target[SYMBOL_ADD_EVENT_LISTENER](meta.eventName, eventTask.invoke, meta.useCapturing);
+      }
+      function cancelEventListener(eventTask) {
+        var meta = eventTask.data;
+        findExistingRegisteredTask(meta.target, eventTask.invoke, meta.eventName, meta.useCapturing, true);
+        meta.target[SYMBOL_REMOVE_EVENT_LISTENER](meta.eventName, eventTask.invoke, meta.useCapturing);
+      }
+      function zoneAwareAddEventListener(self, args) {
+        var eventName = args[0];
+        var handler = args[1];
+        var useCapturing = args[2] || false;
+        var target = self || _global;
+        var delegate = null;
+        if (typeof handler == 'function') {
+          delegate = handler;
+        } else if (handler && handler.handleEvent) {
+          delegate = function(event) {
+            return handler.handleEvent(event);
+          };
+        }
+        var validZoneHandler = false;
+        try {
+          validZoneHandler = handler && handler.toString() === "[object FunctionWrapper]";
+        } catch (e) {
+          return;
+        }
+        if (!delegate || validZoneHandler) {
+          return target[SYMBOL_ADD_EVENT_LISTENER](eventName, handler, useCapturing);
+        }
+        var eventTask = findExistingRegisteredTask(target, handler, eventName, useCapturing, false);
+        if (eventTask) {
+          return target[SYMBOL_ADD_EVENT_LISTENER](eventName, eventTask.invoke, useCapturing);
+        }
+        var zone = Zone.current;
+        var source = target.constructor['name'] + '.addEventListener:' + eventName;
+        var data = {
+          target: target,
+          eventName: eventName,
+          name: eventName,
+          useCapturing: useCapturing,
+          handler: handler
+        };
+        zone.scheduleEventTask(source, delegate, data, scheduleEventListener, cancelEventListener);
+      }
+      function zoneAwareRemoveEventListener(self, args) {
+        var eventName = args[0];
+        var handler = args[1];
+        var useCapturing = args[2] || false;
+        var target = self || _global;
+        var eventTask = findExistingRegisteredTask(target, handler, eventName, useCapturing, true);
+        if (eventTask) {
+          eventTask.zone.cancelTask(eventTask);
+        } else {
+          target[SYMBOL_REMOVE_EVENT_LISTENER](eventName, handler, useCapturing);
+        }
+      }
+      function patchEventTargetMethods(obj) {
+        if (obj && obj.addEventListener) {
+          patchMethod(obj, ADD_EVENT_LISTENER, function() {
+            return zoneAwareAddEventListener;
+          });
+          patchMethod(obj, REMOVE_EVENT_LISTENER, function() {
+            return zoneAwareRemoveEventListener;
+          });
+          return true;
+        } else {
+          return false;
+        }
+      }
+      exports.patchEventTargetMethods = patchEventTargetMethods;
+      ;
+      var originalInstanceKey = exports.zoneSymbol('originalInstance');
+      function patchClass(className) {
+        var OriginalClass = _global[className];
+        if (!OriginalClass)
+          return;
+        _global[className] = function() {
+          var a = bindArguments(arguments, className);
+          switch (a.length) {
+            case 0:
+              this[originalInstanceKey] = new OriginalClass();
+              break;
+            case 1:
+              this[originalInstanceKey] = new OriginalClass(a[0]);
+              break;
+            case 2:
+              this[originalInstanceKey] = new OriginalClass(a[0], a[1]);
+              break;
+            case 3:
+              this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2]);
+              break;
+            case 4:
+              this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2], a[3]);
+              break;
+            default:
+              throw new Error('Arg list too long.');
+          }
+        };
+        var instance = new OriginalClass(function() {});
+        var prop;
+        for (prop in instance) {
+          (function(prop) {
+            if (typeof instance[prop] === 'function') {
+              _global[className].prototype[prop] = function() {
+                return this[originalInstanceKey][prop].apply(this[originalInstanceKey], arguments);
+              };
+            } else {
+              Object.defineProperty(_global[className].prototype, prop, {
+                set: function(fn) {
+                  if (typeof fn === 'function') {
+                    this[originalInstanceKey][prop] = Zone.current.wrap(fn, className + '.' + prop);
+                  } else {
+                    this[originalInstanceKey][prop] = fn;
+                  }
+                },
+                get: function() {
+                  return this[originalInstanceKey][prop];
+                }
+              });
+            }
+          }(prop));
+        }
+        for (prop in OriginalClass) {
+          if (prop !== 'prototype' && OriginalClass.hasOwnProperty(prop)) {
+            _global[className][prop] = OriginalClass[prop];
+          }
+        }
+      }
+      exports.patchClass = patchClass;
+      ;
+      function createNamedFn(name, delegate) {
+        try {
+          return (Function('f', "return function " + name + "(){return f(this, arguments)}"))(delegate);
+        } catch (e) {
+          return function() {
+            return delegate(this, arguments);
+          };
+        }
+      }
+      exports.createNamedFn = createNamedFn;
+      function patchMethod(target, name, patchFn) {
+        var proto = target;
+        while (proto && !proto.hasOwnProperty(name)) {
+          proto = Object.getPrototypeOf(proto);
+        }
+        if (!proto && target[name]) {
+          proto = target;
+        }
+        var delegateName = exports.zoneSymbol(name);
+        var delegate;
+        if (proto && !(delegate = proto[delegateName])) {
+          delegate = proto[delegateName] = proto[name];
+          proto[name] = createNamedFn(name, patchFn(delegate, delegateName, name));
+        }
+        return delegate;
+      }
+      exports.patchMethod = patchMethod;
+    }.call(exports, (function() {
+      return this;
+    }())));
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils_1 = __webpack_require__(3);
+    var _defineProperty = Object.defineProperty;
+    var _getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    var _create = Object.create;
+    var unconfigurablesKey = utils_1.zoneSymbol('unconfigurables');
+    function propertyPatch() {
+      Object.defineProperty = function(obj, prop, desc) {
+        if (isUnconfigurable(obj, prop)) {
+          throw new TypeError('Cannot assign to read only property \'' + prop + '\' of ' + obj);
+        }
+        if (prop !== 'prototype') {
+          desc = rewriteDescriptor(obj, prop, desc);
+        }
+        return _defineProperty(obj, prop, desc);
+      };
+      Object.defineProperties = function(obj, props) {
+        Object.keys(props).forEach(function(prop) {
+          Object.defineProperty(obj, prop, props[prop]);
+        });
+        return obj;
+      };
+      Object.create = function(obj, proto) {
+        if (typeof proto === 'object') {
+          Object.keys(proto).forEach(function(prop) {
+            proto[prop] = rewriteDescriptor(obj, prop, proto[prop]);
+          });
+        }
+        return _create(obj, proto);
+      };
+      Object.getOwnPropertyDescriptor = function(obj, prop) {
+        var desc = _getOwnPropertyDescriptor(obj, prop);
+        if (isUnconfigurable(obj, prop)) {
+          desc.configurable = false;
+        }
+        return desc;
+      };
+    }
+    exports.propertyPatch = propertyPatch;
+    ;
+    function _redefineProperty(obj, prop, desc) {
+      desc = rewriteDescriptor(obj, prop, desc);
+      return _defineProperty(obj, prop, desc);
+    }
+    exports._redefineProperty = _redefineProperty;
+    ;
+    function isUnconfigurable(obj, prop) {
+      return obj && obj[unconfigurablesKey] && obj[unconfigurablesKey][prop];
+    }
+    function rewriteDescriptor(obj, prop, desc) {
+      desc.configurable = true;
+      if (!desc.configurable) {
+        if (!obj[unconfigurablesKey]) {
+          _defineProperty(obj, unconfigurablesKey, {
+            writable: true,
+            value: {}
+          });
+        }
+        obj[unconfigurablesKey][prop] = true;
+      }
+      return desc;
+    }
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var define_property_1 = __webpack_require__(4);
+    var utils_1 = __webpack_require__(3);
+    function registerElementPatch(_global) {
+      if (!utils_1.isBrowser || !('registerElement' in _global.document)) {
+        return;
+      }
+      var _registerElement = document.registerElement;
+      var callbacks = ['createdCallback', 'attachedCallback', 'detachedCallback', 'attributeChangedCallback'];
+      document.registerElement = function(name, opts) {
+        if (opts && opts.prototype) {
+          callbacks.forEach(function(callback) {
+            var source = 'Document.registerElement::' + callback;
+            if (opts.prototype.hasOwnProperty(callback)) {
+              var descriptor = Object.getOwnPropertyDescriptor(opts.prototype, callback);
+              if (descriptor && descriptor.value) {
+                descriptor.value = Zone.current.wrap(descriptor.value, source);
+                define_property_1._redefineProperty(opts.prototype, callback, descriptor);
+              } else {
+                opts.prototype[callback] = Zone.current.wrap(opts.prototype[callback], source);
+              }
+            } else if (opts.prototype[callback]) {
+              opts.prototype[callback] = Zone.current.wrap(opts.prototype[callback], source);
+            }
+          });
+        }
+        return _registerElement.apply(document, [name, opts]);
+      };
+    }
+    exports.registerElementPatch = registerElementPatch;
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var webSocketPatch = __webpack_require__(7);
+    var utils_1 = __webpack_require__(3);
+    var eventNames = 'copy cut paste abort blur focus canplay canplaythrough change click contextmenu dblclick drag dragend dragenter dragleave dragover dragstart drop durationchange emptied ended input invalid keydown keypress keyup load loadeddata loadedmetadata loadstart message mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup pause play playing progress ratechange reset scroll seeked seeking select show stalled submit suspend timeupdate volumechange waiting mozfullscreenchange mozfullscreenerror mozpointerlockchange mozpointerlockerror error webglcontextrestored webglcontextlost webglcontextcreationerror'.split(' ');
+    function propertyDescriptorPatch(_global) {
+      if (utils_1.isNode) {
+        return;
+      }
+      var supportsWebSocket = typeof WebSocket !== 'undefined';
+      if (canPatchViaPropertyDescriptor()) {
+        if (utils_1.isBrowser) {
+          utils_1.patchOnProperties(HTMLElement.prototype, eventNames);
+        }
+        utils_1.patchOnProperties(XMLHttpRequest.prototype, null);
+        if (typeof IDBIndex !== 'undefined') {
+          utils_1.patchOnProperties(IDBIndex.prototype, null);
+          utils_1.patchOnProperties(IDBRequest.prototype, null);
+          utils_1.patchOnProperties(IDBOpenDBRequest.prototype, null);
+          utils_1.patchOnProperties(IDBDatabase.prototype, null);
+          utils_1.patchOnProperties(IDBTransaction.prototype, null);
+          utils_1.patchOnProperties(IDBCursor.prototype, null);
+        }
+        if (supportsWebSocket) {
+          utils_1.patchOnProperties(WebSocket.prototype, null);
+        }
+      } else {
+        patchViaCapturingAllTheEvents();
+        utils_1.patchClass('XMLHttpRequest');
+        if (supportsWebSocket) {
+          webSocketPatch.apply(_global);
+        }
+      }
+    }
+    exports.propertyDescriptorPatch = propertyDescriptorPatch;
+    function canPatchViaPropertyDescriptor() {
+      if (utils_1.isBrowser && !Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'onclick') && typeof Element !== 'undefined') {
+        var desc = Object.getOwnPropertyDescriptor(Element.prototype, 'onclick');
+        if (desc && !desc.configurable)
+          return false;
+      }
+      Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', {get: function() {
+          return true;
+        }});
+      var req = new XMLHttpRequest();
+      var result = !!req.onreadystatechange;
+      Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', {});
+      return result;
+    }
+    ;
+    var unboundKey = utils_1.zoneSymbol('unbound');
+    function patchViaCapturingAllTheEvents() {
+      var _loop_1 = function(i) {
+        var property = eventNames[i];
+        var onproperty = 'on' + property;
+        document.addEventListener(property, function(event) {
+          var elt = event.target,
+              bound,
+              source;
+          if (elt) {
+            source = elt.constructor['name'] + '.' + onproperty;
+          } else {
+            source = 'unknown.' + onproperty;
+          }
+          while (elt) {
+            if (elt[onproperty] && !elt[onproperty][unboundKey]) {
+              bound = Zone.current.wrap(elt[onproperty], source);
+              bound[unboundKey] = elt[onproperty];
+              elt[onproperty] = bound;
+            }
+            elt = elt.parentElement;
+          }
+        }, true);
+      };
+      for (var i = 0; i < eventNames.length; i++) {
+        _loop_1(i);
+      }
+      ;
+    }
+    ;
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils_1 = __webpack_require__(3);
+    function apply(_global) {
+      var WS = _global.WebSocket;
+      if (!_global.EventTarget) {
+        utils_1.patchEventTargetMethods(WS.prototype);
+      }
+      _global.WebSocket = function(a, b) {
+        var socket = arguments.length > 1 ? new WS(a, b) : new WS(a);
+        var proxySocket;
+        var onmessageDesc = Object.getOwnPropertyDescriptor(socket, 'onmessage');
+        if (onmessageDesc && onmessageDesc.configurable === false) {
+          proxySocket = Object.create(socket);
+          ['addEventListener', 'removeEventListener', 'send', 'close'].forEach(function(propName) {
+            proxySocket[propName] = function() {
+              return socket[propName].apply(socket, arguments);
+            };
+          });
+        } else {
+          proxySocket = socket;
+        }
+        utils_1.patchOnProperties(proxySocket, ['close', 'error', 'message', 'open']);
+        return proxySocket;
+      };
+      for (var prop in WS) {
+        _global.WebSocket[prop] = WS[prop];
+      }
+    }
+    exports.apply = apply;
+  }, function(module, exports, __webpack_require__) {
+    "use strict";
+    var utils_1 = __webpack_require__(3);
+    function patchTimer(window, setName, cancelName, nameSuffix) {
+      var setNative = null;
+      var clearNative = null;
+      setName += nameSuffix;
+      cancelName += nameSuffix;
+      function scheduleTask(task) {
+        var data = task.data;
+        data.args[0] = task.invoke;
+        data.handleId = setNative.apply(window, data.args);
+        return task;
+      }
+      function clearTask(task) {
+        return clearNative(task.data.handleId);
+      }
+      setNative = utils_1.patchMethod(window, setName, function(delegate) {
+        return function(self, args) {
+          if (typeof args[0] === 'function') {
+            var zone = Zone.current;
+            var options = {
+              handleId: null,
+              isPeriodic: nameSuffix === 'Interval',
+              delay: (nameSuffix === 'Timeout' || nameSuffix === 'Interval') ? args[1] || 0 : null,
+              args: args
+            };
+            return zone.scheduleMacroTask(setName, args[0], options, scheduleTask, clearTask);
+          } else {
+            return delegate.apply(window, args);
+          }
+        };
+      });
+      clearNative = utils_1.patchMethod(window, cancelName, function(delegate) {
+        return function(self, args) {
+          var task = args[0];
+          if (task && typeof task.type === 'string') {
+            if (task.cancelFn && task.data.isPeriodic || task.runCount === 0) {
+              task.zone.cancelTask(task);
+            }
+          } else {
+            delegate.apply(window, args);
+          }
+        };
+      });
+    }
+    exports.patchTimer = patchTimer;
+  }]);
+  return module.exports;
+});
+
+System.register('app/main.js', ['reflect-metadata', './components/app/module', '@angular/core', '@angular/platform-browser-dynamic', 'zone'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
     var module_1, core_1, platform_browser_dynamic_1;
     return {
-        setters: [function (_1) {}, function (_2) {}, function (module_1_1) {
+        setters: [function (_1) {}, function (module_1_1) {
             module_1 = module_1_1;
         }, function (core_1_1) {
             core_1 = core_1_1;
         }, function (platform_browser_dynamic_1_1) {
             platform_browser_dynamic_1 = platform_browser_dynamic_1_1;
-        }],
+        }, function (_2) {}],
         execute: function () {
             core_1.enableProdMode();
             platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(module_1.AppModule);
