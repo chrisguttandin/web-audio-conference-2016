@@ -49961,7 +49961,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
       timers_1.patchTimer(_global, set, clear, 'Timeout');
       timers_1.patchTimer(_global, set, clear, 'Interval');
       timers_1.patchTimer(_global, set, clear, 'Immediate');
-      timers_1.patchTimer(_global, 'request', 'cancelMacroTask', 'AnimationFrame');
+      timers_1.patchTimer(_global, 'request', 'cancel', 'AnimationFrame');
       timers_1.patchTimer(_global, 'mozRequest', 'mozCancel', 'AnimationFrame');
       timers_1.patchTimer(_global, 'webkitRequest', 'webkitCancel', 'AnimationFrame');
       for (var i = 0; i < blockingMethods.length; i++) {
@@ -50044,6 +50044,9 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
       ;
       ;
       var Zone = (function(global) {
+        if (global.Zone) {
+          throw new Error('Zone already loaded.');
+        }
         var Zone = (function() {
           function Zone(parent, zoneSpec) {
             this._properties = null;
@@ -50085,13 +50088,19 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
           });
           ;
           Zone.prototype.get = function(key) {
+            var zone = this.getZoneWith(key);
+            if (zone)
+              return zone._properties[key];
+          };
+          Zone.prototype.getZoneWith = function(key) {
             var current = this;
             while (current) {
               if (current._properties.hasOwnProperty(key)) {
-                return current._properties[key];
+                return current;
               }
               current = current._parent;
             }
+            return null;
           };
           Zone.prototype.fork = function(zoneSpec) {
             if (!zoneSpec)
@@ -50319,6 +50328,13 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
               }
             };
           }
+          ZoneTask.prototype.toString = function() {
+            if (this.data && typeof this.data.handleId !== 'undefined') {
+              return this.data.handleId;
+            } else {
+              return this.toString();
+            }
+          };
           return ZoneTask;
         }());
         function __symbol__(name) {
@@ -50350,7 +50366,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         function consoleError(e) {
           var rejection = e && e.rejection;
           if (rejection) {
-            console.error('Unhandled Promise rejection:', rejection instanceof Error ? rejection.message : rejection, '; Zone:', e.zone.name, '; Task:', e.task && e.task.source, '; Value:', rejection);
+            console.error('Unhandled Promise rejection:', rejection instanceof Error ? rejection.message : rejection, '; Zone:', e.zone.name, '; Task:', e.task && e.task.source, '; Value:', rejection, rejection instanceof Error ? rejection.stack : undefined);
           }
           console.error(e);
         }
@@ -50370,10 +50386,8 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
               }
             }
             while (_uncaughtPromiseErrors.length) {
-              var uncaughtPromiseErrors = _uncaughtPromiseErrors;
-              _uncaughtPromiseErrors = [];
-              var _loop_1 = function(i) {
-                var uncaughtPromiseError = uncaughtPromiseErrors[i];
+              var _loop_1 = function() {
+                var uncaughtPromiseError = _uncaughtPromiseErrors.shift();
                 try {
                   uncaughtPromiseError.zone.runGuarded(function() {
                     throw uncaughtPromiseError;
@@ -50382,8 +50396,8 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
                   consoleError(e);
                 }
               };
-              for (var i = 0; i < uncaughtPromiseErrors.length; i++) {
-                _loop_1(i);
+              while (_uncaughtPromiseErrors.length) {
+                _loop_1();
               }
             }
             _isDrainingMicrotaskQueue = false;
@@ -50468,6 +50482,9 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         var ZoneAwarePromise = (function() {
           function ZoneAwarePromise(executor) {
             var promise = this;
+            if (!(promise instanceof ZoneAwarePromise)) {
+              throw new Error('Must be an instanceof Promise.');
+            }
             promise[symbolState] = UNRESOLVED;
             promise[symbolValue] = [];
             try {
@@ -50541,7 +50558,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
             return promise;
           };
           ZoneAwarePromise.prototype.then = function(onFulfilled, onRejected) {
-            var chainPromise = new ZoneAwarePromise(null);
+            var chainPromise = new this.constructor(null);
             var zone = Zone.current;
             if (this[symbolState] == UNRESOLVED) {
               this[symbolValue].push(zone, chainPromise, onFulfilled, onRejected);
@@ -50567,6 +50584,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
             }).then(onResolve, onReject);
           };
         }
+        Promise[Zone.__symbol__('uncaughtPromiseErrors')] = _uncaughtPromiseErrors;
         return global.Zone = Zone;
       })(typeof window === 'undefined' ? global : window);
     }.call(exports, (function() {
@@ -50576,7 +50594,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
     "use strict";
     var utils_1 = __webpack_require__(3);
     var WTF_ISSUE_555 = 'Anchor,Area,Audio,BR,Base,BaseFont,Body,Button,Canvas,Content,DList,Directory,Div,Embed,FieldSet,Font,Form,Frame,FrameSet,HR,Head,Heading,Html,IFrame,Image,Input,Keygen,LI,Label,Legend,Link,Map,Marquee,Media,Menu,Meta,Meter,Mod,OList,Object,OptGroup,Option,Output,Paragraph,Pre,Progress,Quote,Script,Select,Source,Span,Style,TableCaption,TableCell,TableCol,Table,TableRow,TableSection,TextArea,Title,Track,UList,Unknown,Video';
-    var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex'.split(',');
+    var NO_EVENT_TARGET = 'ApplicationCache,EventSource,FileReader,InputMethodContext,MediaController,MessagePort,Node,Performance,SVGElementInstance,SharedWorker,TextTrack,TextTrackCue,TextTrackList,WebKitNamedFlow,Window,Worker,WorkerGlobalScope,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload,IDBRequest,IDBOpenDBRequest,IDBDatabase,IDBTransaction,IDBCursor,DBIndex'.split(',');
     var EVENT_TARGET = 'EventTarget';
     function eventTargetPatch(_global) {
       var apis = [];
@@ -50816,6 +50834,8 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         var instance = new OriginalClass(function() {});
         var prop;
         for (prop in instance) {
+          if (className === 'XMLHttpRequest' && prop === 'responseBlob')
+            continue;
           (function(prop) {
             if (typeof instance[prop] === 'function') {
               _global[className].prototype[prop] = function() {
@@ -50887,10 +50907,11 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         if (isUnconfigurable(obj, prop)) {
           throw new TypeError('Cannot assign to read only property \'' + prop + '\' of ' + obj);
         }
+        var originalConfigurableFlag = desc.configurable;
         if (prop !== 'prototype') {
           desc = rewriteDescriptor(obj, prop, desc);
         }
-        return _defineProperty(obj, prop, desc);
+        return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
       };
       Object.defineProperties = function(obj, props) {
         Object.keys(props).forEach(function(prop) {
@@ -50899,7 +50920,7 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         return obj;
       };
       Object.create = function(obj, proto) {
-        if (typeof proto === 'object') {
+        if (typeof proto === 'object' && !Object.isFrozen(proto)) {
           Object.keys(proto).forEach(function(prop) {
             proto[prop] = rewriteDescriptor(obj, prop, proto[prop]);
           });
@@ -50917,8 +50938,9 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
     exports.propertyPatch = propertyPatch;
     ;
     function _redefineProperty(obj, prop, desc) {
+      var originalConfigurableFlag = desc.configurable;
       desc = rewriteDescriptor(obj, prop, desc);
-      return _defineProperty(obj, prop, desc);
+      return _tryDefineProperty(obj, prop, desc, originalConfigurableFlag);
     }
     exports._redefineProperty = _redefineProperty;
     ;
@@ -50937,6 +50959,22 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
         obj[unconfigurablesKey][prop] = true;
       }
       return desc;
+    }
+    function _tryDefineProperty(obj, prop, desc, originalConfigurableFlag) {
+      try {
+        return _defineProperty(obj, prop, desc);
+      } catch (e) {
+        if (desc.configurable) {
+          if (typeof originalConfigurableFlag == 'undefined') {
+            delete desc.configurable;
+          } else {
+            desc.configurable = originalConfigurableFlag;
+          }
+          return _defineProperty(obj, prop, desc);
+        } else {
+          throw e;
+        }
+      }
     }
   }, function(module, exports, __webpack_require__) {
     "use strict";
@@ -51106,7 +51144,16 @@ System.registerDynamic("npm:zone.js/dist/zone.js", [], true, function($__require
               delay: (nameSuffix === 'Timeout' || nameSuffix === 'Interval') ? args[1] || 0 : null,
               args: args
             };
-            return zone.scheduleMacroTask(setName, args[0], options, scheduleTask, clearTask);
+            var task = zone.scheduleMacroTask(setName, args[0], options, scheduleTask, clearTask);
+            if (!task) {
+              return task;
+            }
+            var handle = task.data.handleId;
+            if (handle.ref && handle.unref) {
+              task.ref = handle.ref.bind(handle);
+              task.unref = handle.unref.bind(handle);
+            }
+            return task;
           } else {
             return delegate.apply(window, args);
           }
