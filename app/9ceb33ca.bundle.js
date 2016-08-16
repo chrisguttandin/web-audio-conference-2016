@@ -976,8 +976,7 @@ System.register("app/components/prism/component.js", ['@angular/core'], function
                     moduleId: __moduleName,
                     selector: 'prism',
                     styles: ['code{font-size:3.5vmin}pre[class*=language-]{line-height:1;padding:0 .5em}'],
-                    template: `<pre><code #element [class]="language"><ng-content></ng-content></code></pre>
-`
+                    template: `<pre><code #element [class]="language"><ng-content></ng-content></code></pre>`
                 }), __metadata('design:paramtypes', [])], PrismComponent);
                 return PrismComponent;
             }();
@@ -1013,8 +1012,7 @@ System.register("app/components/app/component.js", ['@angular/core'], function (
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     selector: 'wac-talk',
-                    template: `<router-outlet></router-outlet>
-`
+                    template: `<router-outlet></router-outlet>`
                 }), __metadata('design:paramtypes', [])], AppComponent);
                 return AppComponent;
             }();
@@ -1090,10 +1088,7 @@ System.register('app/components/slides/component.js', ['./routes', '@angular/cor
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     styles: ['div{height:100%;width:100%}'],
-                    template: `<div (swipeleft)="handleSwipeLeft()" (swiperight)="handleSwipeRight()" (window:keyup)="handleKeyUp($event)">
-    <router-outlet></router-outlet>
-</div>
-`
+                    template: `<div (swipeleft)="handleSwipeLeft()" (swiperight)="handleSwipeRight()" (window:keyup)="handleKeyUp($event)"><router-outlet></router-outlet></div>`
                 }), __metadata('design:paramtypes', [router_1.ActivatedRoute, router_1.Router])], SlidesComponent);
                 return SlidesComponent;
             }();
@@ -1128,16 +1123,14 @@ System.register("app/components/slide-eight/component.js", ['@angular/core'], fu
                 SlideEightComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Downsampling</h2>
-<prism language="javascript">var downsampleContext = new OfflineAudioContext(
+                    template: `<h2>Downsampling</h2><prism language="javascript">var downsampleContext = new OfflineAudioContext(
         anyValidNumber,
         anyValidNumber,
         11025
     );
 
 downsampleContext.decodeAudioData(arrayBuffer);
-// will resolve with the downsampled audioBuffer</prism>
-`
+// will resolve with the downsampled audioBuffer</prism>`
                 }), __metadata('design:paramtypes', [])], SlideEightComponent);
                 return SlideEightComponent;
             }();
@@ -1172,12 +1165,7 @@ System.register("app/components/slide-eighteen/component.js", ['@angular/core'],
                 SlideEighteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Not so good parts</h2>
-<ul>
-    <li>current state is broken</li>
-    <li>no worker support</li>
-</ul>
-`
+                    template: `<h2>Not so good parts</h2><ul><li>current state is broken</li><li>no worker support</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideEighteenComponent);
                 return SlideEighteenComponent;
             }();
@@ -1212,12 +1200,7 @@ System.register("app/components/slide-eleven/component.js", ['@angular/core'], f
                 SlideElevenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<ul>
-    <li>will not work</li>
-    <li>the AnalyserNode is only designed to be used for real time usage</li>
-</ul>
-`
+                    template: `<h2>Apply FFT</h2><ul><li>will not work</li><li>the AnalyserNode is only designed to be used for real time usage</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideElevenComponent);
                 return SlideElevenComponent;
             }();
@@ -1252,13 +1235,7 @@ System.register("app/components/slide-fifteen/component.js", ['@angular/core'], 
                 SlideFifteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Apply Gate</h2>
-<ul>
-    <li>no native support (yet)</li>
-    <li>ScriptProcessorNode does not fire each onaudioprocess event</li>
-    <li>ScriptProcessorNode does not have any output in all browsers</li>
-</ul>
-`
+                    template: `<h2>Apply Gate</h2><ul><li>no native support (yet)</li><li>ScriptProcessorNode does not fire each onaudioprocess event</li><li>ScriptProcessorNode does not have any output in all browsers</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideFifteenComponent);
                 return SlideFifteenComponent;
             }();
@@ -1293,13 +1270,7 @@ System.register("app/components/slide-five/component.js", ['@angular/core'], fun
                 SlideFiveComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>audfprint</h2>
-<ul>
-    <li>uses landmark based fingerprinting</li>
-    <li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li>
-    <li>open sourced in Python</li>
-</ul>
-`
+                    template: `<h2>audfprint</h2><ul><li>uses landmark based fingerprinting</li><li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li><li>open sourced in Python</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideFiveComponent);
                 return SlideFiveComponent;
             }();
@@ -1334,13 +1305,7 @@ System.register("app/components/slide-four/component.js", ['@angular/core'], fun
                 SlideFourComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Audio Fingerprinting</h2>
-<ul>
-    <li>retrieve (a) unique value(s) from an audio signal</li>
-    <li>match and query audio signals</li>
-    <li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li>
-</ul>
-`
+                    template: `<h2>Audio Fingerprinting</h2><ul><li>retrieve (a) unique value(s) from an audio signal</li><li>match and query audio signals</li><li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideFourComponent);
                 return SlideFourComponent;
             }();
@@ -1375,12 +1340,7 @@ System.register("app/components/slide-fourteen/component.js", ['@angular/core'],
                 SlideFourteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Find Maximum</h2>
-<ul>
-    <li>no native support</li>
-    <li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li>
-</ul>
-`
+                    template: `<h2>Find Maximum</h2><ul><li>no native support</li><li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideFourteenComponent);
                 return SlideFourteenComponent;
             }();
@@ -1415,12 +1375,7 @@ System.register("app/components/slide-nine/component.js", ['@angular/core'], fun
                 SlideNineComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Downmixing</h2>
-<ul>
-    <li>works as well</li>
-    <li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li>
-</ul>
-`
+                    template: `<h2>Downmixing</h2><ul><li>works as well</li><li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideNineComponent);
                 return SlideNineComponent;
             }();
@@ -1455,11 +1410,7 @@ System.register("app/components/slide-nineteen/component.js", ['@angular/core'],
                 SlideNineteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2>
-<ul>
-    <li>sends serial data via the audio output</li>
-</ul>
-`
+                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2><ul><li>sends serial data via the audio output</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideNineteenComponent);
                 return SlideNineteenComponent;
             }();
@@ -1495,11 +1446,7 @@ System.register("app/components/slide-one/component.js", ['@angular/core'], func
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     styles: ['a,h1,h2,span{text-align:center}a,span{display:block}'],
-                    template: `<h1>Non Audio Signal Processing</h1>
-<span>or</span>
-<h2>What else can we do<br>with the Web Audio API?</h2>
-<a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>
-`
+                    template: `<h1>Non Audio Signal Processing</h1><span>or</span><h2>What else can we do<br>with the Web Audio API?</h2><a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>`
                 }), __metadata('design:paramtypes', [])], SlideOneComponent);
                 return SlideOneComponent;
             }();
@@ -1534,12 +1481,7 @@ System.register("app/components/slide-seven/component.js", ['@angular/core'], fu
                 SlideSevenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Downsampling</h2>
-<ul>
-    <li>can be done easily</li>
-    <li>each browser uses a different algorithm</li>
-</ul>
-`
+                    template: `<h2>Downsampling</h2><ul><li>can be done easily</li><li>each browser uses a different algorithm</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideSevenComponent);
                 return SlideSevenComponent;
             }();
@@ -1574,15 +1516,7 @@ System.register("app/components/slide-seventeen/component.js", ['@angular/core']
                 SlideSeventeenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Good parts</h2>
-<ul>
-    <li>runs possibly faster because it's natively implemented</li>
-    <li>it is already implemented</li>
-    <li>AudioWorklets will solve all current problems</li>
-    <li>suspend()/resume() allow the usage as a stream</li>
-    <li>values from -4294967296 to 4294967296 are supported</li>
-</ul>
-`
+                    template: `<h2>Good parts</h2><ul><li>runs possibly faster because it's natively implemented</li><li>it is already implemented</li><li>AudioWorklets will solve all current problems</li><li>suspend()/resume() allow the usage as a stream</li><li>values from -4294967296 to 4294967296 are supported</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideSeventeenComponent);
                 return SlideSeventeenComponent;
             }();
@@ -1617,18 +1551,7 @@ System.register("app/components/slide-six/component.js", ['@angular/core'], func
                 SlideSixComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>audfprint's algorithm</h2>
-<ul>
-    <li>downsample audio to 11025 Hz</li>
-    <li>downmix audio to mono</li>
-    <li>apply the FFT each 256 samples</li>
-    <li>find the largest magnitude</li>
-    <li>apply a gate</li>
-    <li>...</li>
-    <li>apply an IIR filter</li>
-    <li>... and much more</li>
-</ul>
-`
+                    template: `<h2>audfprint's algorithm</h2><ul><li>downsample audio to 11025 Hz</li><li>downmix audio to mono</li><li>apply the FFT each 256 samples</li><li>find the largest magnitude</li><li>apply a gate</li><li>...</li><li>apply an IIR filter</li><li>... and much more</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideSixComponent);
                 return SlideSixComponent;
             }();
@@ -1663,13 +1586,7 @@ System.register("app/components/slide-sixteen/component.js", ['@angular/core'], 
                 SlideSixteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Apply IIR Filter</h2>
-<ul>
-    <li>works now in Chrome &amp; Opera</li>
-    <li>can't be reliably reimplemted</li>
-    <li>10 times faster</li>
-</ul>
-`
+                    template: `<h2>Apply IIR Filter</h2><ul><li>works now in Chrome &amp; Opera</li><li>can't be reliably reimplemted</li><li>10 times faster</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideSixteenComponent);
                 return SlideSixteenComponent;
             }();
@@ -1704,8 +1621,7 @@ System.register("app/components/slide-ten/component.js", ['@angular/core'], func
                 SlideTenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Downmixing</h2>
-<prism language="javascript">var downmixContext = new OfflineAudioContext(
+                    template: `<h2>Downmixing</h2><prism language="javascript">var downmixContext = new OfflineAudioContext(
         1,
         audioBuffer.length,
         11025
@@ -1717,8 +1633,7 @@ bufferSource.connect(downmixContext.destination);
 bufferSource.start();
 
 downmixContext.startRendering();
-// will resolve with the downmixed audioBuffer</prism>
-`
+// will resolve with the downmixed audioBuffer</prism>`
                 }), __metadata('design:paramtypes', [])], SlideTenComponent);
                 return SlideTenComponent;
             }();
@@ -1753,12 +1668,7 @@ System.register("app/components/slide-thirteen/component.js", ['@angular/core'],
                 SlideThirteenComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<ul>
-    <li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li>
-    <li>increased performance by 400% for me</li>
-</ul>
-`
+                    template: `<h2>Apply FFT</h2><ul><li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li><li>increased performance by 400% for me</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideThirteenComponent);
                 return SlideThirteenComponent;
             }();
@@ -1793,14 +1703,7 @@ System.register("app/components/slide-three/component.js", ['@angular/core'], fu
                 SlideThreeComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Agenda</h2>
-<ul>
-    <li>Audio Fingerprinting with audfprint</li>
-    <li>Non Audio Signal Processing</li>
-    <li>Bonus track: webaudio-serial-tx</li>
-    <li>Bonus track: doppler</li>
-</ul>
-`
+                    template: `<h2>Agenda</h2><ul><li>Audio Fingerprinting with audfprint</li><li>Non Audio Signal Processing</li><li>Bonus track: webaudio-serial-tx</li><li>Bonus track: doppler</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideThreeComponent);
                 return SlideThreeComponent;
             }();
@@ -1835,8 +1738,7 @@ System.register("app/components/slide-twelve/component.js", ['@angular/core'], f
                 SlideTwelveComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Apply FFT</h2>
-<prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
+                    template: `<h2>Apply FFT</h2><prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
 var buffer = new Float32Array(analyser.fftSize);
 var scriptProcessor = offlineAudioContext.createScriptProcessor();
 
@@ -1850,8 +1752,7 @@ anyNodeThatOutputsSound
     .connect(scriptProcessor)
     .connect(offlineAudioContext.destination);
 
-offlineAudioContext.startRendering();</prism>
-`
+offlineAudioContext.startRendering();</prism>`
                 }), __metadata('design:paramtypes', [])], SlideTwelveComponent);
                 return SlideTwelveComponent;
             }();
@@ -1887,8 +1788,7 @@ System.register("app/components/slide-twenty-one/component.js", ['@angular/core'
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     styles: ['h1{text-align:center}'],
-                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>
-`
+                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>`
                 }), __metadata('design:paramtypes', [])], SlideTwentyOneComponent);
                 return SlideTwentyOneComponent;
             }();
@@ -1923,11 +1823,7 @@ System.register("app/components/slide-twenty-three/component.js", ['@angular/cor
                 SlideTwentyThreeComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Thank you</h2>
-<h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3>
-<h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3>
-<h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>
-`
+                    template: `<h2>Thank you</h2><h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3><h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3><h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>`
                 }), __metadata('design:paramtypes', [])], SlideTwentyThreeComponent);
                 return SlideTwentyThreeComponent;
             }();
@@ -1963,8 +1859,7 @@ System.register("app/components/slide-twenty-two/component.js", ['@angular/core'
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
                     styles: ['h1{text-align:center}'],
-                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>
-`
+                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>`
                 }), __metadata('design:paramtypes', [])], SlideTwentyTwoComponent);
                 return SlideTwentyTwoComponent;
             }();
@@ -1999,11 +1894,7 @@ System.register("app/components/slide-twenty/component.js", ['@angular/core'], f
                 SlideTwentyComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2>
-<ul>
-    <li>detecting motion by playing frequencies above the audible range and analyzing their response</li>
-</ul>
-`
+                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2><ul><li>detecting motion by playing frequencies above the audible range and analyzing their response</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideTwentyComponent);
                 return SlideTwentyComponent;
             }();
@@ -2038,15 +1929,7 @@ System.register("app/components/slide-two/component.js", ['@angular/core'], func
                 SlideTwoComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
                     moduleId: __moduleName,
-                    template: `<h2>About me</h2>
-<h3>Christoph Guttandin</h3>
-<ul>
-    <li>based in Berlin</li>
-    <li>self employed at Media Codings</li>
-    <li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li>
-    <li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li>
-</ul>
-`
+                    template: `<h2>About me</h2><h3>Christoph Guttandin</h3><ul><li>based in Berlin</li><li>self employed at Media Codings</li><li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li><li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li></ul>`
                 }), __metadata('design:paramtypes', [])], SlideTwoComponent);
                 return SlideTwoComponent;
             }();
