@@ -8,7 +8,7 @@
 System.config({
     baseURL: '/web-audio-conference-2016',
                         bundles: {
-        'app/9ceb33ca.bundle.js': [
+        'app/a9db97a9.bundle.js': [
             'app/main.js'
         ]
     },
