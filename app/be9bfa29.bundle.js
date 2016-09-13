@@ -3100,6 +3100,7 @@ System.registerDynamic('npm:rxjs/operator/map.js', ['../Subscriber'], true, func
         };
         return MapOperator;
     }();
+    exports.MapOperator = MapOperator;
     /**
      * We need this JSDoc comment for affecting ESDoc.
      * @ignore
@@ -7622,9 +7623,6 @@ var define = System.amdDefine;
       }
       throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
     };
-    NumberWrapper.parseFloat = function(text) {
-      return parseFloat(text);
-    };
     Object.defineProperty(NumberWrapper, "NaN", {
       get: function() {
         return NaN;
@@ -8041,9 +8039,8 @@ var define = System.amdDefine;
       if (k1.length != k2.length) {
         return false;
       }
-      var key;
       for (var i = 0; i < k1.length; i++) {
-        key = k1[i];
+        var key = k1[i];
         if (m1[key] !== m2[key]) {
           return false;
         }
@@ -8240,6 +8237,426 @@ var define = System.amdDefine;
     };
     return SetWrapper;
   }());
+  var TagContentType;
+  (function(TagContentType) {
+    TagContentType[TagContentType["RAW_TEXT"] = 0] = "RAW_TEXT";
+    TagContentType[TagContentType["ESCAPABLE_RAW_TEXT"] = 1] = "ESCAPABLE_RAW_TEXT";
+    TagContentType[TagContentType["PARSABLE_DATA"] = 2] = "PARSABLE_DATA";
+  })(TagContentType || (TagContentType = {}));
+  function splitNsName(elementName) {
+    if (elementName[0] != ':') {
+      return [null, elementName];
+    }
+    var colonIndex = elementName.indexOf(':', 1);
+    if (colonIndex == -1) {
+      throw new Error("Unsupported format \"" + elementName + "\" expecting \":namespace:name\"");
+    }
+    return [elementName.slice(1, colonIndex), elementName.slice(colonIndex + 1)];
+  }
+  function getNsPrefix(fullName) {
+    return fullName === null ? null : splitNsName(fullName)[0];
+  }
+  function mergeNsAndName(prefix, localName) {
+    return prefix ? ":" + prefix + ":" + localName : localName;
+  }
+  var NAMED_ENTITIES = {
+    'Aacute': '\u00C1',
+    'aacute': '\u00E1',
+    'Acirc': '\u00C2',
+    'acirc': '\u00E2',
+    'acute': '\u00B4',
+    'AElig': '\u00C6',
+    'aelig': '\u00E6',
+    'Agrave': '\u00C0',
+    'agrave': '\u00E0',
+    'alefsym': '\u2135',
+    'Alpha': '\u0391',
+    'alpha': '\u03B1',
+    'amp': '&',
+    'and': '\u2227',
+    'ang': '\u2220',
+    'apos': '\u0027',
+    'Aring': '\u00C5',
+    'aring': '\u00E5',
+    'asymp': '\u2248',
+    'Atilde': '\u00C3',
+    'atilde': '\u00E3',
+    'Auml': '\u00C4',
+    'auml': '\u00E4',
+    'bdquo': '\u201E',
+    'Beta': '\u0392',
+    'beta': '\u03B2',
+    'brvbar': '\u00A6',
+    'bull': '\u2022',
+    'cap': '\u2229',
+    'Ccedil': '\u00C7',
+    'ccedil': '\u00E7',
+    'cedil': '\u00B8',
+    'cent': '\u00A2',
+    'Chi': '\u03A7',
+    'chi': '\u03C7',
+    'circ': '\u02C6',
+    'clubs': '\u2663',
+    'cong': '\u2245',
+    'copy': '\u00A9',
+    'crarr': '\u21B5',
+    'cup': '\u222A',
+    'curren': '\u00A4',
+    'dagger': '\u2020',
+    'Dagger': '\u2021',
+    'darr': '\u2193',
+    'dArr': '\u21D3',
+    'deg': '\u00B0',
+    'Delta': '\u0394',
+    'delta': '\u03B4',
+    'diams': '\u2666',
+    'divide': '\u00F7',
+    'Eacute': '\u00C9',
+    'eacute': '\u00E9',
+    'Ecirc': '\u00CA',
+    'ecirc': '\u00EA',
+    'Egrave': '\u00C8',
+    'egrave': '\u00E8',
+    'empty': '\u2205',
+    'emsp': '\u2003',
+    'ensp': '\u2002',
+    'Epsilon': '\u0395',
+    'epsilon': '\u03B5',
+    'equiv': '\u2261',
+    'Eta': '\u0397',
+    'eta': '\u03B7',
+    'ETH': '\u00D0',
+    'eth': '\u00F0',
+    'Euml': '\u00CB',
+    'euml': '\u00EB',
+    'euro': '\u20AC',
+    'exist': '\u2203',
+    'fnof': '\u0192',
+    'forall': '\u2200',
+    'frac12': '\u00BD',
+    'frac14': '\u00BC',
+    'frac34': '\u00BE',
+    'frasl': '\u2044',
+    'Gamma': '\u0393',
+    'gamma': '\u03B3',
+    'ge': '\u2265',
+    'gt': '>',
+    'harr': '\u2194',
+    'hArr': '\u21D4',
+    'hearts': '\u2665',
+    'hellip': '\u2026',
+    'Iacute': '\u00CD',
+    'iacute': '\u00ED',
+    'Icirc': '\u00CE',
+    'icirc': '\u00EE',
+    'iexcl': '\u00A1',
+    'Igrave': '\u00CC',
+    'igrave': '\u00EC',
+    'image': '\u2111',
+    'infin': '\u221E',
+    'int': '\u222B',
+    'Iota': '\u0399',
+    'iota': '\u03B9',
+    'iquest': '\u00BF',
+    'isin': '\u2208',
+    'Iuml': '\u00CF',
+    'iuml': '\u00EF',
+    'Kappa': '\u039A',
+    'kappa': '\u03BA',
+    'Lambda': '\u039B',
+    'lambda': '\u03BB',
+    'lang': '\u27E8',
+    'laquo': '\u00AB',
+    'larr': '\u2190',
+    'lArr': '\u21D0',
+    'lceil': '\u2308',
+    'ldquo': '\u201C',
+    'le': '\u2264',
+    'lfloor': '\u230A',
+    'lowast': '\u2217',
+    'loz': '\u25CA',
+    'lrm': '\u200E',
+    'lsaquo': '\u2039',
+    'lsquo': '\u2018',
+    'lt': '<',
+    'macr': '\u00AF',
+    'mdash': '\u2014',
+    'micro': '\u00B5',
+    'middot': '\u00B7',
+    'minus': '\u2212',
+    'Mu': '\u039C',
+    'mu': '\u03BC',
+    'nabla': '\u2207',
+    'nbsp': '\u00A0',
+    'ndash': '\u2013',
+    'ne': '\u2260',
+    'ni': '\u220B',
+    'not': '\u00AC',
+    'notin': '\u2209',
+    'nsub': '\u2284',
+    'Ntilde': '\u00D1',
+    'ntilde': '\u00F1',
+    'Nu': '\u039D',
+    'nu': '\u03BD',
+    'Oacute': '\u00D3',
+    'oacute': '\u00F3',
+    'Ocirc': '\u00D4',
+    'ocirc': '\u00F4',
+    'OElig': '\u0152',
+    'oelig': '\u0153',
+    'Ograve': '\u00D2',
+    'ograve': '\u00F2',
+    'oline': '\u203E',
+    'Omega': '\u03A9',
+    'omega': '\u03C9',
+    'Omicron': '\u039F',
+    'omicron': '\u03BF',
+    'oplus': '\u2295',
+    'or': '\u2228',
+    'ordf': '\u00AA',
+    'ordm': '\u00BA',
+    'Oslash': '\u00D8',
+    'oslash': '\u00F8',
+    'Otilde': '\u00D5',
+    'otilde': '\u00F5',
+    'otimes': '\u2297',
+    'Ouml': '\u00D6',
+    'ouml': '\u00F6',
+    'para': '\u00B6',
+    'permil': '\u2030',
+    'perp': '\u22A5',
+    'Phi': '\u03A6',
+    'phi': '\u03C6',
+    'Pi': '\u03A0',
+    'pi': '\u03C0',
+    'piv': '\u03D6',
+    'plusmn': '\u00B1',
+    'pound': '\u00A3',
+    'prime': '\u2032',
+    'Prime': '\u2033',
+    'prod': '\u220F',
+    'prop': '\u221D',
+    'Psi': '\u03A8',
+    'psi': '\u03C8',
+    'quot': '\u0022',
+    'radic': '\u221A',
+    'rang': '\u27E9',
+    'raquo': '\u00BB',
+    'rarr': '\u2192',
+    'rArr': '\u21D2',
+    'rceil': '\u2309',
+    'rdquo': '\u201D',
+    'real': '\u211C',
+    'reg': '\u00AE',
+    'rfloor': '\u230B',
+    'Rho': '\u03A1',
+    'rho': '\u03C1',
+    'rlm': '\u200F',
+    'rsaquo': '\u203A',
+    'rsquo': '\u2019',
+    'sbquo': '\u201A',
+    'Scaron': '\u0160',
+    'scaron': '\u0161',
+    'sdot': '\u22C5',
+    'sect': '\u00A7',
+    'shy': '\u00AD',
+    'Sigma': '\u03A3',
+    'sigma': '\u03C3',
+    'sigmaf': '\u03C2',
+    'sim': '\u223C',
+    'spades': '\u2660',
+    'sub': '\u2282',
+    'sube': '\u2286',
+    'sum': '\u2211',
+    'sup': '\u2283',
+    'sup1': '\u00B9',
+    'sup2': '\u00B2',
+    'sup3': '\u00B3',
+    'supe': '\u2287',
+    'szlig': '\u00DF',
+    'Tau': '\u03A4',
+    'tau': '\u03C4',
+    'there4': '\u2234',
+    'Theta': '\u0398',
+    'theta': '\u03B8',
+    'thetasym': '\u03D1',
+    'thinsp': '\u2009',
+    'THORN': '\u00DE',
+    'thorn': '\u00FE',
+    'tilde': '\u02DC',
+    'times': '\u00D7',
+    'trade': '\u2122',
+    'Uacute': '\u00DA',
+    'uacute': '\u00FA',
+    'uarr': '\u2191',
+    'uArr': '\u21D1',
+    'Ucirc': '\u00DB',
+    'ucirc': '\u00FB',
+    'Ugrave': '\u00D9',
+    'ugrave': '\u00F9',
+    'uml': '\u00A8',
+    'upsih': '\u03D2',
+    'Upsilon': '\u03A5',
+    'upsilon': '\u03C5',
+    'Uuml': '\u00DC',
+    'uuml': '\u00FC',
+    'weierp': '\u2118',
+    'Xi': '\u039E',
+    'xi': '\u03BE',
+    'Yacute': '\u00DD',
+    'yacute': '\u00FD',
+    'yen': '\u00A5',
+    'yuml': '\u00FF',
+    'Yuml': '\u0178',
+    'Zeta': '\u0396',
+    'zeta': '\u03B6',
+    'zwj': '\u200D',
+    'zwnj': '\u200C'
+  };
+  var HtmlTagDefinition = (function() {
+    function HtmlTagDefinition(_a) {
+      var _this = this;
+      var _b = _a === void 0 ? {} : _a,
+          closedByChildren = _b.closedByChildren,
+          requiredParents = _b.requiredParents,
+          implicitNamespacePrefix = _b.implicitNamespacePrefix,
+          _c = _b.contentType,
+          contentType = _c === void 0 ? TagContentType.PARSABLE_DATA : _c,
+          _d = _b.closedByParent,
+          closedByParent = _d === void 0 ? false : _d,
+          _e = _b.isVoid,
+          isVoid = _e === void 0 ? false : _e,
+          _f = _b.ignoreFirstLf,
+          ignoreFirstLf = _f === void 0 ? false : _f;
+      this.closedByChildren = {};
+      this.closedByParent = false;
+      this.canSelfClose = false;
+      if (closedByChildren && closedByChildren.length > 0) {
+        closedByChildren.forEach(function(tagName) {
+          return _this.closedByChildren[tagName] = true;
+        });
+      }
+      this.isVoid = isVoid;
+      this.closedByParent = closedByParent || isVoid;
+      if (requiredParents && requiredParents.length > 0) {
+        this.requiredParents = {};
+        this.parentToAdd = requiredParents[0];
+        requiredParents.forEach(function(tagName) {
+          return _this.requiredParents[tagName] = true;
+        });
+      }
+      this.implicitNamespacePrefix = implicitNamespacePrefix;
+      this.contentType = contentType;
+      this.ignoreFirstLf = ignoreFirstLf;
+    }
+    HtmlTagDefinition.prototype.requireExtraParent = function(currentParent) {
+      if (!this.requiredParents) {
+        return false;
+      }
+      if (!currentParent) {
+        return true;
+      }
+      var lcParent = currentParent.toLowerCase();
+      return this.requiredParents[lcParent] != true && lcParent != 'template';
+    };
+    HtmlTagDefinition.prototype.isClosedByChild = function(name) {
+      return this.isVoid || name.toLowerCase() in this.closedByChildren;
+    };
+    return HtmlTagDefinition;
+  }());
+  var TAG_DEFINITIONS = {
+    'base': new HtmlTagDefinition({isVoid: true}),
+    'meta': new HtmlTagDefinition({isVoid: true}),
+    'area': new HtmlTagDefinition({isVoid: true}),
+    'embed': new HtmlTagDefinition({isVoid: true}),
+    'link': new HtmlTagDefinition({isVoid: true}),
+    'img': new HtmlTagDefinition({isVoid: true}),
+    'input': new HtmlTagDefinition({isVoid: true}),
+    'param': new HtmlTagDefinition({isVoid: true}),
+    'hr': new HtmlTagDefinition({isVoid: true}),
+    'br': new HtmlTagDefinition({isVoid: true}),
+    'source': new HtmlTagDefinition({isVoid: true}),
+    'track': new HtmlTagDefinition({isVoid: true}),
+    'wbr': new HtmlTagDefinition({isVoid: true}),
+    'p': new HtmlTagDefinition({
+      closedByChildren: ['address', 'article', 'aside', 'blockquote', 'div', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul'],
+      closedByParent: true
+    }),
+    'thead': new HtmlTagDefinition({closedByChildren: ['tbody', 'tfoot']}),
+    'tbody': new HtmlTagDefinition({
+      closedByChildren: ['tbody', 'tfoot'],
+      closedByParent: true
+    }),
+    'tfoot': new HtmlTagDefinition({
+      closedByChildren: ['tbody'],
+      closedByParent: true
+    }),
+    'tr': new HtmlTagDefinition({
+      closedByChildren: ['tr'],
+      requiredParents: ['tbody', 'tfoot', 'thead'],
+      closedByParent: true
+    }),
+    'td': new HtmlTagDefinition({
+      closedByChildren: ['td', 'th'],
+      closedByParent: true
+    }),
+    'th': new HtmlTagDefinition({
+      closedByChildren: ['td', 'th'],
+      closedByParent: true
+    }),
+    'col': new HtmlTagDefinition({
+      requiredParents: ['colgroup'],
+      isVoid: true
+    }),
+    'svg': new HtmlTagDefinition({implicitNamespacePrefix: 'svg'}),
+    'math': new HtmlTagDefinition({implicitNamespacePrefix: 'math'}),
+    'li': new HtmlTagDefinition({
+      closedByChildren: ['li'],
+      closedByParent: true
+    }),
+    'dt': new HtmlTagDefinition({closedByChildren: ['dt', 'dd']}),
+    'dd': new HtmlTagDefinition({
+      closedByChildren: ['dt', 'dd'],
+      closedByParent: true
+    }),
+    'rb': new HtmlTagDefinition({
+      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
+      closedByParent: true
+    }),
+    'rt': new HtmlTagDefinition({
+      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
+      closedByParent: true
+    }),
+    'rtc': new HtmlTagDefinition({
+      closedByChildren: ['rb', 'rtc', 'rp'],
+      closedByParent: true
+    }),
+    'rp': new HtmlTagDefinition({
+      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
+      closedByParent: true
+    }),
+    'optgroup': new HtmlTagDefinition({
+      closedByChildren: ['optgroup'],
+      closedByParent: true
+    }),
+    'option': new HtmlTagDefinition({
+      closedByChildren: ['option', 'optgroup'],
+      closedByParent: true
+    }),
+    'pre': new HtmlTagDefinition({ignoreFirstLf: true}),
+    'listing': new HtmlTagDefinition({ignoreFirstLf: true}),
+    'style': new HtmlTagDefinition({contentType: TagContentType.RAW_TEXT}),
+    'script': new HtmlTagDefinition({contentType: TagContentType.RAW_TEXT}),
+    'title': new HtmlTagDefinition({contentType: TagContentType.ESCAPABLE_RAW_TEXT}),
+    'textarea': new HtmlTagDefinition({
+      contentType: TagContentType.ESCAPABLE_RAW_TEXT,
+      ignoreFirstLf: true
+    })
+  };
+  var _DEFAULT_TAG_DEFINITION = new HtmlTagDefinition();
+  function getHtmlTagDefinition(tagName) {
+    return TAG_DEFINITIONS[tagName.toLowerCase()] || _DEFAULT_TAG_DEFINITION;
+  }
   var _EMPTY_ATTR_VALUE = '';
   var _SELECTOR_REGEXP = new RegExp('(\\:not\\()|' + '([-\\w]+)|' + '(?:\\.([-\\w]+))|' + '(?:\\[([-\\w*]+)(?:=([^\\]]*))?\\])|' + '(\\))|' + '(\\s*,\\s*)', 'g');
   var CssSelector = (function() {
@@ -8308,7 +8725,7 @@ var define = System.amdDefine;
       this.element = element;
     };
     CssSelector.prototype.getMatchingElementTemplate = function() {
-      var tagName = isPresent(this.element) ? this.element : 'div';
+      var tagName = this.element || 'div';
       var classAttr = this.classNames.length > 0 ? " class=\"" + this.classNames.join(' ') + "\"" : '';
       var attrs = '';
       for (var i = 0; i < this.attrs.length; i += 2) {
@@ -8316,7 +8733,7 @@ var define = System.amdDefine;
         var attrValue = this.attrs[i + 1] !== '' ? "=\"" + this.attrs[i + 1] + "\"" : '';
         attrs += " " + attrName + attrValue;
       }
-      return "<" + tagName + classAttr + attrs + "></" + tagName + ">";
+      return getHtmlTagDefinition(tagName).isVoid ? "<" + tagName + classAttr + attrs + "/>" : "<" + tagName + classAttr + attrs + "></" + tagName + ">";
     };
     CssSelector.prototype.addAttribute = function(name, value) {
       if (value === void 0) {
@@ -10204,7 +10621,8 @@ var define = System.amdDefine;
           importedModules = _b.importedModules,
           exportedModules = _b.exportedModules,
           schemas = _b.schemas,
-          transitiveModule = _b.transitiveModule;
+          transitiveModule = _b.transitiveModule,
+          id = _b.id;
       this.type = type;
       this.declaredDirectives = _normalizeArray(declaredDirectives);
       this.exportedDirectives = _normalizeArray(exportedDirectives);
@@ -10216,6 +10634,7 @@ var define = System.amdDefine;
       this.importedModules = _normalizeArray(importedModules);
       this.exportedModules = _normalizeArray(exportedModules);
       this.schemas = _normalizeArray(schemas);
+      this.id = id;
       this.transitiveModule = transitiveModule;
     }
     Object.defineProperty(CompileNgModuleMetadata.prototype, "identifier", {
@@ -11091,7 +11510,7 @@ var define = System.amdDefine;
         this.advance();
       }
       var str = this.input.substring(start, this.index);
-      var value = simple ? NumberWrapper.parseIntAutoRadix(str) : NumberWrapper.parseFloat(str);
+      var value = simple ? NumberWrapper.parseIntAutoRadix(str) : parseFloat(str);
       return newNumberToken(start, value);
     };
     _Scanner.prototype.scanString = function() {
@@ -12015,7 +12434,7 @@ var define = System.amdDefine;
     };
     return ExpansionCase;
   }());
-  var Attribute = (function() {
+  var Attribute$1 = (function() {
     function Attribute(name, value, sourceSpan) {
       this.name = name;
       this.value = value;
@@ -12063,282 +12482,6 @@ var define = System.amdDefine;
     });
     return result;
   }
-  var TagContentType;
-  (function(TagContentType) {
-    TagContentType[TagContentType["RAW_TEXT"] = 0] = "RAW_TEXT";
-    TagContentType[TagContentType["ESCAPABLE_RAW_TEXT"] = 1] = "ESCAPABLE_RAW_TEXT";
-    TagContentType[TagContentType["PARSABLE_DATA"] = 2] = "PARSABLE_DATA";
-  })(TagContentType || (TagContentType = {}));
-  function splitNsName(elementName) {
-    if (elementName[0] != ':') {
-      return [null, elementName];
-    }
-    var colonIndex = elementName.indexOf(':', 1);
-    if (colonIndex == -1) {
-      throw new Error("Unsupported format \"" + elementName + "\" expecting \":namespace:name\"");
-    }
-    return [elementName.slice(1, colonIndex), elementName.slice(colonIndex + 1)];
-  }
-  function getNsPrefix(fullName) {
-    return fullName === null ? null : splitNsName(fullName)[0];
-  }
-  function mergeNsAndName(prefix, localName) {
-    return prefix ? ":" + prefix + ":" + localName : localName;
-  }
-  var NAMED_ENTITIES = {
-    'Aacute': '\u00C1',
-    'aacute': '\u00E1',
-    'Acirc': '\u00C2',
-    'acirc': '\u00E2',
-    'acute': '\u00B4',
-    'AElig': '\u00C6',
-    'aelig': '\u00E6',
-    'Agrave': '\u00C0',
-    'agrave': '\u00E0',
-    'alefsym': '\u2135',
-    'Alpha': '\u0391',
-    'alpha': '\u03B1',
-    'amp': '&',
-    'and': '\u2227',
-    'ang': '\u2220',
-    'apos': '\u0027',
-    'Aring': '\u00C5',
-    'aring': '\u00E5',
-    'asymp': '\u2248',
-    'Atilde': '\u00C3',
-    'atilde': '\u00E3',
-    'Auml': '\u00C4',
-    'auml': '\u00E4',
-    'bdquo': '\u201E',
-    'Beta': '\u0392',
-    'beta': '\u03B2',
-    'brvbar': '\u00A6',
-    'bull': '\u2022',
-    'cap': '\u2229',
-    'Ccedil': '\u00C7',
-    'ccedil': '\u00E7',
-    'cedil': '\u00B8',
-    'cent': '\u00A2',
-    'Chi': '\u03A7',
-    'chi': '\u03C7',
-    'circ': '\u02C6',
-    'clubs': '\u2663',
-    'cong': '\u2245',
-    'copy': '\u00A9',
-    'crarr': '\u21B5',
-    'cup': '\u222A',
-    'curren': '\u00A4',
-    'dagger': '\u2020',
-    'Dagger': '\u2021',
-    'darr': '\u2193',
-    'dArr': '\u21D3',
-    'deg': '\u00B0',
-    'Delta': '\u0394',
-    'delta': '\u03B4',
-    'diams': '\u2666',
-    'divide': '\u00F7',
-    'Eacute': '\u00C9',
-    'eacute': '\u00E9',
-    'Ecirc': '\u00CA',
-    'ecirc': '\u00EA',
-    'Egrave': '\u00C8',
-    'egrave': '\u00E8',
-    'empty': '\u2205',
-    'emsp': '\u2003',
-    'ensp': '\u2002',
-    'Epsilon': '\u0395',
-    'epsilon': '\u03B5',
-    'equiv': '\u2261',
-    'Eta': '\u0397',
-    'eta': '\u03B7',
-    'ETH': '\u00D0',
-    'eth': '\u00F0',
-    'Euml': '\u00CB',
-    'euml': '\u00EB',
-    'euro': '\u20AC',
-    'exist': '\u2203',
-    'fnof': '\u0192',
-    'forall': '\u2200',
-    'frac12': '\u00BD',
-    'frac14': '\u00BC',
-    'frac34': '\u00BE',
-    'frasl': '\u2044',
-    'Gamma': '\u0393',
-    'gamma': '\u03B3',
-    'ge': '\u2265',
-    'gt': '>',
-    'harr': '\u2194',
-    'hArr': '\u21D4',
-    'hearts': '\u2665',
-    'hellip': '\u2026',
-    'Iacute': '\u00CD',
-    'iacute': '\u00ED',
-    'Icirc': '\u00CE',
-    'icirc': '\u00EE',
-    'iexcl': '\u00A1',
-    'Igrave': '\u00CC',
-    'igrave': '\u00EC',
-    'image': '\u2111',
-    'infin': '\u221E',
-    'int': '\u222B',
-    'Iota': '\u0399',
-    'iota': '\u03B9',
-    'iquest': '\u00BF',
-    'isin': '\u2208',
-    'Iuml': '\u00CF',
-    'iuml': '\u00EF',
-    'Kappa': '\u039A',
-    'kappa': '\u03BA',
-    'Lambda': '\u039B',
-    'lambda': '\u03BB',
-    'lang': '\u27E8',
-    'laquo': '\u00AB',
-    'larr': '\u2190',
-    'lArr': '\u21D0',
-    'lceil': '\u2308',
-    'ldquo': '\u201C',
-    'le': '\u2264',
-    'lfloor': '\u230A',
-    'lowast': '\u2217',
-    'loz': '\u25CA',
-    'lrm': '\u200E',
-    'lsaquo': '\u2039',
-    'lsquo': '\u2018',
-    'lt': '<',
-    'macr': '\u00AF',
-    'mdash': '\u2014',
-    'micro': '\u00B5',
-    'middot': '\u00B7',
-    'minus': '\u2212',
-    'Mu': '\u039C',
-    'mu': '\u03BC',
-    'nabla': '\u2207',
-    'nbsp': '\u00A0',
-    'ndash': '\u2013',
-    'ne': '\u2260',
-    'ni': '\u220B',
-    'not': '\u00AC',
-    'notin': '\u2209',
-    'nsub': '\u2284',
-    'Ntilde': '\u00D1',
-    'ntilde': '\u00F1',
-    'Nu': '\u039D',
-    'nu': '\u03BD',
-    'Oacute': '\u00D3',
-    'oacute': '\u00F3',
-    'Ocirc': '\u00D4',
-    'ocirc': '\u00F4',
-    'OElig': '\u0152',
-    'oelig': '\u0153',
-    'Ograve': '\u00D2',
-    'ograve': '\u00F2',
-    'oline': '\u203E',
-    'Omega': '\u03A9',
-    'omega': '\u03C9',
-    'Omicron': '\u039F',
-    'omicron': '\u03BF',
-    'oplus': '\u2295',
-    'or': '\u2228',
-    'ordf': '\u00AA',
-    'ordm': '\u00BA',
-    'Oslash': '\u00D8',
-    'oslash': '\u00F8',
-    'Otilde': '\u00D5',
-    'otilde': '\u00F5',
-    'otimes': '\u2297',
-    'Ouml': '\u00D6',
-    'ouml': '\u00F6',
-    'para': '\u00B6',
-    'permil': '\u2030',
-    'perp': '\u22A5',
-    'Phi': '\u03A6',
-    'phi': '\u03C6',
-    'Pi': '\u03A0',
-    'pi': '\u03C0',
-    'piv': '\u03D6',
-    'plusmn': '\u00B1',
-    'pound': '\u00A3',
-    'prime': '\u2032',
-    'Prime': '\u2033',
-    'prod': '\u220F',
-    'prop': '\u221D',
-    'Psi': '\u03A8',
-    'psi': '\u03C8',
-    'quot': '\u0022',
-    'radic': '\u221A',
-    'rang': '\u27E9',
-    'raquo': '\u00BB',
-    'rarr': '\u2192',
-    'rArr': '\u21D2',
-    'rceil': '\u2309',
-    'rdquo': '\u201D',
-    'real': '\u211C',
-    'reg': '\u00AE',
-    'rfloor': '\u230B',
-    'Rho': '\u03A1',
-    'rho': '\u03C1',
-    'rlm': '\u200F',
-    'rsaquo': '\u203A',
-    'rsquo': '\u2019',
-    'sbquo': '\u201A',
-    'Scaron': '\u0160',
-    'scaron': '\u0161',
-    'sdot': '\u22C5',
-    'sect': '\u00A7',
-    'shy': '\u00AD',
-    'Sigma': '\u03A3',
-    'sigma': '\u03C3',
-    'sigmaf': '\u03C2',
-    'sim': '\u223C',
-    'spades': '\u2660',
-    'sub': '\u2282',
-    'sube': '\u2286',
-    'sum': '\u2211',
-    'sup': '\u2283',
-    'sup1': '\u00B9',
-    'sup2': '\u00B2',
-    'sup3': '\u00B3',
-    'supe': '\u2287',
-    'szlig': '\u00DF',
-    'Tau': '\u03A4',
-    'tau': '\u03C4',
-    'there4': '\u2234',
-    'Theta': '\u0398',
-    'theta': '\u03B8',
-    'thetasym': '\u03D1',
-    'thinsp': '\u2009',
-    'THORN': '\u00DE',
-    'thorn': '\u00FE',
-    'tilde': '\u02DC',
-    'times': '\u00D7',
-    'trade': '\u2122',
-    'Uacute': '\u00DA',
-    'uacute': '\u00FA',
-    'uarr': '\u2191',
-    'uArr': '\u21D1',
-    'Ucirc': '\u00DB',
-    'ucirc': '\u00FB',
-    'Ugrave': '\u00D9',
-    'ugrave': '\u00F9',
-    'uml': '\u00A8',
-    'upsih': '\u03D2',
-    'Upsilon': '\u03A5',
-    'upsilon': '\u03C5',
-    'Uuml': '\u00DC',
-    'uuml': '\u00FC',
-    'weierp': '\u2118',
-    'Xi': '\u039E',
-    'xi': '\u03BE',
-    'Yacute': '\u00DD',
-    'yacute': '\u00FD',
-    'yen': '\u00A5',
-    'yuml': '\u00FF',
-    'Yuml': '\u0178',
-    'Zeta': '\u0396',
-    'zeta': '\u03B6',
-    'zwj': '\u200D',
-    'zwnj': '\u200C'
-  };
   var __extends$5 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
@@ -13230,7 +13373,7 @@ var define = System.amdDefine;
         value = valueToken.parts[0];
         end = valueToken.sourceSpan.end;
       }
-      return new Attribute(fullName, value, new ParseSourceSpan(attrName.sourceSpan.start, end));
+      return new Attribute$1(fullName, value, new ParseSourceSpan(attrName.sourceSpan.start, end));
     };
     _TreeBuilder.prototype._getParentElement = function() {
       return this._elementStack.length > 0 ? ListWrapper.last(this._elementStack) : null;
@@ -13525,150 +13668,6 @@ var define = System.amdDefine;
     };
     return IcuPlaceholder;
   }());
-  var HtmlTagDefinition = (function() {
-    function HtmlTagDefinition(_a) {
-      var _this = this;
-      var _b = _a === void 0 ? {} : _a,
-          closedByChildren = _b.closedByChildren,
-          requiredParents = _b.requiredParents,
-          implicitNamespacePrefix = _b.implicitNamespacePrefix,
-          _c = _b.contentType,
-          contentType = _c === void 0 ? TagContentType.PARSABLE_DATA : _c,
-          _d = _b.closedByParent,
-          closedByParent = _d === void 0 ? false : _d,
-          _e = _b.isVoid,
-          isVoid = _e === void 0 ? false : _e,
-          _f = _b.ignoreFirstLf,
-          ignoreFirstLf = _f === void 0 ? false : _f;
-      this.closedByChildren = {};
-      this.closedByParent = false;
-      this.canSelfClose = false;
-      if (closedByChildren && closedByChildren.length > 0) {
-        closedByChildren.forEach(function(tagName) {
-          return _this.closedByChildren[tagName] = true;
-        });
-      }
-      this.isVoid = isVoid;
-      this.closedByParent = closedByParent || isVoid;
-      if (requiredParents && requiredParents.length > 0) {
-        this.requiredParents = {};
-        this.parentToAdd = requiredParents[0];
-        requiredParents.forEach(function(tagName) {
-          return _this.requiredParents[tagName] = true;
-        });
-      }
-      this.implicitNamespacePrefix = implicitNamespacePrefix;
-      this.contentType = contentType;
-      this.ignoreFirstLf = ignoreFirstLf;
-    }
-    HtmlTagDefinition.prototype.requireExtraParent = function(currentParent) {
-      if (!this.requiredParents) {
-        return false;
-      }
-      if (!currentParent) {
-        return true;
-      }
-      var lcParent = currentParent.toLowerCase();
-      return this.requiredParents[lcParent] != true && lcParent != 'template';
-    };
-    HtmlTagDefinition.prototype.isClosedByChild = function(name) {
-      return this.isVoid || name.toLowerCase() in this.closedByChildren;
-    };
-    return HtmlTagDefinition;
-  }());
-  var TAG_DEFINITIONS = {
-    'base': new HtmlTagDefinition({isVoid: true}),
-    'meta': new HtmlTagDefinition({isVoid: true}),
-    'area': new HtmlTagDefinition({isVoid: true}),
-    'embed': new HtmlTagDefinition({isVoid: true}),
-    'link': new HtmlTagDefinition({isVoid: true}),
-    'img': new HtmlTagDefinition({isVoid: true}),
-    'input': new HtmlTagDefinition({isVoid: true}),
-    'param': new HtmlTagDefinition({isVoid: true}),
-    'hr': new HtmlTagDefinition({isVoid: true}),
-    'br': new HtmlTagDefinition({isVoid: true}),
-    'source': new HtmlTagDefinition({isVoid: true}),
-    'track': new HtmlTagDefinition({isVoid: true}),
-    'wbr': new HtmlTagDefinition({isVoid: true}),
-    'p': new HtmlTagDefinition({
-      closedByChildren: ['address', 'article', 'aside', 'blockquote', 'div', 'dl', 'fieldset', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'main', 'nav', 'ol', 'p', 'pre', 'section', 'table', 'ul'],
-      closedByParent: true
-    }),
-    'thead': new HtmlTagDefinition({closedByChildren: ['tbody', 'tfoot']}),
-    'tbody': new HtmlTagDefinition({
-      closedByChildren: ['tbody', 'tfoot'],
-      closedByParent: true
-    }),
-    'tfoot': new HtmlTagDefinition({
-      closedByChildren: ['tbody'],
-      closedByParent: true
-    }),
-    'tr': new HtmlTagDefinition({
-      closedByChildren: ['tr'],
-      requiredParents: ['tbody', 'tfoot', 'thead'],
-      closedByParent: true
-    }),
-    'td': new HtmlTagDefinition({
-      closedByChildren: ['td', 'th'],
-      closedByParent: true
-    }),
-    'th': new HtmlTagDefinition({
-      closedByChildren: ['td', 'th'],
-      closedByParent: true
-    }),
-    'col': new HtmlTagDefinition({
-      requiredParents: ['colgroup'],
-      isVoid: true
-    }),
-    'svg': new HtmlTagDefinition({implicitNamespacePrefix: 'svg'}),
-    'math': new HtmlTagDefinition({implicitNamespacePrefix: 'math'}),
-    'li': new HtmlTagDefinition({
-      closedByChildren: ['li'],
-      closedByParent: true
-    }),
-    'dt': new HtmlTagDefinition({closedByChildren: ['dt', 'dd']}),
-    'dd': new HtmlTagDefinition({
-      closedByChildren: ['dt', 'dd'],
-      closedByParent: true
-    }),
-    'rb': new HtmlTagDefinition({
-      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
-      closedByParent: true
-    }),
-    'rt': new HtmlTagDefinition({
-      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
-      closedByParent: true
-    }),
-    'rtc': new HtmlTagDefinition({
-      closedByChildren: ['rb', 'rtc', 'rp'],
-      closedByParent: true
-    }),
-    'rp': new HtmlTagDefinition({
-      closedByChildren: ['rb', 'rt', 'rtc', 'rp'],
-      closedByParent: true
-    }),
-    'optgroup': new HtmlTagDefinition({
-      closedByChildren: ['optgroup'],
-      closedByParent: true
-    }),
-    'option': new HtmlTagDefinition({
-      closedByChildren: ['option', 'optgroup'],
-      closedByParent: true
-    }),
-    'pre': new HtmlTagDefinition({ignoreFirstLf: true}),
-    'listing': new HtmlTagDefinition({ignoreFirstLf: true}),
-    'style': new HtmlTagDefinition({contentType: TagContentType.RAW_TEXT}),
-    'script': new HtmlTagDefinition({contentType: TagContentType.RAW_TEXT}),
-    'title': new HtmlTagDefinition({contentType: TagContentType.ESCAPABLE_RAW_TEXT}),
-    'textarea': new HtmlTagDefinition({
-      contentType: TagContentType.ESCAPABLE_RAW_TEXT,
-      ignoreFirstLf: true
-    })
-  };
-  var _DEFAULT_TAG_DEFINITION = new HtmlTagDefinition();
-  function getHtmlTagDefinition(tagName) {
-    return TAG_DEFINITIONS[tagName.toLowerCase()] || _DEFAULT_TAG_DEFINITION;
-  }
   var TAG_TO_PLACEHOLDER_NAMES = {
     'A': 'LINK',
     'B': 'BOLD_TEXT',
@@ -14095,7 +14094,7 @@ var define = System.amdDefine;
       });
     };
     _Visitor.prototype._addMessage = function(ast, meaningAndDesc) {
-      if (ast.length == 0 || ast.length == 1 && ast[0] instanceof Attribute && !ast[0].value) {
+      if (ast.length == 0 || ast.length == 1 && ast[0] instanceof Attribute$1 && !ast[0].value) {
         return;
       }
       var _a = _splitMeaningAndDesc(meaningAndDesc),
@@ -14138,7 +14137,7 @@ var define = System.amdDefine;
           if (nodes) {
             if (nodes[0] instanceof Text) {
               var value = nodes[0].value;
-              translatedAttributes.push(new Attribute(attr.name, value, attr.sourceSpan));
+              translatedAttributes.push(new Attribute$1(attr.name, value, attr.sourceSpan));
             } else {
               _this._reportError(el, "Unexpected translation for attribute \"" + attr.name + "\" (id=\"" + id + "\")");
             }
@@ -14916,6 +14915,7 @@ var define = System.amdDefine;
   var AppView = _angular_core.__core_private__.AppView;
   var DebugAppView = _angular_core.__core_private__.DebugAppView;
   var NgModuleInjector = _angular_core.__core_private__.NgModuleInjector;
+  var registerModuleFactory = _angular_core.__core_private__.registerModuleFactory;
   var ViewType = _angular_core.__core_private__.ViewType;
   var MAX_INTERPOLATION_VALUES = _angular_core.__core_private__.MAX_INTERPOLATION_VALUES;
   var checkBinding = _angular_core.__core_private__.checkBinding;
@@ -15051,6 +15051,11 @@ var define = System.amdDefine;
       name: 'NgModuleInjector',
       runtime: NgModuleInjector,
       moduleUrl: assetUrl('core', 'linker/ng_module_factory')
+    };
+    Identifiers.RegisterModuleFactoryFn = {
+      name: 'registerModuleFactory',
+      runtime: registerModuleFactory,
+      moduleUrl: assetUrl('core', 'linker/ng_module_factory_loader')
     };
     Identifiers.ValueUnwrapper = {
       name: 'ValueUnwrapper',
@@ -15365,18 +15370,18 @@ var define = System.amdDefine;
       }
       var expansionResult = expandNodes(c.expression);
       errors.push.apply(errors, expansionResult.errors);
-      return new Element("template", [new Attribute('ngPluralCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
+      return new Element("template", [new Attribute$1('ngPluralCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
     });
-    var switchAttr = new Attribute('[ngPlural]', ast.switchValue, ast.switchValueSourceSpan);
+    var switchAttr = new Attribute$1('[ngPlural]', ast.switchValue, ast.switchValueSourceSpan);
     return new Element('ng-container', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
   }
   function _expandDefaultForm(ast, errors) {
     var children = ast.cases.map(function(c) {
       var expansionResult = expandNodes(c.expression);
       errors.push.apply(errors, expansionResult.errors);
-      return new Element("template", [new Attribute('ngSwitchCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
+      return new Element("template", [new Attribute$1('ngSwitchCase', "" + c.value, c.valueSourceSpan)], expansionResult.nodes, c.sourceSpan, c.sourceSpan, c.sourceSpan);
     });
-    var switchAttr = new Attribute('[ngSwitch]', ast.switchValue, ast.switchValueSourceSpan);
+    var switchAttr = new Attribute$1('[ngSwitch]', ast.switchValue, ast.switchValueSourceSpan);
     return new Element('ng-container', [switchAttr], children, ast.sourceSpan, ast.sourceSpan, ast.sourceSpan);
   }
   var __extends$10 = (this && this.__extends) || function(d, b) {
@@ -17189,8 +17194,8 @@ var define = System.amdDefine;
     if (errors.length == 0) {
       _fillAnimationAstStartingKeyframes(animationAst, styles, errors);
     }
-    var sequenceAst = (animationAst instanceof AnimationSequenceAst) ? animationAst : new AnimationSequenceAst([animationAst]);
-    return new AnimationStateTransitionAst(transitionExprs, sequenceAst);
+    var stepsAst = (animationAst instanceof AnimationWithStepsAst) ? animationAst : new AnimationSequenceAst([animationAst]);
+    return new AnimationStateTransitionAst(transitionExprs, stepsAst);
   }
   function _parseAnimationTransitionExpr(eventStr, errors) {
     var expressions = [];
@@ -17225,7 +17230,7 @@ var define = System.amdDefine;
   }
   function _normalizeStyleSteps(entry, stateStyles, errors) {
     var steps = _normalizeStyleStepEntry(entry, stateStyles, errors);
-    return new CompileAnimationSequenceMetadata(steps);
+    return (entry instanceof CompileAnimationGroupMetadata) ? new CompileAnimationGroupMetadata(steps) : new CompileAnimationSequenceMetadata(steps);
   }
   function _mergeAnimationStyles(stylesList, newItem) {
     if (isStringMap(newItem) && stylesList.length > 0) {
@@ -17487,7 +17492,7 @@ var define = System.amdDefine;
         errors.push(new AnimationParseError("The provided timing value \"" + exp + "\" is invalid."));
         return new _AnimationTimings(0, 0, null);
       }
-      var durationMatch = NumberWrapper.parseFloat(matches[1]);
+      var durationMatch = parseFloat(matches[1]);
       var durationUnit = matches[2];
       if (durationUnit == 's') {
         durationMatch *= _ONE_SECOND;
@@ -17496,7 +17501,7 @@ var define = System.amdDefine;
       var delayMatch = matches[3];
       var delayUnit = matches[4];
       if (isPresent(delayMatch)) {
-        var delayVal = NumberWrapper.parseFloat(delayMatch);
+        var delayVal = parseFloat(delayMatch);
         if (isPresent(delayUnit) && delayUnit == 's') {
           delayVal *= _ONE_SECOND;
         }
@@ -18656,6 +18661,7 @@ var define = System.amdDefine;
       this.literalMapCount = 0;
       this.pipeCount = 0;
       this.createMethod = new CompileMethod(this);
+      this.animationBindingsMethod = new CompileMethod(this);
       this.injectorGetMethod = new CompileMethod(this);
       this.updateContentQueriesMethod = new CompileMethod(this);
       this.dirtyParentQueriesMethod = new CompileMethod(this);
@@ -19396,7 +19402,6 @@ var define = System.amdDefine;
   function createCurrValueExpr(exprIndex) {
     return variable("currVal_" + exprIndex);
   }
-  var _animationViewCheckedFlagMap = new Map();
   function bind(view, currValExpr, fieldExpr, parsedExpression, context, actions, method, bindingIndex) {
     var checkExpression = convertCdExpressionToIr(view, context, parsedExpression, DetectChangesVars.valUnwrapper, bindingIndex);
     if (isBlank(checkExpression.expression)) {
@@ -19441,6 +19446,7 @@ var define = System.amdDefine;
       var oldRenderValue = sanitizedValue(boundProp, fieldExpr);
       var renderValue = sanitizedValue(boundProp, currValExpr);
       var updateStmts = [];
+      var compileMethod = view.detectChangesRenderPropertiesMethod;
       switch (boundProp.type) {
         case exports.PropertyBindingType.Property:
           if (view.genConfig.logBindingUpdate) {
@@ -19469,6 +19475,7 @@ var define = System.amdDefine;
           if (isHostProp) {
             targetViewExpr = compileElement.appElement.prop('componentView');
           }
+          compileMethod = view.animationBindingsMethod;
           var animationFnExpr = targetViewExpr.prop('componentType').prop('animations').key(literal(animationName));
           var emptyStateValue = literal(EMPTY_ANIMATION_STATE);
           var oldRenderVar = variable('oldRenderVar');
@@ -19479,15 +19486,9 @@ var define = System.amdDefine;
           updateStmts.push(new IfStmt(newRenderVar.equals(importExpr(resolveIdentifier(Identifiers.UNINITIALIZED))), [newRenderVar.set(emptyStateValue).toStmt()]));
           updateStmts.push(animationFnExpr.callFn([THIS_EXPR, renderNode, oldRenderVar, newRenderVar]).toStmt());
           view.detachMethod.addStmt(animationFnExpr.callFn([THIS_EXPR, renderNode, oldRenderValue, emptyStateValue]).toStmt());
-          if (!_animationViewCheckedFlagMap.get(view)) {
-            _animationViewCheckedFlagMap.set(view, true);
-            var triggerStmt = THIS_EXPR.callMethod('triggerQueuedAnimations', []).toStmt();
-            view.afterViewLifecycleCallbacksMethod.addStmt(triggerStmt);
-            view.detachMethod.addStmt(triggerStmt);
-          }
           break;
       }
-      bind(view, currValExpr, fieldExpr, boundProp.value, context, updateStmts, view.detectChangesRenderPropertiesMethod, view.bindings.length);
+      bind(view, currValExpr, fieldExpr, boundProp.value, context, updateStmts, compileMethod, view.bindings.length);
     });
   }
   function sanitizedValue(boundProp, renderValue) {
@@ -20027,9 +20028,10 @@ var define = System.amdDefine;
   }
   function generateDetectChangesMethod(view) {
     var stmts = [];
-    if (view.detectChangesInInputsMethod.isEmpty() && view.updateContentQueriesMethod.isEmpty() && view.afterContentLifecycleCallbacksMethod.isEmpty() && view.detectChangesRenderPropertiesMethod.isEmpty() && view.updateViewQueriesMethod.isEmpty() && view.afterViewLifecycleCallbacksMethod.isEmpty()) {
+    if (view.animationBindingsMethod.isEmpty() && view.detectChangesInInputsMethod.isEmpty() && view.updateContentQueriesMethod.isEmpty() && view.afterContentLifecycleCallbacksMethod.isEmpty() && view.detectChangesRenderPropertiesMethod.isEmpty() && view.updateViewQueriesMethod.isEmpty() && view.afterViewLifecycleCallbacksMethod.isEmpty()) {
       return stmts;
     }
+    ListWrapper.addAll(stmts, view.animationBindingsMethod.finish());
     ListWrapper.addAll(stmts, view.detectChangesInInputsMethod.finish());
     stmts.push(THIS_EXPR.callMethod('detectContentChildrenChanges', [DetectChangesVars.throwOnChange]).toStmt());
     var afterContentStmts = view.updateContentQueriesMethod.finish().concat(view.afterContentLifecycleCallbacksMethod.finish());
@@ -20670,7 +20672,7 @@ var define = System.amdDefine;
     });
   }
   function _isDirectiveMetadata(type) {
-    return type instanceof _angular_core.DirectiveMetadata;
+    return type instanceof _angular_core.Directive;
   }
   var DirectiveResolver = (function() {
     function DirectiveResolver(_reflector) {
@@ -20703,28 +20705,31 @@ var define = System.amdDefine;
       var queries = {};
       StringMapWrapper.forEach(propertyMetadata, function(metadata, propName) {
         metadata.forEach(function(a) {
-          if (a instanceof _angular_core.InputMetadata) {
+          if (a instanceof _angular_core.Input) {
             if (isPresent(a.bindingPropertyName)) {
               inputs.push(propName + ": " + a.bindingPropertyName);
             } else {
               inputs.push(propName);
             }
-          } else if (a instanceof _angular_core.OutputMetadata) {
-            if (isPresent(a.bindingPropertyName)) {
-              outputs.push(propName + ": " + a.bindingPropertyName);
+          } else if (a instanceof _angular_core.Output) {
+            var output = a;
+            if (isPresent(output.bindingPropertyName)) {
+              outputs.push(propName + ": " + output.bindingPropertyName);
             } else {
               outputs.push(propName);
             }
-          } else if (a instanceof _angular_core.HostBindingMetadata) {
-            if (isPresent(a.hostPropertyName)) {
-              host[("[" + a.hostPropertyName + "]")] = propName;
+          } else if (a instanceof _angular_core.HostBinding) {
+            var hostBinding = a;
+            if (isPresent(hostBinding.hostPropertyName)) {
+              host[("[" + hostBinding.hostPropertyName + "]")] = propName;
             } else {
               host[("[" + propName + "]")] = propName;
             }
-          } else if (a instanceof _angular_core.HostListenerMetadata) {
-            var args = isPresent(a.args) ? a.args.join(', ') : '';
-            host[("(" + a.eventName + ")")] = propName + "(" + args + ")";
-          } else if (a instanceof _angular_core.QueryMetadata) {
+          } else if (a instanceof _angular_core.HostListener) {
+            var hostListener = a;
+            var args = isPresent(hostListener.args) ? hostListener.args.join(', ') : '';
+            host[("(" + hostListener.eventName + ")")] = propName + "(" + args + ")";
+          } else if (a instanceof _angular_core.Query) {
             queries[propName] = a;
           }
         });
@@ -20768,8 +20773,8 @@ var define = System.amdDefine;
       }
       var mergedHost = isPresent(dm.host) ? StringMapWrapper.merge(dm.host, host) : host;
       var mergedQueries = isPresent(dm.queries) ? StringMapWrapper.merge(dm.queries, queries) : queries;
-      if (dm instanceof _angular_core.ComponentMetadata) {
-        return new _angular_core.ComponentMetadata({
+      if (dm instanceof _angular_core.Component) {
+        return new _angular_core.Component({
           selector: dm.selector,
           inputs: mergedInputs,
           outputs: mergedOutputs,
@@ -20790,7 +20795,7 @@ var define = System.amdDefine;
           interpolation: dm.interpolation
         });
       } else {
-        return new _angular_core.DirectiveMetadata({
+        return new _angular_core.Directive({
           selector: dm.selector,
           inputs: mergedInputs,
           outputs: mergedOutputs,
@@ -20813,7 +20818,7 @@ var define = System.amdDefine;
     return reflector.hasLifecycleHook(token, lcInterface, lcProp);
   }
   function _isNgModuleMetadata(obj) {
-    return obj instanceof _angular_core.NgModuleMetadata;
+    return obj instanceof _angular_core.NgModule;
   }
   var NgModuleResolver = (function() {
     function NgModuleResolver(_reflector) {
@@ -20841,7 +20846,7 @@ var define = System.amdDefine;
     return NgModuleResolver;
   }());
   function _isPipeMetadata(type) {
-    return type instanceof _angular_core.PipeMetadata;
+    return type instanceof _angular_core.Pipe;
   }
   var PipeResolver = (function() {
     function PipeResolver(_reflector) {
@@ -20980,7 +20985,7 @@ var define = System.amdDefine;
         var moduleUrl = staticTypeModuleUrl(directiveType);
         var entryComponentMetadata = [];
         var selector = dirMeta.selector;
-        if (dirMeta instanceof _angular_core.ComponentMetadata) {
+        if (dirMeta instanceof _angular_core.Component) {
           var cmpMeta = dirMeta;
           assertArrayOfStrings('styles', cmpMeta.styles);
           assertInterpolationSymbols('interpolation', cmpMeta.interpolation);
@@ -21136,9 +21141,13 @@ var define = System.amdDefine;
           }));
         }
         if (meta.bootstrap) {
-          bootstrapComponents.push.apply(bootstrapComponents, flattenArray(meta.bootstrap).map(function(type) {
+          var typeMetadata = flattenArray(meta.bootstrap).map(function(type) {
+            if (!isValidType(type)) {
+              throw new Error("Unexpected value '" + stringify(type) + "' used in the bootstrap property of module '" + stringify(moduleType) + "'");
+            }
             return _this.getTypeMetadata(type, staticTypeModuleUrl(type));
-          }));
+          });
+          bootstrapComponents.push.apply(bootstrapComponents, typeMetadata);
         }
         entryComponents_1.push.apply(entryComponents_1, bootstrapComponents);
         if (meta.schemas) {
@@ -21158,7 +21167,8 @@ var define = System.amdDefine;
           exportedPipes: exportedPipes_1,
           importedModules: importedModules_1,
           exportedModules: exportedModules_1,
-          transitiveModule: transitiveModule_1
+          transitiveModule: transitiveModule_1,
+          id: meta.id
         });
         transitiveModule_1.modules.push(compileMeta);
         this._verifyModule(compileMeta);
@@ -21196,7 +21206,7 @@ var define = System.amdDefine;
     CompileMetadataResolver.prototype._addTypeToModule = function(type, moduleType) {
       var oldModule = this._ngModuleOfTypes.get(type);
       if (oldModule && oldModule !== moduleType) {
-        throw new Error("Type " + stringify(type) + " is part of the declarations of 2 modules: " + stringify(oldModule) + " and " + stringify(moduleType) + "!");
+        throw new Error(("Type " + stringify(type) + " is part of the declarations of 2 modules: " + stringify(oldModule) + " and " + stringify(moduleType) + "! ") + ("Please consider moving " + stringify(type) + " to a higher module that imports " + stringify(oldModule) + " and " + stringify(moduleType) + ". ") + ("You can also create a new NgModule that exports and includes " + stringify(type) + " then import that NgModule in " + stringify(oldModule) + " and " + stringify(moduleType) + "."));
       }
       this._ngModuleOfTypes.set(type, moduleType);
     };
@@ -21308,24 +21318,24 @@ var define = System.amdDefine;
         var token = null;
         if (isArray(param)) {
           param.forEach(function(paramEntry) {
-            if (paramEntry instanceof _angular_core.HostMetadata) {
+            if (paramEntry instanceof _angular_core.Host) {
               isHost = true;
-            } else if (paramEntry instanceof _angular_core.SelfMetadata) {
+            } else if (paramEntry instanceof _angular_core.Self) {
               isSelf = true;
-            } else if (paramEntry instanceof _angular_core.SkipSelfMetadata) {
+            } else if (paramEntry instanceof _angular_core.SkipSelf) {
               isSkipSelf = true;
-            } else if (paramEntry instanceof _angular_core.OptionalMetadata) {
+            } else if (paramEntry instanceof _angular_core.Optional) {
               isOptional = true;
-            } else if (paramEntry instanceof _angular_core.AttributeMetadata) {
+            } else if (paramEntry instanceof _angular_core.Attribute) {
               isAttribute = true;
               token = paramEntry.attributeName;
-            } else if (paramEntry instanceof _angular_core.QueryMetadata) {
+            } else if (paramEntry instanceof _angular_core.Query) {
               if (paramEntry.isViewQuery) {
                 viewQuery = paramEntry;
               } else {
                 query = paramEntry;
               }
-            } else if (paramEntry instanceof _angular_core.InjectMetadata) {
+            } else if (paramEntry instanceof _angular_core.Inject) {
               token = paramEntry.token;
             } else if (isValidType(paramEntry) && isBlank(token)) {
               token = paramEntry;
@@ -21460,11 +21470,14 @@ var define = System.amdDefine;
       });
       return res;
     };
+    CompileMetadataResolver.prototype._queryVarBindings = function(selector) {
+      return StringWrapper.split(selector, /\s*,\s*/g);
+    };
     CompileMetadataResolver.prototype.getQueryMetadata = function(q, propertyName, typeOrFunc) {
       var _this = this;
       var selectors;
-      if (q.isVarBindingQuery) {
-        selectors = q.varBindings.map(function(varName) {
+      if (isString(q.selector)) {
+        selectors = this._queryVarBindings(q.selector).map(function(varName) {
           return _this.getTokenMetadata(varName);
         });
       } else {
@@ -21598,7 +21611,12 @@ var define = System.amdDefine;
       var injectorClass = builder.build();
       var ngModuleFactoryVar = ngModuleMeta.type.name + "NgFactory";
       var ngModuleFactoryStmt = variable(ngModuleFactoryVar).set(importExpr(resolveIdentifier(Identifiers.NgModuleFactory)).instantiate([variable(injectorClass.name), importExpr(ngModuleMeta.type)], importType(resolveIdentifier(Identifiers.NgModuleFactory), [importType(ngModuleMeta.type)], [TypeModifier.Const]))).toDeclStmt(null, [StmtModifier.Final]);
-      return new NgModuleCompileResult([injectorClass, ngModuleFactoryStmt], ngModuleFactoryVar, deps);
+      var stmts = [injectorClass, ngModuleFactoryStmt];
+      if (ngModuleMeta.id) {
+        var registerFactoryStmt = importExpr(resolveIdentifier(Identifiers.RegisterModuleFactoryFn)).callFn([literal(ngModuleMeta.id), variable(ngModuleFactoryVar)]).toStmt();
+        stmts.push(registerFactoryStmt);
+      }
+      return new NgModuleCompileResult(stmts, ngModuleFactoryVar, deps);
     };
     NgModuleCompiler.decorators = [{type: _angular_core.Injectable}];
     NgModuleCompiler.ctorParameters = [];
@@ -23218,10 +23236,10 @@ var define = System.amdDefine;
       return '';
     });
   }
-  var _sourceMappingUrlRe = /[\s\S]*(\/\*\s*#\s*sourceMappingURL=[\s\S]+?\*\/)\s*$/;
+  var _sourceMappingUrlRe = /\/\*\s*#\s*sourceMappingURL=[\s\S]+?\*\//;
   function extractSourceMappingUrl(input) {
     var matcher = input.match(_sourceMappingUrlRe);
-    return matcher ? matcher[1] : '';
+    return matcher ? matcher[0] : '';
   }
   var _ruleRe = /(\s*)([^;\{\}]+?)(\s*)((?:{%BLOCK%}?\s*;?)|(?:\s*;))/g;
   var _curlyRe = /([{}])/g;
@@ -23732,7 +23750,7 @@ var define = System.amdDefine;
   var NUMBER = 'number';
   var STRING = 'string';
   var OBJECT = 'object';
-  var SCHEMA = (['*|textContent,%classList,className,id,innerHTML,*beforecopy,*beforecut,*beforepaste,*copy,*cut,*paste,*search,*selectstart,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerHTML,#scrollLeft,#scrollTop', 'abbr,address,article,aside,b,bdi,bdo,cite,code,dd,dfn,dt,em,figcaption,figure,footer,header,i,kbd,main,mark,nav,noscript,rb,rp,rt,rtc,ruby,s,samp,section,small,strong,sub,sup,u,var,wbr^*|accessKey,contentEditable,dir,!draggable,!hidden,innerText,lang,*abort,*beforecopy,*beforecut,*beforepaste,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*copy,*cuechange,*cut,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*message,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*mozfullscreenchange,*mozfullscreenerror,*mozpointerlockchange,*mozpointerlockerror,*paste,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*search,*seeked,*seeking,*select,*selectstart,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,*webglcontextcreationerror,*webglcontextlost,*webglcontextrestored,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerText,!spellcheck,%style,#tabIndex,title,!translate', 'media^abbr|!autoplay,!controls,%crossOrigin,#currentTime,!defaultMuted,#defaultPlaybackRate,!disableRemotePlayback,!loop,!muted,*encrypted,#playbackRate,preload,src,%srcObject,#volume', ':svg:^abbr|*abort,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*cuechange,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*seeked,*seeking,*select,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,%style,#tabIndex', ':svg:graphics^:svg:|', ':svg:animation^:svg:|*begin,*end,*repeat', ':svg:geometry^:svg:|', ':svg:componentTransferFunction^:svg:|', ':svg:gradient^:svg:|', ':svg:textContent^:svg:graphics|', ':svg:textPositioning^:svg:textContent|', 'abbr^*|accessKey,contentEditable,dir,!draggable,!hidden,innerText,lang,*abort,*beforecopy,*beforecut,*beforepaste,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*copy,*cuechange,*cut,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*message,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*mozfullscreenchange,*mozfullscreenerror,*mozpointerlockchange,*mozpointerlockerror,*paste,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*search,*seeked,*seeking,*select,*selectstart,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,*webglcontextcreationerror,*webglcontextlost,*webglcontextrestored,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerText,!spellcheck,%style,#tabIndex,title,!translate', 'a^abbr|charset,coords,download,hash,host,hostname,href,hreflang,name,password,pathname,ping,port,protocol,referrerPolicy,rel,rev,search,shape,target,text,type,username', 'area^abbr|alt,coords,hash,host,hostname,href,!noHref,password,pathname,ping,port,protocol,referrerPolicy,search,shape,target,username', 'audio^media|', 'br^abbr|clear', 'base^abbr|href,target', 'body^abbr|aLink,background,bgColor,link,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,text,vLink', 'button^abbr|!autofocus,!disabled,formAction,formEnctype,formMethod,!formNoValidate,formTarget,name,type,value', 'canvas^abbr|#height,#width', 'content^abbr|select', 'dl^abbr|!compact', 'datalist^abbr|', 'details^abbr|!open', 'dialog^abbr|!open,returnValue', 'dir^abbr|!compact', 'div^abbr|align', 'embed^abbr|align,height,name,src,type,width', 'fieldset^abbr|!disabled,name', 'font^abbr|color,face,size', 'form^abbr|acceptCharset,action,autocomplete,encoding,enctype,method,name,!noValidate,target', 'frame^abbr|frameBorder,longDesc,marginHeight,marginWidth,name,!noResize,scrolling,src', 'frameset^abbr|cols,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,rows', 'hr^abbr|align,color,!noShade,size,width', 'head^abbr|', 'h1,h2,h3,h4,h5,h6^abbr|align', 'html^abbr|version', 'iframe^abbr|align,!allowFullscreen,frameBorder,height,longDesc,marginHeight,marginWidth,name,referrerPolicy,%sandbox,scrolling,src,srcdoc,width', 'img^abbr|align,alt,border,%crossOrigin,#height,#hspace,!isMap,longDesc,lowsrc,name,referrerPolicy,sizes,src,srcset,useMap,#vspace,#width', 'input^abbr|accept,align,alt,autocapitalize,autocomplete,!autofocus,!checked,!defaultChecked,defaultValue,dirName,!disabled,%files,formAction,formEnctype,formMethod,!formNoValidate,formTarget,#height,!incremental,!indeterminate,max,#maxLength,min,#minLength,!multiple,name,pattern,placeholder,!readOnly,!required,selectionDirection,#selectionEnd,#selectionStart,#size,src,step,type,useMap,value,%valueAsDate,#valueAsNumber,#width', 'keygen^abbr|!autofocus,challenge,!disabled,keytype,name', 'li^abbr|type,#value', 'label^abbr|htmlFor', 'legend^abbr|align', 'link^abbr|as,charset,%crossOrigin,!disabled,href,hreflang,integrity,media,rel,%relList,rev,%sizes,target,type', 'map^abbr|name', 'marquee^abbr|behavior,bgColor,direction,height,#hspace,#loop,#scrollAmount,#scrollDelay,!trueSpeed,#vspace,width', 'menu^abbr|!compact', 'meta^abbr|content,httpEquiv,name,scheme', 'meter^abbr|#high,#low,#max,#min,#optimum,#value', 'ins,del^abbr|cite,dateTime', 'ol^abbr|!compact,!reversed,#start,type', 'object^abbr|align,archive,border,code,codeBase,codeType,data,!declare,height,#hspace,name,standby,type,useMap,#vspace,width', 'optgroup^abbr|!disabled,label', 'option^abbr|!defaultSelected,!disabled,label,!selected,text,value', 'output^abbr|defaultValue,%htmlFor,name,value', 'p^abbr|align', 'param^abbr|name,type,value,valueType', 'picture^abbr|', 'pre^abbr|#width', 'progress^abbr|#max,#value', 'q,blockquote,cite^abbr|', 'script^abbr|!async,charset,%crossOrigin,!defer,event,htmlFor,integrity,src,text,type', 'select^abbr|!autofocus,!disabled,#length,!multiple,name,!required,#selectedIndex,#size,value', 'shadow^abbr|', 'source^abbr|media,sizes,src,srcset,type', 'span^abbr|', 'style^abbr|!disabled,media,type', 'caption^abbr|align', 'th,td^abbr|abbr,align,axis,bgColor,ch,chOff,#colSpan,headers,height,!noWrap,#rowSpan,scope,vAlign,width', 'col,colgroup^abbr|align,ch,chOff,#span,vAlign,width', 'table^abbr|align,bgColor,border,%caption,cellPadding,cellSpacing,frame,rules,summary,%tFoot,%tHead,width', 'tr^abbr|align,bgColor,ch,chOff,vAlign', 'tfoot,thead,tbody^abbr|align,ch,chOff,vAlign', 'template^abbr|', 'textarea^abbr|autocapitalize,!autofocus,#cols,defaultValue,dirName,!disabled,#maxLength,#minLength,name,placeholder,!readOnly,!required,#rows,selectionDirection,#selectionEnd,#selectionStart,value,wrap', 'title^abbr|text', 'track^abbr|!default,kind,label,src,srclang', 'ul^abbr|!compact,type', 'unknown^abbr|', 'video^media|#height,poster,#width', ':svg:a^:svg:graphics|', ':svg:animate^:svg:animation|', ':svg:animateMotion^:svg:animation|', ':svg:animateTransform^:svg:animation|', ':svg:circle^:svg:geometry|', ':svg:clipPath^:svg:graphics|', ':svg:cursor^:svg:|', ':svg:defs^:svg:graphics|', ':svg:desc^:svg:|', ':svg:discard^:svg:|', ':svg:ellipse^:svg:geometry|', ':svg:feBlend^:svg:|', ':svg:feColorMatrix^:svg:|', ':svg:feComponentTransfer^:svg:|', ':svg:feComposite^:svg:|', ':svg:feConvolveMatrix^:svg:|', ':svg:feDiffuseLighting^:svg:|', ':svg:feDisplacementMap^:svg:|', ':svg:feDistantLight^:svg:|', ':svg:feDropShadow^:svg:|', ':svg:feFlood^:svg:|', ':svg:feFuncA^:svg:componentTransferFunction|', ':svg:feFuncB^:svg:componentTransferFunction|', ':svg:feFuncG^:svg:componentTransferFunction|', ':svg:feFuncR^:svg:componentTransferFunction|', ':svg:feGaussianBlur^:svg:|', ':svg:feImage^:svg:|', ':svg:feMerge^:svg:|', ':svg:feMergeNode^:svg:|', ':svg:feMorphology^:svg:|', ':svg:feOffset^:svg:|', ':svg:fePointLight^:svg:|', ':svg:feSpecularLighting^:svg:|', ':svg:feSpotLight^:svg:|', ':svg:feTile^:svg:|', ':svg:feTurbulence^:svg:|', ':svg:filter^:svg:|', ':svg:foreignObject^:svg:graphics|', ':svg:g^:svg:graphics|', ':svg:image^:svg:graphics|', ':svg:line^:svg:geometry|', ':svg:linearGradient^:svg:gradient|', ':svg:mpath^:svg:|', ':svg:marker^:svg:|', ':svg:mask^:svg:|', ':svg:metadata^:svg:|', ':svg:path^:svg:geometry|', ':svg:pattern^:svg:|', ':svg:polygon^:svg:geometry|', ':svg:polyline^:svg:geometry|', ':svg:radialGradient^:svg:gradient|', ':svg:rect^:svg:geometry|', ':svg:svg^:svg:graphics|#currentScale,#zoomAndPan', ':svg:script^:svg:|type', ':svg:set^:svg:animation|', ':svg:stop^:svg:|', ':svg:style^:svg:|!disabled,media,title,type', ':svg:switch^:svg:graphics|', ':svg:symbol^:svg:|', ':svg:tspan^:svg:textPositioning|', ':svg:text^:svg:textPositioning|', ':svg:textPath^:svg:textContent|', ':svg:title^:svg:|', ':svg:use^:svg:graphics|', ':svg:view^:svg:|#zoomAndPan']);
+  var SCHEMA = ['[Element]|textContent,%classList,className,id,innerHTML,*beforecopy,*beforecut,*beforepaste,*copy,*cut,*paste,*search,*selectstart,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerHTML,#scrollLeft,#scrollTop', '[HTMLElement]^[Element]|accessKey,contentEditable,dir,!draggable,!hidden,innerText,lang,*abort,*beforecopy,*beforecut,*beforepaste,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*copy,*cuechange,*cut,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*message,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*mozfullscreenchange,*mozfullscreenerror,*mozpointerlockchange,*mozpointerlockerror,*paste,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*search,*seeked,*seeking,*select,*selectstart,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,*webglcontextcreationerror,*webglcontextlost,*webglcontextrestored,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerText,!spellcheck,%style,#tabIndex,title,!translate', 'abbr,address,article,aside,b,bdi,bdo,cite,code,dd,dfn,dt,em,figcaption,figure,footer,header,i,kbd,main,mark,nav,noscript,rb,rp,rt,rtc,ruby,s,samp,section,small,strong,sub,sup,u,var,wbr^[HTMLElement]|accessKey,contentEditable,dir,!draggable,!hidden,innerText,lang,*abort,*beforecopy,*beforecut,*beforepaste,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*copy,*cuechange,*cut,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*message,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*mozfullscreenchange,*mozfullscreenerror,*mozpointerlockchange,*mozpointerlockerror,*paste,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*search,*seeked,*seeking,*select,*selectstart,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,*webglcontextcreationerror,*webglcontextlost,*webglcontextrestored,*webkitfullscreenchange,*webkitfullscreenerror,*wheel,outerText,!spellcheck,%style,#tabIndex,title,!translate', 'media^[HTMLElement]|!autoplay,!controls,%crossOrigin,#currentTime,!defaultMuted,#defaultPlaybackRate,!disableRemotePlayback,!loop,!muted,*encrypted,#playbackRate,preload,src,%srcObject,#volume', ':svg:^[HTMLElement]|*abort,*blur,*cancel,*canplay,*canplaythrough,*change,*click,*close,*contextmenu,*cuechange,*dblclick,*drag,*dragend,*dragenter,*dragleave,*dragover,*dragstart,*drop,*durationchange,*emptied,*ended,*error,*focus,*input,*invalid,*keydown,*keypress,*keyup,*load,*loadeddata,*loadedmetadata,*loadstart,*mousedown,*mouseenter,*mouseleave,*mousemove,*mouseout,*mouseover,*mouseup,*mousewheel,*pause,*play,*playing,*progress,*ratechange,*reset,*resize,*scroll,*seeked,*seeking,*select,*show,*stalled,*submit,*suspend,*timeupdate,*toggle,*volumechange,*waiting,%style,#tabIndex', ':svg:graphics^:svg:|', ':svg:animation^:svg:|*begin,*end,*repeat', ':svg:geometry^:svg:|', ':svg:componentTransferFunction^:svg:|', ':svg:gradient^:svg:|', ':svg:textContent^:svg:graphics|', ':svg:textPositioning^:svg:textContent|', 'a^[HTMLElement]|charset,coords,download,hash,host,hostname,href,hreflang,name,password,pathname,ping,port,protocol,referrerPolicy,rel,rev,search,shape,target,text,type,username', 'area^[HTMLElement]|alt,coords,hash,host,hostname,href,!noHref,password,pathname,ping,port,protocol,referrerPolicy,search,shape,target,username', 'audio^media|', 'br^[HTMLElement]|clear', 'base^[HTMLElement]|href,target', 'body^[HTMLElement]|aLink,background,bgColor,link,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,text,vLink', 'button^[HTMLElement]|!autofocus,!disabled,formAction,formEnctype,formMethod,!formNoValidate,formTarget,name,type,value', 'canvas^[HTMLElement]|#height,#width', 'content^[HTMLElement]|select', 'dl^[HTMLElement]|!compact', 'datalist^[HTMLElement]|', 'details^[HTMLElement]|!open', 'dialog^[HTMLElement]|!open,returnValue', 'dir^[HTMLElement]|!compact', 'div^[HTMLElement]|align', 'embed^[HTMLElement]|align,height,name,src,type,width', 'fieldset^[HTMLElement]|!disabled,name', 'font^[HTMLElement]|color,face,size', 'form^[HTMLElement]|acceptCharset,action,autocomplete,encoding,enctype,method,name,!noValidate,target', 'frame^[HTMLElement]|frameBorder,longDesc,marginHeight,marginWidth,name,!noResize,scrolling,src', 'frameset^[HTMLElement]|cols,*beforeunload,*blur,*error,*focus,*hashchange,*languagechange,*load,*message,*offline,*online,*pagehide,*pageshow,*popstate,*rejectionhandled,*resize,*scroll,*storage,*unhandledrejection,*unload,rows', 'hr^[HTMLElement]|align,color,!noShade,size,width', 'head^[HTMLElement]|', 'h1,h2,h3,h4,h5,h6^[HTMLElement]|align', 'html^[HTMLElement]|version', 'iframe^[HTMLElement]|align,!allowFullscreen,frameBorder,height,longDesc,marginHeight,marginWidth,name,referrerPolicy,%sandbox,scrolling,src,srcdoc,width', 'img^[HTMLElement]|align,alt,border,%crossOrigin,#height,#hspace,!isMap,longDesc,lowsrc,name,referrerPolicy,sizes,src,srcset,useMap,#vspace,#width', 'input^[HTMLElement]|accept,align,alt,autocapitalize,autocomplete,!autofocus,!checked,!defaultChecked,defaultValue,dirName,!disabled,%files,formAction,formEnctype,formMethod,!formNoValidate,formTarget,#height,!incremental,!indeterminate,max,#maxLength,min,#minLength,!multiple,name,pattern,placeholder,!readOnly,!required,selectionDirection,#selectionEnd,#selectionStart,#size,src,step,type,useMap,value,%valueAsDate,#valueAsNumber,#width', 'keygen^[HTMLElement]|!autofocus,challenge,!disabled,keytype,name', 'li^[HTMLElement]|type,#value', 'label^[HTMLElement]|htmlFor', 'legend^[HTMLElement]|align', 'link^[HTMLElement]|as,charset,%crossOrigin,!disabled,href,hreflang,integrity,media,rel,%relList,rev,%sizes,target,type', 'map^[HTMLElement]|name', 'marquee^[HTMLElement]|behavior,bgColor,direction,height,#hspace,#loop,#scrollAmount,#scrollDelay,!trueSpeed,#vspace,width', 'menu^[HTMLElement]|!compact', 'meta^[HTMLElement]|content,httpEquiv,name,scheme', 'meter^[HTMLElement]|#high,#low,#max,#min,#optimum,#value', 'ins,del^[HTMLElement]|cite,dateTime', 'ol^[HTMLElement]|!compact,!reversed,#start,type', 'object^[HTMLElement]|align,archive,border,code,codeBase,codeType,data,!declare,height,#hspace,name,standby,type,useMap,#vspace,width', 'optgroup^[HTMLElement]|!disabled,label', 'option^[HTMLElement]|!defaultSelected,!disabled,label,!selected,text,value', 'output^[HTMLElement]|defaultValue,%htmlFor,name,value', 'p^[HTMLElement]|align', 'param^[HTMLElement]|name,type,value,valueType', 'picture^[HTMLElement]|', 'pre^[HTMLElement]|#width', 'progress^[HTMLElement]|#max,#value', 'q,blockquote,cite^[HTMLElement]|', 'script^[HTMLElement]|!async,charset,%crossOrigin,!defer,event,htmlFor,integrity,src,text,type', 'select^[HTMLElement]|!autofocus,!disabled,#length,!multiple,name,!required,#selectedIndex,#size,value', 'shadow^[HTMLElement]|', 'source^[HTMLElement]|media,sizes,src,srcset,type', 'span^[HTMLElement]|', 'style^[HTMLElement]|!disabled,media,type', 'caption^[HTMLElement]|align', 'th,td^[HTMLElement]|abbr,align,axis,bgColor,ch,chOff,#colSpan,headers,height,!noWrap,#rowSpan,scope,vAlign,width', 'col,colgroup^[HTMLElement]|align,ch,chOff,#span,vAlign,width', 'table^[HTMLElement]|align,bgColor,border,%caption,cellPadding,cellSpacing,frame,rules,summary,%tFoot,%tHead,width', 'tr^[HTMLElement]|align,bgColor,ch,chOff,vAlign', 'tfoot,thead,tbody^[HTMLElement]|align,ch,chOff,vAlign', 'template^[HTMLElement]|', 'textarea^[HTMLElement]|autocapitalize,!autofocus,#cols,defaultValue,dirName,!disabled,#maxLength,#minLength,name,placeholder,!readOnly,!required,#rows,selectionDirection,#selectionEnd,#selectionStart,value,wrap', 'title^[HTMLElement]|text', 'track^[HTMLElement]|!default,kind,label,src,srclang', 'ul^[HTMLElement]|!compact,type', 'unknown^[HTMLElement]|', 'video^media|#height,poster,#width', ':svg:a^:svg:graphics|', ':svg:animate^:svg:animation|', ':svg:animateMotion^:svg:animation|', ':svg:animateTransform^:svg:animation|', ':svg:circle^:svg:geometry|', ':svg:clipPath^:svg:graphics|', ':svg:cursor^:svg:|', ':svg:defs^:svg:graphics|', ':svg:desc^:svg:|', ':svg:discard^:svg:|', ':svg:ellipse^:svg:geometry|', ':svg:feBlend^:svg:|', ':svg:feColorMatrix^:svg:|', ':svg:feComponentTransfer^:svg:|', ':svg:feComposite^:svg:|', ':svg:feConvolveMatrix^:svg:|', ':svg:feDiffuseLighting^:svg:|', ':svg:feDisplacementMap^:svg:|', ':svg:feDistantLight^:svg:|', ':svg:feDropShadow^:svg:|', ':svg:feFlood^:svg:|', ':svg:feFuncA^:svg:componentTransferFunction|', ':svg:feFuncB^:svg:componentTransferFunction|', ':svg:feFuncG^:svg:componentTransferFunction|', ':svg:feFuncR^:svg:componentTransferFunction|', ':svg:feGaussianBlur^:svg:|', ':svg:feImage^:svg:|', ':svg:feMerge^:svg:|', ':svg:feMergeNode^:svg:|', ':svg:feMorphology^:svg:|', ':svg:feOffset^:svg:|', ':svg:fePointLight^:svg:|', ':svg:feSpecularLighting^:svg:|', ':svg:feSpotLight^:svg:|', ':svg:feTile^:svg:|', ':svg:feTurbulence^:svg:|', ':svg:filter^:svg:|', ':svg:foreignObject^:svg:graphics|', ':svg:g^:svg:graphics|', ':svg:image^:svg:graphics|', ':svg:line^:svg:geometry|', ':svg:linearGradient^:svg:gradient|', ':svg:mpath^:svg:|', ':svg:marker^:svg:|', ':svg:mask^:svg:|', ':svg:metadata^:svg:|', ':svg:path^:svg:geometry|', ':svg:pattern^:svg:|', ':svg:polygon^:svg:geometry|', ':svg:polyline^:svg:geometry|', ':svg:radialGradient^:svg:gradient|', ':svg:rect^:svg:geometry|', ':svg:svg^:svg:graphics|#currentScale,#zoomAndPan', ':svg:script^:svg:|type', ':svg:set^:svg:animation|', ':svg:stop^:svg:|', ':svg:style^:svg:|!disabled,media,title,type', ':svg:switch^:svg:graphics|', ':svg:symbol^:svg:|', ':svg:tspan^:svg:textPositioning|', ':svg:text^:svg:textPositioning|', ':svg:textPath^:svg:textContent|', ':svg:title^:svg:|', ':svg:use^:svg:graphics|', ':svg:view^:svg:|#zoomAndPan', 'data^[HTMLElement]|value', 'menuitem^[HTMLElement]|type,label,icon,!disabled,!checked,radiogroup,!default', 'summary^[HTMLElement]|', 'time^[HTMLElement]|dateTime'];
   var _ATTR_TO_PROP = {
     'class': 'className',
     'formaction': 'formAction',
@@ -23747,6 +23765,7 @@ var define = System.amdDefine;
       _super.call(this);
       this._schema = {};
       SCHEMA.forEach(function(encodedType) {
+        var type = {};
         var _a = encodedType.split('|'),
             strType = _a[0],
             strProperties = _a[1];
@@ -23754,11 +23773,10 @@ var define = System.amdDefine;
         var _b = strType.split('^'),
             typeNames = _b[0],
             superName = _b[1];
-        var type = {};
         typeNames.split(',').forEach(function(tag) {
           return _this._schema[tag.toLowerCase()] = type;
         });
-        var superType = _this._schema[superName];
+        var superType = superName && _this._schema[superName.toLowerCase()];
         if (superType) {
           Object.keys(superType).forEach(function(prop) {
             type[prop] = superType[prop];
@@ -23859,7 +23877,7 @@ var define = System.amdDefine;
     useFactory: function(parser, translations, format) {
       return new I18NHtmlParser(parser, translations, format);
     },
-    deps: [HtmlParser, [new _angular_core.OptionalMetadata(), new _angular_core.Inject(_angular_core.TRANSLATIONS)], [new _angular_core.OptionalMetadata(), new _angular_core.Inject(_angular_core.TRANSLATIONS_FORMAT)]]
+    deps: [HtmlParser, [new _angular_core.Optional(), new _angular_core.Inject(_angular_core.TRANSLATIONS)], [new _angular_core.Optional(), new _angular_core.Inject(_angular_core.TRANSLATIONS_FORMAT)]]
   }, TemplateParser, DirectiveNormalizer, CompileMetadataResolver, DEFAULT_PACKAGE_URL_PROVIDER, StyleCompiler, ViewCompiler, NgModuleCompiler, {
     provide: CompilerConfig,
     useValue: new CompilerConfig()
@@ -24063,6 +24081,36 @@ var define = System.amdDefine;
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) : typeof define === 'function' && define.amd ? define("npm:@angular/common/bundles/common.umd.js", ["exports", "@angular/core"], factory) : (factory((global.ng = global.ng || {}, global.ng.common = global.ng.common || {}), global.ng.core));
 }(this, function(exports, _angular_core) {
   'use strict';
+  var PlatformLocation = (function() {
+    function PlatformLocation() {}
+    Object.defineProperty(PlatformLocation.prototype, "pathname", {
+      get: function() {
+        return null;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(PlatformLocation.prototype, "search", {
+      get: function() {
+        return null;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(PlatformLocation.prototype, "hash", {
+      get: function() {
+        return null;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return PlatformLocation;
+  }());
+  var LocationStrategy = (function() {
+    function LocationStrategy() {}
+    return LocationStrategy;
+  }());
+  var APP_BASE_HREF = new _angular_core.OpaqueToken('appBaseHref');
   var globalScope;
   if (typeof window === 'undefined') {
     if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
@@ -24235,9 +24283,6 @@ var define = System.amdDefine;
       }
       throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
     };
-    NumberWrapper.parseFloat = function(text) {
-      return parseFloat(text);
-    };
     Object.defineProperty(NumberWrapper, "NaN", {
       get: function() {
         return NaN;
@@ -24256,9 +24301,6 @@ var define = System.amdDefine;
     };
     return NumberWrapper;
   }());
-  function normalizeBlank(obj) {
-    return isBlank(obj) ? null : obj;
-  }
   function isJsObject(o) {
     return o !== null && (typeof o === 'function' || typeof o === 'object');
   }
@@ -24329,68 +24371,120 @@ var define = System.amdDefine;
     }
     return _symbolIterator;
   }
-  var __extends$1 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
+  var Location = (function() {
+    function Location(platformStrategy) {
+      var _this = this;
+      this._subject = new _angular_core.EventEmitter();
+      this._platformStrategy = platformStrategy;
+      var browserBaseHref = this._platformStrategy.getBaseHref();
+      this._baseHref = Location.stripTrailingSlash(_stripIndexHtml(browserBaseHref));
+      this._platformStrategy.onPopState(function(ev) {
+        _this._subject.emit({
+          'url': _this.path(true),
+          'pop': true,
+          'type': ev.type
+        });
+      });
     }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var BaseError = (function(_super) {
-    __extends$1(BaseError, _super);
-    function BaseError(message) {
-      var nativeError = _super.call(this, message);
-      this._nativeError = nativeError;
-    }
-    Object.defineProperty(BaseError.prototype, "message", {
-      get: function() {
-        return this._nativeError.message;
-      },
-      set: function(message) {
-        this._nativeError.message = message;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(BaseError.prototype, "name", {
-      get: function() {
-        return this._nativeError.name;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(BaseError.prototype, "stack", {
-      get: function() {
-        return this._nativeError.stack;
-      },
-      set: function(value) {
-        this._nativeError.stack = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    BaseError.prototype.toString = function() {
-      return this._nativeError.toString();
+    Location.prototype.path = function(includeHash) {
+      if (includeHash === void 0) {
+        includeHash = false;
+      }
+      return this.normalize(this._platformStrategy.path(includeHash));
     };
-    return BaseError;
-  }(Error));
-  var WrappedError = (function(_super) {
-    __extends$1(WrappedError, _super);
-    function WrappedError(message, error) {
-      _super.call(this, message + " caused by: " + (error instanceof Error ? error.message : error));
-      this.originalError = error;
+    Location.prototype.isCurrentPathEqualTo = function(path, query) {
+      if (query === void 0) {
+        query = '';
+      }
+      return this.path() == this.normalize(path + Location.normalizeQueryParams(query));
+    };
+    Location.prototype.normalize = function(url) {
+      return Location.stripTrailingSlash(_stripBaseHref(this._baseHref, _stripIndexHtml(url)));
+    };
+    Location.prototype.prepareExternalUrl = function(url) {
+      if (url.length > 0 && !url.startsWith('/')) {
+        url = '/' + url;
+      }
+      return this._platformStrategy.prepareExternalUrl(url);
+    };
+    Location.prototype.go = function(path, query) {
+      if (query === void 0) {
+        query = '';
+      }
+      this._platformStrategy.pushState(null, '', path, query);
+    };
+    Location.prototype.replaceState = function(path, query) {
+      if (query === void 0) {
+        query = '';
+      }
+      this._platformStrategy.replaceState(null, '', path, query);
+    };
+    Location.prototype.forward = function() {
+      this._platformStrategy.forward();
+    };
+    Location.prototype.back = function() {
+      this._platformStrategy.back();
+    };
+    Location.prototype.subscribe = function(onNext, onThrow, onReturn) {
+      if (onThrow === void 0) {
+        onThrow = null;
+      }
+      if (onReturn === void 0) {
+        onReturn = null;
+      }
+      return this._subject.subscribe({
+        next: onNext,
+        error: onThrow,
+        complete: onReturn
+      });
+    };
+    Location.normalizeQueryParams = function(params) {
+      return (params.length > 0 && params.substring(0, 1) != '?') ? ('?' + params) : params;
+    };
+    Location.joinWithSlash = function(start, end) {
+      if (start.length == 0) {
+        return end;
+      }
+      if (end.length == 0) {
+        return start;
+      }
+      var slashes = 0;
+      if (start.endsWith('/')) {
+        slashes++;
+      }
+      if (end.startsWith('/')) {
+        slashes++;
+      }
+      if (slashes == 2) {
+        return start + end.substring(1);
+      }
+      if (slashes == 1) {
+        return start + end;
+      }
+      return start + '/' + end;
+    };
+    Location.stripTrailingSlash = function(url) {
+      if (/\/$/g.test(url)) {
+        url = url.substring(0, url.length - 1);
+      }
+      return url;
+    };
+    Location.decorators = [{type: _angular_core.Injectable}];
+    Location.ctorParameters = [{type: LocationStrategy}];
+    return Location;
+  }());
+  function _stripBaseHref(baseHref, url) {
+    if (baseHref.length > 0 && url.startsWith(baseHref)) {
+      return url.substring(baseHref.length);
     }
-    Object.defineProperty(WrappedError.prototype, "stack", {
-      get: function() {
-        return (this.originalError instanceof Error ? this.originalError : this._nativeError).stack;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return WrappedError;
-  }(BaseError));
+    return url;
+  }
+  function _stripIndexHtml(url) {
+    if (/\/index.html$/g.test(url)) {
+      return url.substring(0, url.length - 11);
+    }
+    return url;
+  }
   var __extends = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
@@ -24400,671 +24494,130 @@ var define = System.amdDefine;
     }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
-  var InvalidPipeArgumentError = (function(_super) {
-    __extends(InvalidPipeArgumentError, _super);
-    function InvalidPipeArgumentError(type, value) {
-      _super.call(this, "Invalid argument '" + value + "' for pipe '" + stringify(type) + "'");
-    }
-    return InvalidPipeArgumentError;
-  }(BaseError));
-  var ObservableStrategy = (function() {
-    function ObservableStrategy() {}
-    ObservableStrategy.prototype.createSubscription = function(async, updateLatestValue) {
-      return async.subscribe({
-        next: updateLatestValue,
-        error: function(e) {
-          throw e;
-        }
-      });
-    };
-    ObservableStrategy.prototype.dispose = function(subscription) {
-      subscription.unsubscribe();
-    };
-    ObservableStrategy.prototype.onDestroy = function(subscription) {
-      subscription.unsubscribe();
-    };
-    return ObservableStrategy;
-  }());
-  var PromiseStrategy = (function() {
-    function PromiseStrategy() {}
-    PromiseStrategy.prototype.createSubscription = function(async, updateLatestValue) {
-      return async.then(updateLatestValue, function(e) {
-        throw e;
-      });
-    };
-    PromiseStrategy.prototype.dispose = function(subscription) {};
-    PromiseStrategy.prototype.onDestroy = function(subscription) {};
-    return PromiseStrategy;
-  }());
-  var _promiseStrategy = new PromiseStrategy();
-  var _observableStrategy = new ObservableStrategy();
-  var AsyncPipe = (function() {
-    function AsyncPipe(_ref) {
-      this._latestValue = null;
-      this._latestReturnedValue = null;
-      this._subscription = null;
-      this._obj = null;
-      this._strategy = null;
-      this._ref = _ref;
-    }
-    AsyncPipe.prototype.ngOnDestroy = function() {
-      if (isPresent(this._subscription)) {
-        this._dispose();
-      }
-    };
-    AsyncPipe.prototype.transform = function(obj) {
-      if (isBlank(this._obj)) {
-        if (isPresent(obj)) {
-          this._subscribe(obj);
-        }
-        this._latestReturnedValue = this._latestValue;
-        return this._latestValue;
-      }
-      if (obj !== this._obj) {
-        this._dispose();
-        return this.transform(obj);
-      }
-      if (this._latestValue === this._latestReturnedValue) {
-        return this._latestReturnedValue;
-      } else {
-        this._latestReturnedValue = this._latestValue;
-        return _angular_core.WrappedValue.wrap(this._latestValue);
-      }
-    };
-    AsyncPipe.prototype._subscribe = function(obj) {
-      var _this = this;
-      this._obj = obj;
-      this._strategy = this._selectStrategy(obj);
-      this._subscription = this._strategy.createSubscription(obj, function(value) {
-        return _this._updateLatestValue(obj, value);
-      });
-    };
-    AsyncPipe.prototype._selectStrategy = function(obj) {
-      if (isPromise(obj)) {
-        return _promiseStrategy;
-      } else if (obj.subscribe) {
-        return _observableStrategy;
-      } else {
-        throw new InvalidPipeArgumentError(AsyncPipe, obj);
-      }
-    };
-    AsyncPipe.prototype._dispose = function() {
-      this._strategy.dispose(this._subscription);
-      this._latestValue = null;
-      this._latestReturnedValue = null;
-      this._subscription = null;
-      this._obj = null;
-    };
-    AsyncPipe.prototype._updateLatestValue = function(async, value) {
-      if (async === this._obj) {
-        this._latestValue = value;
-        this._ref.markForCheck();
-      }
-    };
-    AsyncPipe.decorators = [{
-      type: _angular_core.Pipe,
-      args: [{
-        name: 'async',
-        pure: false
-      }]
-    }];
-    AsyncPipe.ctorParameters = [{type: _angular_core.ChangeDetectorRef}];
-    return AsyncPipe;
-  }());
-  var Map$1 = global$1.Map;
-  var Set$1 = global$1.Set;
-  var createMapFromPairs = (function() {
-    try {
-      if (new Map$1([[1, 2]]).size === 1) {
-        return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
-      for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        map.set(pair[0], pair[1]);
-      }
-      return map;
-    };
-  })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
-  var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
-      return function _clearValues(m) {
-        var keyIterator = m.keys();
-        var k;
-        while (!((k = keyIterator.next()).done)) {
-          m.set(k.value, null);
-        }
-      };
-    } else {
-      return function _clearValuesWithForeEach(m) {
-        m.forEach(function(v, k) {
-          m.set(k, null);
-        });
-      };
-    }
-  })();
-  var _arrayFromMap = (function() {
-    try {
-      if ((new Map$1()).values().next) {
-        return function createArrayFromMap(m, getValues) {
-          return getValues ? Array.from(m.values()) : Array.from(m.keys());
-        };
-      }
-    } catch (e) {}
-    return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
-          i = 0;
-      m.forEach(function(v, k) {
-        res[i] = getValues ? v : k;
-        i++;
-      });
-      return res;
-    };
-  })();
-  var StringMapWrapper = (function() {
-    function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
-    StringMapWrapper.get = function(map, key) {
-      return map.hasOwnProperty(key) ? map[key] : undefined;
-    };
-    StringMapWrapper.set = function(map, key, value) {
-      map[key] = value;
-    };
-    StringMapWrapper.keys = function(map) {
-      return Object.keys(map);
-    };
-    StringMapWrapper.values = function(map) {
-      return Object.keys(map).map(function(k) {
-        return map[k];
-      });
-    };
-    StringMapWrapper.isEmpty = function(map) {
-      for (var prop in map) {
-        return false;
-      }
-      return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
-    };
-    StringMapWrapper.forEach = function(map, callback) {
-      for (var _i = 0,
-          _a = Object.keys(map); _i < _a.length; _i++) {
-        var k = _a[_i];
-        callback(map[k], k);
-      }
-    };
-    StringMapWrapper.merge = function(m1, m2) {
-      var m = {};
-      for (var _i = 0,
-          _a = Object.keys(m1); _i < _a.length; _i++) {
-        var k = _a[_i];
-        m[k] = m1[k];
-      }
-      for (var _b = 0,
-          _c = Object.keys(m2); _b < _c.length; _b++) {
-        var k = _c[_b];
-        m[k] = m2[k];
-      }
-      return m;
-    };
-    StringMapWrapper.equals = function(m1, m2) {
-      var k1 = Object.keys(m1);
-      var k2 = Object.keys(m2);
-      if (k1.length != k2.length) {
-        return false;
-      }
-      var key;
-      for (var i = 0; i < k1.length; i++) {
-        key = k1[i];
-        if (m1[key] !== m2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    return StringMapWrapper;
-  }());
-  var ListWrapper = (function() {
-    function ListWrapper() {}
-    ListWrapper.createFixedSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.createGrowableSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.clone = function(array) {
-      return array.slice(0);
-    };
-    ListWrapper.forEachWithIndex = function(array, fn) {
-      for (var i = 0; i < array.length; i++) {
-        fn(array[i], i);
-      }
-    };
-    ListWrapper.first = function(array) {
-      if (!array)
-        return null;
-      return array[0];
-    };
-    ListWrapper.last = function(array) {
-      if (!array || array.length == 0)
-        return null;
-      return array[array.length - 1];
-    };
-    ListWrapper.indexOf = function(array, value, startIndex) {
-      if (startIndex === void 0) {
-        startIndex = 0;
-      }
-      return array.indexOf(value, startIndex);
-    };
-    ListWrapper.contains = function(list, el) {
-      return list.indexOf(el) !== -1;
-    };
-    ListWrapper.reversed = function(array) {
-      var a = ListWrapper.clone(array);
-      return a.reverse();
-    };
-    ListWrapper.concat = function(a, b) {
-      return a.concat(b);
-    };
-    ListWrapper.insert = function(list, index, value) {
-      list.splice(index, 0, value);
-    };
-    ListWrapper.removeAt = function(list, index) {
-      var res = list[index];
-      list.splice(index, 1);
-      return res;
-    };
-    ListWrapper.removeAll = function(list, items) {
-      for (var i = 0; i < items.length; ++i) {
-        var index = list.indexOf(items[i]);
-        list.splice(index, 1);
-      }
-    };
-    ListWrapper.remove = function(list, el) {
-      var index = list.indexOf(el);
-      if (index > -1) {
-        list.splice(index, 1);
-        return true;
-      }
-      return false;
-    };
-    ListWrapper.clear = function(list) {
-      list.length = 0;
-    };
-    ListWrapper.isEmpty = function(list) {
-      return list.length == 0;
-    };
-    ListWrapper.fill = function(list, value, start, end) {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (end === void 0) {
-        end = null;
-      }
-      list.fill(value, start, end === null ? list.length : end);
-    };
-    ListWrapper.equals = function(a, b) {
-      if (a.length != b.length)
-        return false;
-      for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i])
-          return false;
-      }
-      return true;
-    };
-    ListWrapper.slice = function(l, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return l.slice(from, to === null ? undefined : to);
-    };
-    ListWrapper.splice = function(l, from, length) {
-      return l.splice(from, length);
-    };
-    ListWrapper.sort = function(l, compareFn) {
-      if (isPresent(compareFn)) {
-        l.sort(compareFn);
-      } else {
-        l.sort();
-      }
-    };
-    ListWrapper.toString = function(l) {
-      return l.toString();
-    };
-    ListWrapper.toJSON = function(l) {
-      return JSON.stringify(l);
-    };
-    ListWrapper.maximum = function(list, predicate) {
-      if (list.length == 0) {
-        return null;
-      }
-      var solution = null;
-      var maxValue = -Infinity;
-      for (var index = 0; index < list.length; index++) {
-        var candidate = list[index];
-        if (isBlank(candidate)) {
-          continue;
-        }
-        var candidateValue = predicate(candidate);
-        if (candidateValue > maxValue) {
-          solution = candidate;
-          maxValue = candidateValue;
-        }
-      }
-      return solution;
-    };
-    ListWrapper.flatten = function(list) {
-      var target = [];
-      _flattenArray(list, target);
-      return target;
-    };
-    ListWrapper.addAll = function(list, source) {
-      for (var i = 0; i < source.length; i++) {
-        list.push(source[i]);
-      }
-    };
-    return ListWrapper;
-  }());
-  function _flattenArray(source, target) {
-    if (isPresent(source)) {
-      for (var i = 0; i < source.length; i++) {
-        var item = source[i];
-        if (isArray(item)) {
-          _flattenArray(item, target);
-        } else {
-          target.push(item);
-        }
+  var HashLocationStrategy = (function(_super) {
+    __extends(HashLocationStrategy, _super);
+    function HashLocationStrategy(_platformLocation, _baseHref) {
+      _super.call(this);
+      this._platformLocation = _platformLocation;
+      this._baseHref = '';
+      if (isPresent(_baseHref)) {
+        this._baseHref = _baseHref;
       }
     }
-    return target;
-  }
-  function isListLikeIterable(obj) {
-    if (!isJsObject(obj))
-      return false;
-    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
-  }
-  var createSetFromList = (function() {
-    var test = new Set$1([1, 2, 3]);
-    if (test.size === 3) {
-      return function createSetFromList(lst) {
-        return new Set$1(lst);
-      };
-    } else {
-      return function createSetAndPopulateFromList(lst) {
-        var res = new Set$1(lst);
-        if (res.size !== lst.length) {
-          for (var i = 0; i < lst.length; i++) {
-            res.add(lst[i]);
-          }
-        }
-        return res;
-      };
-    }
-  })();
-  var NumberFormatStyle;
-  (function(NumberFormatStyle) {
-    NumberFormatStyle[NumberFormatStyle["Decimal"] = 0] = "Decimal";
-    NumberFormatStyle[NumberFormatStyle["Percent"] = 1] = "Percent";
-    NumberFormatStyle[NumberFormatStyle["Currency"] = 2] = "Currency";
-  })(NumberFormatStyle || (NumberFormatStyle = {}));
-  var NumberFormatter = (function() {
-    function NumberFormatter() {}
-    NumberFormatter.format = function(num, locale, style, _a) {
-      var _b = _a === void 0 ? {} : _a,
-          minimumIntegerDigits = _b.minimumIntegerDigits,
-          minimumFractionDigits = _b.minimumFractionDigits,
-          maximumFractionDigits = _b.maximumFractionDigits,
-          currency = _b.currency,
-          _c = _b.currencyAsSymbol,
-          currencyAsSymbol = _c === void 0 ? false : _c;
-      var options = {
-        minimumIntegerDigits: minimumIntegerDigits,
-        minimumFractionDigits: minimumFractionDigits,
-        maximumFractionDigits: maximumFractionDigits,
-        style: NumberFormatStyle[style].toLowerCase()
-      };
-      if (style == NumberFormatStyle.Currency) {
-        options.currency = currency;
-        options.currencyDisplay = currencyAsSymbol ? 'symbol' : 'code';
+    HashLocationStrategy.prototype.onPopState = function(fn) {
+      this._platformLocation.onPopState(fn);
+      this._platformLocation.onHashChange(fn);
+    };
+    HashLocationStrategy.prototype.getBaseHref = function() {
+      return this._baseHref;
+    };
+    HashLocationStrategy.prototype.path = function(includeHash) {
+      if (includeHash === void 0) {
+        includeHash = false;
       }
-      return new Intl.NumberFormat(locale, options).format(num);
+      var path = this._platformLocation.hash;
+      if (!isPresent(path))
+        path = '#';
+      return path.length > 0 ? path.substring(1) : path;
     };
-    return NumberFormatter;
-  }());
-  var DATE_FORMATS_SPLIT = /((?:[^yMLdHhmsazZEwGjJ']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|L+|d+|H+|h+|J+|j+|m+|s+|a|z|Z|G+|w+))(.*)/;
-  var PATTERN_ALIASES = {
-    yMMMdjms: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 3), digitCondition('day', 1), digitCondition('hour', 1), digitCondition('minute', 1), digitCondition('second', 1)])),
-    yMdjm: datePartGetterFactory(combine([digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1), digitCondition('hour', 1), digitCondition('minute', 1)])),
-    yMMMMEEEEd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 4), nameCondition('weekday', 4), digitCondition('day', 1)])),
-    yMMMMd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 4), digitCondition('day', 1)])),
-    yMMMd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 3), digitCondition('day', 1)])),
-    yMd: datePartGetterFactory(combine([digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1)])),
-    jms: datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('second', 1), digitCondition('minute', 1)])),
-    jm: datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('minute', 1)]))
-  };
-  var DATE_FORMATS = {
-    yyyy: datePartGetterFactory(digitCondition('year', 4)),
-    yy: datePartGetterFactory(digitCondition('year', 2)),
-    y: datePartGetterFactory(digitCondition('year', 1)),
-    MMMM: datePartGetterFactory(nameCondition('month', 4)),
-    MMM: datePartGetterFactory(nameCondition('month', 3)),
-    MM: datePartGetterFactory(digitCondition('month', 2)),
-    M: datePartGetterFactory(digitCondition('month', 1)),
-    LLLL: datePartGetterFactory(nameCondition('month', 4)),
-    dd: datePartGetterFactory(digitCondition('day', 2)),
-    d: datePartGetterFactory(digitCondition('day', 1)),
-    HH: digitModifier(hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), false)))),
-    H: hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), false))),
-    hh: digitModifier(hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), true)))),
-    h: hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
-    jj: datePartGetterFactory(digitCondition('hour', 2)),
-    j: datePartGetterFactory(digitCondition('hour', 1)),
-    mm: digitModifier(datePartGetterFactory(digitCondition('minute', 2))),
-    m: datePartGetterFactory(digitCondition('minute', 1)),
-    ss: digitModifier(datePartGetterFactory(digitCondition('second', 2))),
-    s: datePartGetterFactory(digitCondition('second', 1)),
-    sss: datePartGetterFactory(digitCondition('second', 3)),
-    EEEE: datePartGetterFactory(nameCondition('weekday', 4)),
-    EEE: datePartGetterFactory(nameCondition('weekday', 3)),
-    EE: datePartGetterFactory(nameCondition('weekday', 2)),
-    E: datePartGetterFactory(nameCondition('weekday', 1)),
-    a: hourClockExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
-    Z: timeZoneGetter('short'),
-    z: timeZoneGetter('long'),
-    ww: datePartGetterFactory({}),
-    w: datePartGetterFactory({}),
-    G: datePartGetterFactory(nameCondition('era', 1)),
-    GG: datePartGetterFactory(nameCondition('era', 2)),
-    GGG: datePartGetterFactory(nameCondition('era', 3)),
-    GGGG: datePartGetterFactory(nameCondition('era', 4))
-  };
-  function digitModifier(inner) {
-    return function(date, locale) {
-      var result = inner(date, locale);
-      return result.length == 1 ? '0' + result : result;
+    HashLocationStrategy.prototype.prepareExternalUrl = function(internal) {
+      var url = Location.joinWithSlash(this._baseHref, internal);
+      return url.length > 0 ? ('#' + url) : url;
     };
-  }
-  function hourClockExtracter(inner) {
-    return function(date, locale) {
-      var result = inner(date, locale);
-      return result.split(' ')[1];
-    };
-  }
-  function hourExtracter(inner) {
-    return function(date, locale) {
-      var result = inner(date, locale);
-      return result.split(' ')[0];
-    };
-  }
-  function intlDateFormat(date, locale, options) {
-    return new Intl.DateTimeFormat(locale, options).format(date).replace(/[\u200e\u200f]/g, '');
-  }
-  function timeZoneGetter(timezone) {
-    var options = {
-      hour: '2-digit',
-      hour12: false,
-      timeZoneName: timezone
-    };
-    return function(date, locale) {
-      var result = intlDateFormat(date, locale, options);
-      return result ? result.substring(3) : '';
-    };
-  }
-  function hour12Modify(options, value) {
-    options.hour12 = value;
-    return options;
-  }
-  function digitCondition(prop, len) {
-    var result = {};
-    result[prop] = len == 2 ? '2-digit' : 'numeric';
-    return result;
-  }
-  function nameCondition(prop, len) {
-    var result = {};
-    result[prop] = len < 4 ? 'short' : 'long';
-    return result;
-  }
-  function combine(options) {
-    var result = {};
-    options.forEach(function(option) {
-      Object.assign(result, option);
-    });
-    return result;
-  }
-  function datePartGetterFactory(ret) {
-    return function(date, locale) {
-      return intlDateFormat(date, locale, ret);
-    };
-  }
-  var datePartsFormatterCache = new Map();
-  function dateFormatter(format, date, locale) {
-    var text = '';
-    var match;
-    var fn;
-    var parts = [];
-    if (PATTERN_ALIASES[format]) {
-      return PATTERN_ALIASES[format](date, locale);
-    }
-    if (datePartsFormatterCache.has(format)) {
-      parts = datePartsFormatterCache.get(format);
-    } else {
-      var matches = DATE_FORMATS_SPLIT.exec(format);
-      while (format) {
-        match = DATE_FORMATS_SPLIT.exec(format);
-        if (match) {
-          parts = concat(parts, match, 1);
-          format = parts.pop();
-        } else {
-          parts.push(format);
-          format = null;
-        }
+    HashLocationStrategy.prototype.pushState = function(state, title, path, queryParams) {
+      var url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
+      if (url.length == 0) {
+        url = this._platformLocation.pathname;
       }
-      datePartsFormatterCache.set(format, parts);
-    }
-    parts.forEach(function(part) {
-      fn = DATE_FORMATS[part];
-      text += fn ? fn(date, locale) : part === '\'\'' ? '\'' : part.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
-    });
-    return text;
-  }
-  var slice = [].slice;
-  function concat(array1, array2, index) {
-    return array1.concat(slice.call(array2, index));
-  }
-  var DateFormatter = (function() {
-    function DateFormatter() {}
-    DateFormatter.format = function(date, locale, pattern) {
-      return dateFormatter(pattern, date, locale);
+      this._platformLocation.pushState(state, title, url);
     };
-    return DateFormatter;
-  }());
-  var DatePipe = (function() {
-    function DatePipe(_locale) {
-      this._locale = _locale;
-    }
-    DatePipe.prototype.transform = function(value, pattern) {
-      if (pattern === void 0) {
-        pattern = 'mediumDate';
+    HashLocationStrategy.prototype.replaceState = function(state, title, path, queryParams) {
+      var url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
+      if (url.length == 0) {
+        url = this._platformLocation.pathname;
       }
-      if (isBlank(value))
-        return null;
-      if (!this.supports(value)) {
-        throw new InvalidPipeArgumentError(DatePipe, value);
-      }
-      if (NumberWrapper.isNumeric(value)) {
-        value = DateWrapper.fromMillis(parseFloat(value));
-      } else if (isString(value)) {
-        value = DateWrapper.fromISOString(value);
-      }
-      if (StringMapWrapper.contains(DatePipe._ALIASES, pattern)) {
-        pattern = StringMapWrapper.get(DatePipe._ALIASES, pattern);
-      }
-      return DateFormatter.format(value, this._locale, pattern);
+      this._platformLocation.replaceState(state, title, url);
     };
-    DatePipe.prototype.supports = function(obj) {
-      if (isDate(obj) || NumberWrapper.isNumeric(obj)) {
-        return true;
-      }
-      if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) {
-        return true;
-      }
-      return false;
+    HashLocationStrategy.prototype.forward = function() {
+      this._platformLocation.forward();
     };
-    DatePipe._ALIASES = {
-      'medium': 'yMMMdjms',
-      'short': 'yMdjm',
-      'fullDate': 'yMMMMEEEEd',
-      'longDate': 'yMMMMd',
-      'mediumDate': 'yMMMd',
-      'shortDate': 'yMd',
-      'mediumTime': 'jms',
-      'shortTime': 'jm'
+    HashLocationStrategy.prototype.back = function() {
+      this._platformLocation.back();
     };
-    DatePipe.decorators = [{
-      type: _angular_core.Pipe,
-      args: [{
-        name: 'date',
-        pure: true
-      }]
-    }];
-    DatePipe.ctorParameters = [{
+    HashLocationStrategy.decorators = [{type: _angular_core.Injectable}];
+    HashLocationStrategy.ctorParameters = [{type: PlatformLocation}, {
       type: undefined,
-      decorators: [{
+      decorators: [{type: _angular_core.Optional}, {
         type: _angular_core.Inject,
-        args: [_angular_core.LOCALE_ID]
+        args: [APP_BASE_HREF]
       }]
     }];
-    return DatePipe;
-  }());
+    return HashLocationStrategy;
+  }(LocationStrategy));
+  var __extends$1 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var PathLocationStrategy = (function(_super) {
+    __extends$1(PathLocationStrategy, _super);
+    function PathLocationStrategy(_platformLocation, href) {
+      _super.call(this);
+      this._platformLocation = _platformLocation;
+      if (isBlank(href)) {
+        href = this._platformLocation.getBaseHrefFromDOM();
+      }
+      if (isBlank(href)) {
+        throw new Error("No base href set. Please provide a value for the APP_BASE_HREF token or add a base element to the document.");
+      }
+      this._baseHref = href;
+    }
+    PathLocationStrategy.prototype.onPopState = function(fn) {
+      this._platformLocation.onPopState(fn);
+      this._platformLocation.onHashChange(fn);
+    };
+    PathLocationStrategy.prototype.getBaseHref = function() {
+      return this._baseHref;
+    };
+    PathLocationStrategy.prototype.prepareExternalUrl = function(internal) {
+      return Location.joinWithSlash(this._baseHref, internal);
+    };
+    PathLocationStrategy.prototype.path = function(includeHash) {
+      if (includeHash === void 0) {
+        includeHash = false;
+      }
+      var pathname = this._platformLocation.pathname + Location.normalizeQueryParams(this._platformLocation.search);
+      var hash = this._platformLocation.hash;
+      return hash && includeHash ? "" + pathname + hash : pathname;
+    };
+    PathLocationStrategy.prototype.pushState = function(state, title, url, queryParams) {
+      var externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+      this._platformLocation.pushState(state, title, externalUrl);
+    };
+    PathLocationStrategy.prototype.replaceState = function(state, title, url, queryParams) {
+      var externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+      this._platformLocation.replaceState(state, title, externalUrl);
+    };
+    PathLocationStrategy.prototype.forward = function() {
+      this._platformLocation.forward();
+    };
+    PathLocationStrategy.prototype.back = function() {
+      this._platformLocation.back();
+    };
+    PathLocationStrategy.decorators = [{type: _angular_core.Injectable}];
+    PathLocationStrategy.ctorParameters = [{type: PlatformLocation}, {
+      type: undefined,
+      decorators: [{type: _angular_core.Optional}, {
+        type: _angular_core.Inject,
+        args: [APP_BASE_HREF]
+      }]
+    }];
+    return PathLocationStrategy;
+  }(LocationStrategy));
   var __extends$2 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
@@ -25134,7 +24687,7 @@ var define = System.amdDefine;
     var v = nDecimal.length;
     var f = parseInt(nDecimal, 10);
     var t = parseInt(n.toString().replace(/^[^.]*\.?|0+$/g, ''), 10) || 0;
-    var lang = locale.split('_')[0].toLowerCase();
+    var lang = locale.split('-')[0].toLowerCase();
     switch (lang) {
       case 'af':
       case 'asa':
@@ -25502,6 +25055,1296 @@ var define = System.amdDefine;
         return Plural.Other;
     }
   }
+  var Map$1 = global$1.Map;
+  var Set$1 = global$1.Set;
+  var createMapFromPairs = (function() {
+    try {
+      if (new Map$1([[1, 2]]).size === 1) {
+        return function createMapFromPairs(pairs) {
+          return new Map$1(pairs);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromPairs(pairs) {
+      var map = new Map$1();
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i];
+        map.set(pair[0], pair[1]);
+      }
+      return map;
+    };
+  })();
+  var createMapFromMap = (function() {
+    try {
+      if (new Map$1(new Map$1())) {
+        return function createMapFromMap(m) {
+          return new Map$1(m);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromMap(m) {
+      var map = new Map$1();
+      m.forEach(function(v, k) {
+        map.set(k, v);
+      });
+      return map;
+    };
+  })();
+  var _clearValues = (function() {
+    if ((new Map$1()).keys().next) {
+      return function _clearValues(m) {
+        var keyIterator = m.keys();
+        var k;
+        while (!((k = keyIterator.next()).done)) {
+          m.set(k.value, null);
+        }
+      };
+    } else {
+      return function _clearValuesWithForeEach(m) {
+        m.forEach(function(v, k) {
+          m.set(k, null);
+        });
+      };
+    }
+  })();
+  var _arrayFromMap = (function() {
+    try {
+      if ((new Map$1()).values().next) {
+        return function createArrayFromMap(m, getValues) {
+          return getValues ? Array.from(m.values()) : Array.from(m.keys());
+        };
+      }
+    } catch (e) {}
+    return function createArrayFromMapWithForeach(m, getValues) {
+      var res = ListWrapper.createFixedSize(m.size),
+          i = 0;
+      m.forEach(function(v, k) {
+        res[i] = getValues ? v : k;
+        i++;
+      });
+      return res;
+    };
+  })();
+  var StringMapWrapper = (function() {
+    function StringMapWrapper() {}
+    StringMapWrapper.create = function() {
+      return {};
+    };
+    StringMapWrapper.contains = function(map, key) {
+      return map.hasOwnProperty(key);
+    };
+    StringMapWrapper.get = function(map, key) {
+      return map.hasOwnProperty(key) ? map[key] : undefined;
+    };
+    StringMapWrapper.set = function(map, key, value) {
+      map[key] = value;
+    };
+    StringMapWrapper.keys = function(map) {
+      return Object.keys(map);
+    };
+    StringMapWrapper.values = function(map) {
+      return Object.keys(map).map(function(k) {
+        return map[k];
+      });
+    };
+    StringMapWrapper.isEmpty = function(map) {
+      for (var prop in map) {
+        return false;
+      }
+      return true;
+    };
+    StringMapWrapper.delete = function(map, key) {
+      delete map[key];
+    };
+    StringMapWrapper.forEach = function(map, callback) {
+      for (var _i = 0,
+          _a = Object.keys(map); _i < _a.length; _i++) {
+        var k = _a[_i];
+        callback(map[k], k);
+      }
+    };
+    StringMapWrapper.merge = function(m1, m2) {
+      var m = {};
+      for (var _i = 0,
+          _a = Object.keys(m1); _i < _a.length; _i++) {
+        var k = _a[_i];
+        m[k] = m1[k];
+      }
+      for (var _b = 0,
+          _c = Object.keys(m2); _b < _c.length; _b++) {
+        var k = _c[_b];
+        m[k] = m2[k];
+      }
+      return m;
+    };
+    StringMapWrapper.equals = function(m1, m2) {
+      var k1 = Object.keys(m1);
+      var k2 = Object.keys(m2);
+      if (k1.length != k2.length) {
+        return false;
+      }
+      for (var i = 0; i < k1.length; i++) {
+        var key = k1[i];
+        if (m1[key] !== m2[key]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    return StringMapWrapper;
+  }());
+  var ListWrapper = (function() {
+    function ListWrapper() {}
+    ListWrapper.createFixedSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.createGrowableSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.clone = function(array) {
+      return array.slice(0);
+    };
+    ListWrapper.forEachWithIndex = function(array, fn) {
+      for (var i = 0; i < array.length; i++) {
+        fn(array[i], i);
+      }
+    };
+    ListWrapper.first = function(array) {
+      if (!array)
+        return null;
+      return array[0];
+    };
+    ListWrapper.last = function(array) {
+      if (!array || array.length == 0)
+        return null;
+      return array[array.length - 1];
+    };
+    ListWrapper.indexOf = function(array, value, startIndex) {
+      if (startIndex === void 0) {
+        startIndex = 0;
+      }
+      return array.indexOf(value, startIndex);
+    };
+    ListWrapper.contains = function(list, el) {
+      return list.indexOf(el) !== -1;
+    };
+    ListWrapper.reversed = function(array) {
+      var a = ListWrapper.clone(array);
+      return a.reverse();
+    };
+    ListWrapper.concat = function(a, b) {
+      return a.concat(b);
+    };
+    ListWrapper.insert = function(list, index, value) {
+      list.splice(index, 0, value);
+    };
+    ListWrapper.removeAt = function(list, index) {
+      var res = list[index];
+      list.splice(index, 1);
+      return res;
+    };
+    ListWrapper.removeAll = function(list, items) {
+      for (var i = 0; i < items.length; ++i) {
+        var index = list.indexOf(items[i]);
+        list.splice(index, 1);
+      }
+    };
+    ListWrapper.remove = function(list, el) {
+      var index = list.indexOf(el);
+      if (index > -1) {
+        list.splice(index, 1);
+        return true;
+      }
+      return false;
+    };
+    ListWrapper.clear = function(list) {
+      list.length = 0;
+    };
+    ListWrapper.isEmpty = function(list) {
+      return list.length == 0;
+    };
+    ListWrapper.fill = function(list, value, start, end) {
+      if (start === void 0) {
+        start = 0;
+      }
+      if (end === void 0) {
+        end = null;
+      }
+      list.fill(value, start, end === null ? list.length : end);
+    };
+    ListWrapper.equals = function(a, b) {
+      if (a.length != b.length)
+        return false;
+      for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i])
+          return false;
+      }
+      return true;
+    };
+    ListWrapper.slice = function(l, from, to) {
+      if (from === void 0) {
+        from = 0;
+      }
+      if (to === void 0) {
+        to = null;
+      }
+      return l.slice(from, to === null ? undefined : to);
+    };
+    ListWrapper.splice = function(l, from, length) {
+      return l.splice(from, length);
+    };
+    ListWrapper.sort = function(l, compareFn) {
+      if (isPresent(compareFn)) {
+        l.sort(compareFn);
+      } else {
+        l.sort();
+      }
+    };
+    ListWrapper.toString = function(l) {
+      return l.toString();
+    };
+    ListWrapper.toJSON = function(l) {
+      return JSON.stringify(l);
+    };
+    ListWrapper.maximum = function(list, predicate) {
+      if (list.length == 0) {
+        return null;
+      }
+      var solution = null;
+      var maxValue = -Infinity;
+      for (var index = 0; index < list.length; index++) {
+        var candidate = list[index];
+        if (isBlank(candidate)) {
+          continue;
+        }
+        var candidateValue = predicate(candidate);
+        if (candidateValue > maxValue) {
+          solution = candidate;
+          maxValue = candidateValue;
+        }
+      }
+      return solution;
+    };
+    ListWrapper.flatten = function(list) {
+      var target = [];
+      _flattenArray(list, target);
+      return target;
+    };
+    ListWrapper.addAll = function(list, source) {
+      for (var i = 0; i < source.length; i++) {
+        list.push(source[i]);
+      }
+    };
+    return ListWrapper;
+  }());
+  function _flattenArray(source, target) {
+    if (isPresent(source)) {
+      for (var i = 0; i < source.length; i++) {
+        var item = source[i];
+        if (isArray(item)) {
+          _flattenArray(item, target);
+        } else {
+          target.push(item);
+        }
+      }
+    }
+    return target;
+  }
+  function isListLikeIterable(obj) {
+    if (!isJsObject(obj))
+      return false;
+    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
+  }
+  var createSetFromList = (function() {
+    var test = new Set$1([1, 2, 3]);
+    if (test.size === 3) {
+      return function createSetFromList(lst) {
+        return new Set$1(lst);
+      };
+    } else {
+      return function createSetAndPopulateFromList(lst) {
+        var res = new Set$1(lst);
+        if (res.size !== lst.length) {
+          for (var i = 0; i < lst.length; i++) {
+            res.add(lst[i]);
+          }
+        }
+        return res;
+      };
+    }
+  })();
+  var NgClass = (function() {
+    function NgClass(_iterableDiffers, _keyValueDiffers, _ngEl, _renderer) {
+      this._iterableDiffers = _iterableDiffers;
+      this._keyValueDiffers = _keyValueDiffers;
+      this._ngEl = _ngEl;
+      this._renderer = _renderer;
+      this._initialClasses = [];
+    }
+    Object.defineProperty(NgClass.prototype, "klass", {
+      set: function(v) {
+        this._applyInitialClasses(true);
+        this._initialClasses = typeof v === 'string' ? v.split(/\s+/) : [];
+        this._applyInitialClasses(false);
+        this._applyClasses(this._rawClass, false);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgClass.prototype, "ngClass", {
+      set: function(v) {
+        this._cleanupClasses(this._rawClass);
+        this._iterableDiffer = null;
+        this._keyValueDiffer = null;
+        this._rawClass = typeof v === 'string' ? v.split(/\s+/) : v;
+        if (this._rawClass) {
+          if (isListLikeIterable(this._rawClass)) {
+            this._iterableDiffer = this._iterableDiffers.find(this._rawClass).create(null);
+          } else {
+            this._keyValueDiffer = this._keyValueDiffers.find(this._rawClass).create(null);
+          }
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgClass.prototype.ngDoCheck = function() {
+      if (this._iterableDiffer) {
+        var changes = this._iterableDiffer.diff(this._rawClass);
+        if (changes) {
+          this._applyIterableChanges(changes);
+        }
+      } else if (this._keyValueDiffer) {
+        var changes = this._keyValueDiffer.diff(this._rawClass);
+        if (changes) {
+          this._applyKeyValueChanges(changes);
+        }
+      }
+    };
+    NgClass.prototype._cleanupClasses = function(rawClassVal) {
+      this._applyClasses(rawClassVal, true);
+      this._applyInitialClasses(false);
+    };
+    NgClass.prototype._applyKeyValueChanges = function(changes) {
+      var _this = this;
+      changes.forEachAddedItem(function(record) {
+        return _this._toggleClass(record.key, record.currentValue);
+      });
+      changes.forEachChangedItem(function(record) {
+        return _this._toggleClass(record.key, record.currentValue);
+      });
+      changes.forEachRemovedItem(function(record) {
+        if (record.previousValue) {
+          _this._toggleClass(record.key, false);
+        }
+      });
+    };
+    NgClass.prototype._applyIterableChanges = function(changes) {
+      var _this = this;
+      changes.forEachAddedItem(function(record) {
+        return _this._toggleClass(record.item, true);
+      });
+      changes.forEachRemovedItem(function(record) {
+        return _this._toggleClass(record.item, false);
+      });
+    };
+    NgClass.prototype._applyInitialClasses = function(isCleanup) {
+      var _this = this;
+      this._initialClasses.forEach(function(klass) {
+        return _this._toggleClass(klass, !isCleanup);
+      });
+    };
+    NgClass.prototype._applyClasses = function(rawClassVal, isCleanup) {
+      var _this = this;
+      if (rawClassVal) {
+        if (Array.isArray(rawClassVal) || rawClassVal instanceof Set) {
+          rawClassVal.forEach(function(klass) {
+            return _this._toggleClass(klass, !isCleanup);
+          });
+        } else {
+          Object.keys(rawClassVal).forEach(function(klass) {
+            if (isPresent(rawClassVal[klass]))
+              _this._toggleClass(klass, !isCleanup);
+          });
+        }
+      }
+    };
+    NgClass.prototype._toggleClass = function(klass, enabled) {
+      var _this = this;
+      klass = klass.trim();
+      if (klass) {
+        klass.split(/\s+/g).forEach(function(klass) {
+          _this._renderer.setElementClass(_this._ngEl.nativeElement, klass, enabled);
+        });
+      }
+    };
+    NgClass.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngClass]'}]
+    }];
+    NgClass.ctorParameters = [{type: _angular_core.IterableDiffers}, {type: _angular_core.KeyValueDiffers}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
+    NgClass.propDecorators = {
+      'klass': [{
+        type: _angular_core.Input,
+        args: ['class']
+      }],
+      'ngClass': [{type: _angular_core.Input}]
+    };
+    return NgClass;
+  }());
+  var NgForRow = (function() {
+    function NgForRow($implicit, index, count) {
+      this.$implicit = $implicit;
+      this.index = index;
+      this.count = count;
+    }
+    Object.defineProperty(NgForRow.prototype, "first", {
+      get: function() {
+        return this.index === 0;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgForRow.prototype, "last", {
+      get: function() {
+        return this.index === this.count - 1;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgForRow.prototype, "even", {
+      get: function() {
+        return this.index % 2 === 0;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgForRow.prototype, "odd", {
+      get: function() {
+        return !this.even;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return NgForRow;
+  }());
+  var NgFor = (function() {
+    function NgFor(_viewContainer, _template, _differs, _cdr) {
+      this._viewContainer = _viewContainer;
+      this._template = _template;
+      this._differs = _differs;
+      this._cdr = _cdr;
+      this._differ = null;
+    }
+    Object.defineProperty(NgFor.prototype, "ngForTemplate", {
+      set: function(value) {
+        if (value) {
+          this._template = value;
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgFor.prototype.ngOnChanges = function(changes) {
+      if ('ngForOf' in changes) {
+        var value = changes['ngForOf'].currentValue;
+        if (!this._differ && value) {
+          try {
+            this._differ = this._differs.find(value).create(this._cdr, this.ngForTrackBy);
+          } catch (e) {
+            throw new Error("Cannot find a differ supporting object '" + value + "' of type '" + getTypeNameForDebugging(value) + "'. NgFor only supports binding to Iterables such as Arrays.");
+          }
+        }
+      }
+    };
+    NgFor.prototype.ngDoCheck = function() {
+      if (this._differ) {
+        var changes = this._differ.diff(this.ngForOf);
+        if (changes)
+          this._applyChanges(changes);
+      }
+    };
+    NgFor.prototype._applyChanges = function(changes) {
+      var _this = this;
+      var insertTuples = [];
+      changes.forEachOperation(function(item, adjustedPreviousIndex, currentIndex) {
+        if (item.previousIndex == null) {
+          var view = _this._viewContainer.createEmbeddedView(_this._template, new NgForRow(null, null, null), currentIndex);
+          var tuple = new RecordViewTuple(item, view);
+          insertTuples.push(tuple);
+        } else if (currentIndex == null) {
+          _this._viewContainer.remove(adjustedPreviousIndex);
+        } else {
+          var view = _this._viewContainer.get(adjustedPreviousIndex);
+          _this._viewContainer.move(view, currentIndex);
+          var tuple = new RecordViewTuple(item, view);
+          insertTuples.push(tuple);
+        }
+      });
+      for (var i = 0; i < insertTuples.length; i++) {
+        this._perViewChange(insertTuples[i].view, insertTuples[i].record);
+      }
+      for (var i = 0,
+          ilen = this._viewContainer.length; i < ilen; i++) {
+        var viewRef = this._viewContainer.get(i);
+        viewRef.context.index = i;
+        viewRef.context.count = ilen;
+      }
+      changes.forEachIdentityChange(function(record) {
+        var viewRef = _this._viewContainer.get(record.currentIndex);
+        viewRef.context.$implicit = record.item;
+      });
+    };
+    NgFor.prototype._perViewChange = function(view, record) {
+      view.context.$implicit = record.item;
+    };
+    NgFor.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngFor][ngForOf]'}]
+    }];
+    NgFor.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {type: _angular_core.IterableDiffers}, {type: _angular_core.ChangeDetectorRef}];
+    NgFor.propDecorators = {
+      'ngForOf': [{type: _angular_core.Input}],
+      'ngForTrackBy': [{type: _angular_core.Input}],
+      'ngForTemplate': [{type: _angular_core.Input}]
+    };
+    return NgFor;
+  }());
+  var RecordViewTuple = (function() {
+    function RecordViewTuple(record, view) {
+      this.record = record;
+      this.view = view;
+    }
+    return RecordViewTuple;
+  }());
+  var NgIf = (function() {
+    function NgIf(_viewContainer, _template) {
+      this._viewContainer = _viewContainer;
+      this._template = _template;
+      this._hasView = false;
+    }
+    Object.defineProperty(NgIf.prototype, "ngIf", {
+      set: function(condition) {
+        if (condition && !this._hasView) {
+          this._hasView = true;
+          this._viewContainer.createEmbeddedView(this._template);
+        } else if (!condition && this._hasView) {
+          this._hasView = false;
+          this._viewContainer.clear();
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgIf.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngIf]'}]
+    }];
+    NgIf.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}];
+    NgIf.propDecorators = {'ngIf': [{type: _angular_core.Input}]};
+    return NgIf;
+  }());
+  var _CASE_DEFAULT = new Object();
+  var SwitchView = (function() {
+    function SwitchView(_viewContainerRef, _templateRef) {
+      this._viewContainerRef = _viewContainerRef;
+      this._templateRef = _templateRef;
+    }
+    SwitchView.prototype.create = function() {
+      this._viewContainerRef.createEmbeddedView(this._templateRef);
+    };
+    SwitchView.prototype.destroy = function() {
+      this._viewContainerRef.clear();
+    };
+    return SwitchView;
+  }());
+  var NgSwitch = (function() {
+    function NgSwitch() {
+      this._useDefault = false;
+      this._valueViews = new Map();
+      this._activeViews = [];
+    }
+    Object.defineProperty(NgSwitch.prototype, "ngSwitch", {
+      set: function(value) {
+        this._emptyAllActiveViews();
+        this._useDefault = false;
+        var views = this._valueViews.get(value);
+        if (!views) {
+          this._useDefault = true;
+          views = this._valueViews.get(_CASE_DEFAULT) || null;
+        }
+        this._activateViews(views);
+        this._switchValue = value;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgSwitch.prototype._onCaseValueChanged = function(oldCase, newCase, view) {
+      this._deregisterView(oldCase, view);
+      this._registerView(newCase, view);
+      if (oldCase === this._switchValue) {
+        view.destroy();
+        ListWrapper.remove(this._activeViews, view);
+      } else if (newCase === this._switchValue) {
+        if (this._useDefault) {
+          this._useDefault = false;
+          this._emptyAllActiveViews();
+        }
+        view.create();
+        this._activeViews.push(view);
+      }
+      if (this._activeViews.length === 0 && !this._useDefault) {
+        this._useDefault = true;
+        this._activateViews(this._valueViews.get(_CASE_DEFAULT));
+      }
+    };
+    NgSwitch.prototype._emptyAllActiveViews = function() {
+      var activeContainers = this._activeViews;
+      for (var i = 0; i < activeContainers.length; i++) {
+        activeContainers[i].destroy();
+      }
+      this._activeViews = [];
+    };
+    NgSwitch.prototype._activateViews = function(views) {
+      if (views) {
+        for (var i = 0; i < views.length; i++) {
+          views[i].create();
+        }
+        this._activeViews = views;
+      }
+    };
+    NgSwitch.prototype._registerView = function(value, view) {
+      var views = this._valueViews.get(value);
+      if (!views) {
+        views = [];
+        this._valueViews.set(value, views);
+      }
+      views.push(view);
+    };
+    NgSwitch.prototype._deregisterView = function(value, view) {
+      if (value === _CASE_DEFAULT)
+        return;
+      var views = this._valueViews.get(value);
+      if (views.length == 1) {
+        this._valueViews.delete(value);
+      } else {
+        ListWrapper.remove(views, view);
+      }
+    };
+    NgSwitch.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngSwitch]'}]
+    }];
+    NgSwitch.ctorParameters = [];
+    NgSwitch.propDecorators = {'ngSwitch': [{type: _angular_core.Input}]};
+    return NgSwitch;
+  }());
+  var NgSwitchCase = (function() {
+    function NgSwitchCase(viewContainer, templateRef, ngSwitch) {
+      this._value = _CASE_DEFAULT;
+      this._switch = ngSwitch;
+      this._view = new SwitchView(viewContainer, templateRef);
+    }
+    Object.defineProperty(NgSwitchCase.prototype, "ngSwitchCase", {
+      set: function(value) {
+        this._switch._onCaseValueChanged(this._value, value, this._view);
+        this._value = value;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgSwitchCase.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngSwitchCase]'}]
+    }];
+    NgSwitchCase.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {
+      type: NgSwitch,
+      decorators: [{type: _angular_core.Host}]
+    }];
+    NgSwitchCase.propDecorators = {'ngSwitchCase': [{type: _angular_core.Input}]};
+    return NgSwitchCase;
+  }());
+  var NgSwitchDefault = (function() {
+    function NgSwitchDefault(viewContainer, templateRef, sswitch) {
+      sswitch._registerView(_CASE_DEFAULT, new SwitchView(viewContainer, templateRef));
+    }
+    NgSwitchDefault.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngSwitchDefault]'}]
+    }];
+    NgSwitchDefault.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {
+      type: NgSwitch,
+      decorators: [{type: _angular_core.Host}]
+    }];
+    return NgSwitchDefault;
+  }());
+  var NgPlural = (function() {
+    function NgPlural(_localization) {
+      this._localization = _localization;
+      this._caseViews = {};
+    }
+    Object.defineProperty(NgPlural.prototype, "ngPlural", {
+      set: function(value) {
+        this._switchValue = value;
+        this._updateView();
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgPlural.prototype.addCase = function(value, switchView) {
+      this._caseViews[value] = switchView;
+    };
+    NgPlural.prototype._updateView = function() {
+      this._clearViews();
+      var cases = Object.keys(this._caseViews);
+      var key = getPluralCategory(this._switchValue, cases, this._localization);
+      this._activateView(this._caseViews[key]);
+    };
+    NgPlural.prototype._clearViews = function() {
+      if (this._activeView)
+        this._activeView.destroy();
+    };
+    NgPlural.prototype._activateView = function(view) {
+      if (view) {
+        this._activeView = view;
+        this._activeView.create();
+      }
+    };
+    NgPlural.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngPlural]'}]
+    }];
+    NgPlural.ctorParameters = [{type: NgLocalization}];
+    NgPlural.propDecorators = {'ngPlural': [{type: _angular_core.Input}]};
+    return NgPlural;
+  }());
+  var NgPluralCase = (function() {
+    function NgPluralCase(value, template, viewContainer, ngPlural) {
+      this.value = value;
+      ngPlural.addCase(value, new SwitchView(viewContainer, template));
+    }
+    NgPluralCase.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngPluralCase]'}]
+    }];
+    NgPluralCase.ctorParameters = [{
+      type: undefined,
+      decorators: [{
+        type: _angular_core.Attribute,
+        args: ['ngPluralCase']
+      }]
+    }, {type: _angular_core.TemplateRef}, {type: _angular_core.ViewContainerRef}, {
+      type: NgPlural,
+      decorators: [{type: _angular_core.Host}]
+    }];
+    return NgPluralCase;
+  }());
+  var NgStyle = (function() {
+    function NgStyle(_differs, _ngEl, _renderer) {
+      this._differs = _differs;
+      this._ngEl = _ngEl;
+      this._renderer = _renderer;
+    }
+    Object.defineProperty(NgStyle.prototype, "ngStyle", {
+      set: function(v) {
+        this._ngStyle = v;
+        if (!this._differ && v) {
+          this._differ = this._differs.find(v).create(null);
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgStyle.prototype.ngDoCheck = function() {
+      if (this._differ) {
+        var changes = this._differ.diff(this._ngStyle);
+        if (changes) {
+          this._applyChanges(changes);
+        }
+      }
+    };
+    NgStyle.prototype._applyChanges = function(changes) {
+      var _this = this;
+      changes.forEachRemovedItem(function(record) {
+        return _this._setStyle(record.key, null);
+      });
+      changes.forEachAddedItem(function(record) {
+        return _this._setStyle(record.key, record.currentValue);
+      });
+      changes.forEachChangedItem(function(record) {
+        return _this._setStyle(record.key, record.currentValue);
+      });
+    };
+    NgStyle.prototype._setStyle = function(nameAndUnit, value) {
+      var _a = nameAndUnit.split('.'),
+          name = _a[0],
+          unit = _a[1];
+      value = value !== null && value !== void(0) && unit ? "" + value + unit : value;
+      this._renderer.setElementStyle(this._ngEl.nativeElement, name, value);
+    };
+    NgStyle.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngStyle]'}]
+    }];
+    NgStyle.ctorParameters = [{type: _angular_core.KeyValueDiffers}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
+    NgStyle.propDecorators = {'ngStyle': [{type: _angular_core.Input}]};
+    return NgStyle;
+  }());
+  var NgTemplateOutlet = (function() {
+    function NgTemplateOutlet(_viewContainerRef) {
+      this._viewContainerRef = _viewContainerRef;
+    }
+    Object.defineProperty(NgTemplateOutlet.prototype, "ngOutletContext", {
+      set: function(context) {
+        this._context = context;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(NgTemplateOutlet.prototype, "ngTemplateOutlet", {
+      set: function(templateRef) {
+        this._templateRef = templateRef;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NgTemplateOutlet.prototype.ngOnChanges = function() {
+      if (this._viewRef) {
+        this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._viewRef));
+      }
+      if (this._templateRef) {
+        this._viewRef = this._viewContainerRef.createEmbeddedView(this._templateRef, this._context);
+      }
+    };
+    NgTemplateOutlet.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[ngTemplateOutlet]'}]
+    }];
+    NgTemplateOutlet.ctorParameters = [{type: _angular_core.ViewContainerRef}];
+    NgTemplateOutlet.propDecorators = {
+      'ngOutletContext': [{type: _angular_core.Input}],
+      'ngTemplateOutlet': [{type: _angular_core.Input}]
+    };
+    return NgTemplateOutlet;
+  }());
+  var COMMON_DIRECTIVES = [NgClass, NgFor, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase];
+  var __extends$4 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var BaseError = (function(_super) {
+    __extends$4(BaseError, _super);
+    function BaseError(message) {
+      var nativeError = _super.call(this, message);
+      this._nativeError = nativeError;
+    }
+    Object.defineProperty(BaseError.prototype, "message", {
+      get: function() {
+        return this._nativeError.message;
+      },
+      set: function(message) {
+        this._nativeError.message = message;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(BaseError.prototype, "name", {
+      get: function() {
+        return this._nativeError.name;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(BaseError.prototype, "stack", {
+      get: function() {
+        return this._nativeError.stack;
+      },
+      set: function(value) {
+        this._nativeError.stack = value;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    BaseError.prototype.toString = function() {
+      return this._nativeError.toString();
+    };
+    return BaseError;
+  }(Error));
+  var WrappedError = (function(_super) {
+    __extends$4(WrappedError, _super);
+    function WrappedError(message, error) {
+      _super.call(this, message + " caused by: " + (error instanceof Error ? error.message : error));
+      this.originalError = error;
+    }
+    Object.defineProperty(WrappedError.prototype, "stack", {
+      get: function() {
+        return (this.originalError instanceof Error ? this.originalError : this._nativeError).stack;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return WrappedError;
+  }(BaseError));
+  var __extends$3 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var InvalidPipeArgumentError = (function(_super) {
+    __extends$3(InvalidPipeArgumentError, _super);
+    function InvalidPipeArgumentError(type, value) {
+      _super.call(this, "Invalid argument '" + value + "' for pipe '" + stringify(type) + "'");
+    }
+    return InvalidPipeArgumentError;
+  }(BaseError));
+  var ObservableStrategy = (function() {
+    function ObservableStrategy() {}
+    ObservableStrategy.prototype.createSubscription = function(async, updateLatestValue) {
+      return async.subscribe({
+        next: updateLatestValue,
+        error: function(e) {
+          throw e;
+        }
+      });
+    };
+    ObservableStrategy.prototype.dispose = function(subscription) {
+      subscription.unsubscribe();
+    };
+    ObservableStrategy.prototype.onDestroy = function(subscription) {
+      subscription.unsubscribe();
+    };
+    return ObservableStrategy;
+  }());
+  var PromiseStrategy = (function() {
+    function PromiseStrategy() {}
+    PromiseStrategy.prototype.createSubscription = function(async, updateLatestValue) {
+      return async.then(updateLatestValue, function(e) {
+        throw e;
+      });
+    };
+    PromiseStrategy.prototype.dispose = function(subscription) {};
+    PromiseStrategy.prototype.onDestroy = function(subscription) {};
+    return PromiseStrategy;
+  }());
+  var _promiseStrategy = new PromiseStrategy();
+  var _observableStrategy = new ObservableStrategy();
+  var AsyncPipe = (function() {
+    function AsyncPipe(_ref) {
+      this._latestValue = null;
+      this._latestReturnedValue = null;
+      this._subscription = null;
+      this._obj = null;
+      this._strategy = null;
+      this._ref = _ref;
+    }
+    AsyncPipe.prototype.ngOnDestroy = function() {
+      if (isPresent(this._subscription)) {
+        this._dispose();
+      }
+    };
+    AsyncPipe.prototype.transform = function(obj) {
+      if (isBlank(this._obj)) {
+        if (isPresent(obj)) {
+          this._subscribe(obj);
+        }
+        this._latestReturnedValue = this._latestValue;
+        return this._latestValue;
+      }
+      if (obj !== this._obj) {
+        this._dispose();
+        return this.transform(obj);
+      }
+      if (this._latestValue === this._latestReturnedValue) {
+        return this._latestReturnedValue;
+      } else {
+        this._latestReturnedValue = this._latestValue;
+        return _angular_core.WrappedValue.wrap(this._latestValue);
+      }
+    };
+    AsyncPipe.prototype._subscribe = function(obj) {
+      var _this = this;
+      this._obj = obj;
+      this._strategy = this._selectStrategy(obj);
+      this._subscription = this._strategy.createSubscription(obj, function(value) {
+        return _this._updateLatestValue(obj, value);
+      });
+    };
+    AsyncPipe.prototype._selectStrategy = function(obj) {
+      if (isPromise(obj)) {
+        return _promiseStrategy;
+      } else if (obj.subscribe) {
+        return _observableStrategy;
+      } else {
+        throw new InvalidPipeArgumentError(AsyncPipe, obj);
+      }
+    };
+    AsyncPipe.prototype._dispose = function() {
+      this._strategy.dispose(this._subscription);
+      this._latestValue = null;
+      this._latestReturnedValue = null;
+      this._subscription = null;
+      this._obj = null;
+    };
+    AsyncPipe.prototype._updateLatestValue = function(async, value) {
+      if (async === this._obj) {
+        this._latestValue = value;
+        this._ref.markForCheck();
+      }
+    };
+    AsyncPipe.decorators = [{
+      type: _angular_core.Pipe,
+      args: [{
+        name: 'async',
+        pure: false
+      }]
+    }];
+    AsyncPipe.ctorParameters = [{type: _angular_core.ChangeDetectorRef}];
+    return AsyncPipe;
+  }());
+  var NumberFormatStyle;
+  (function(NumberFormatStyle) {
+    NumberFormatStyle[NumberFormatStyle["Decimal"] = 0] = "Decimal";
+    NumberFormatStyle[NumberFormatStyle["Percent"] = 1] = "Percent";
+    NumberFormatStyle[NumberFormatStyle["Currency"] = 2] = "Currency";
+  })(NumberFormatStyle || (NumberFormatStyle = {}));
+  var NumberFormatter = (function() {
+    function NumberFormatter() {}
+    NumberFormatter.format = function(num, locale, style, _a) {
+      var _b = _a === void 0 ? {} : _a,
+          minimumIntegerDigits = _b.minimumIntegerDigits,
+          minimumFractionDigits = _b.minimumFractionDigits,
+          maximumFractionDigits = _b.maximumFractionDigits,
+          currency = _b.currency,
+          _c = _b.currencyAsSymbol,
+          currencyAsSymbol = _c === void 0 ? false : _c;
+      var options = {
+        minimumIntegerDigits: minimumIntegerDigits,
+        minimumFractionDigits: minimumFractionDigits,
+        maximumFractionDigits: maximumFractionDigits,
+        style: NumberFormatStyle[style].toLowerCase()
+      };
+      if (style == NumberFormatStyle.Currency) {
+        options.currency = currency;
+        options.currencyDisplay = currencyAsSymbol ? 'symbol' : 'code';
+      }
+      return new Intl.NumberFormat(locale, options).format(num);
+    };
+    return NumberFormatter;
+  }());
+  var DATE_FORMATS_SPLIT = /((?:[^yMLdHhmsazZEwGjJ']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|L+|d+|H+|h+|J+|j+|m+|s+|a|z|Z|G+|w+))(.*)/;
+  var PATTERN_ALIASES = {
+    yMMMdjms: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 3), digitCondition('day', 1), digitCondition('hour', 1), digitCondition('minute', 1), digitCondition('second', 1)])),
+    yMdjm: datePartGetterFactory(combine([digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1), digitCondition('hour', 1), digitCondition('minute', 1)])),
+    yMMMMEEEEd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 4), nameCondition('weekday', 4), digitCondition('day', 1)])),
+    yMMMMd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 4), digitCondition('day', 1)])),
+    yMMMd: datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 3), digitCondition('day', 1)])),
+    yMd: datePartGetterFactory(combine([digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1)])),
+    jms: datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('second', 1), digitCondition('minute', 1)])),
+    jm: datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('minute', 1)]))
+  };
+  var DATE_FORMATS = {
+    yyyy: datePartGetterFactory(digitCondition('year', 4)),
+    yy: datePartGetterFactory(digitCondition('year', 2)),
+    y: datePartGetterFactory(digitCondition('year', 1)),
+    MMMM: datePartGetterFactory(nameCondition('month', 4)),
+    MMM: datePartGetterFactory(nameCondition('month', 3)),
+    MM: datePartGetterFactory(digitCondition('month', 2)),
+    M: datePartGetterFactory(digitCondition('month', 1)),
+    LLLL: datePartGetterFactory(nameCondition('month', 4)),
+    dd: datePartGetterFactory(digitCondition('day', 2)),
+    d: datePartGetterFactory(digitCondition('day', 1)),
+    HH: digitModifier(hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), false)))),
+    H: hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), false))),
+    hh: digitModifier(hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), true)))),
+    h: hourExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
+    jj: datePartGetterFactory(digitCondition('hour', 2)),
+    j: datePartGetterFactory(digitCondition('hour', 1)),
+    mm: digitModifier(datePartGetterFactory(digitCondition('minute', 2))),
+    m: datePartGetterFactory(digitCondition('minute', 1)),
+    ss: digitModifier(datePartGetterFactory(digitCondition('second', 2))),
+    s: datePartGetterFactory(digitCondition('second', 1)),
+    sss: datePartGetterFactory(digitCondition('second', 3)),
+    EEEE: datePartGetterFactory(nameCondition('weekday', 4)),
+    EEE: datePartGetterFactory(nameCondition('weekday', 3)),
+    EE: datePartGetterFactory(nameCondition('weekday', 2)),
+    E: datePartGetterFactory(nameCondition('weekday', 1)),
+    a: hourClockExtracter(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
+    Z: timeZoneGetter('short'),
+    z: timeZoneGetter('long'),
+    ww: datePartGetterFactory({}),
+    w: datePartGetterFactory({}),
+    G: datePartGetterFactory(nameCondition('era', 1)),
+    GG: datePartGetterFactory(nameCondition('era', 2)),
+    GGG: datePartGetterFactory(nameCondition('era', 3)),
+    GGGG: datePartGetterFactory(nameCondition('era', 4))
+  };
+  function digitModifier(inner) {
+    return function(date, locale) {
+      var result = inner(date, locale);
+      return result.length == 1 ? '0' + result : result;
+    };
+  }
+  function hourClockExtracter(inner) {
+    return function(date, locale) {
+      var result = inner(date, locale);
+      return result.split(' ')[1];
+    };
+  }
+  function hourExtracter(inner) {
+    return function(date, locale) {
+      var result = inner(date, locale);
+      return result.split(' ')[0];
+    };
+  }
+  function intlDateFormat(date, locale, options) {
+    return new Intl.DateTimeFormat(locale, options).format(date).replace(/[\u200e\u200f]/g, '');
+  }
+  function timeZoneGetter(timezone) {
+    var options = {
+      hour: '2-digit',
+      hour12: false,
+      timeZoneName: timezone
+    };
+    return function(date, locale) {
+      var result = intlDateFormat(date, locale, options);
+      return result ? result.substring(3) : '';
+    };
+  }
+  function hour12Modify(options, value) {
+    options.hour12 = value;
+    return options;
+  }
+  function digitCondition(prop, len) {
+    var result = {};
+    result[prop] = len == 2 ? '2-digit' : 'numeric';
+    return result;
+  }
+  function nameCondition(prop, len) {
+    var result = {};
+    result[prop] = len < 4 ? 'short' : 'long';
+    return result;
+  }
+  function combine(options) {
+    var result = {};
+    options.forEach(function(option) {
+      Object.assign(result, option);
+    });
+    return result;
+  }
+  function datePartGetterFactory(ret) {
+    return function(date, locale) {
+      return intlDateFormat(date, locale, ret);
+    };
+  }
+  var datePartsFormatterCache = new Map();
+  function dateFormatter(format, date, locale) {
+    var text = '';
+    var match;
+    var fn;
+    var parts = [];
+    if (PATTERN_ALIASES[format]) {
+      return PATTERN_ALIASES[format](date, locale);
+    }
+    if (datePartsFormatterCache.has(format)) {
+      parts = datePartsFormatterCache.get(format);
+    } else {
+      var matches = DATE_FORMATS_SPLIT.exec(format);
+      while (format) {
+        match = DATE_FORMATS_SPLIT.exec(format);
+        if (match) {
+          parts = concat(parts, match, 1);
+          format = parts.pop();
+        } else {
+          parts.push(format);
+          format = null;
+        }
+      }
+      datePartsFormatterCache.set(format, parts);
+    }
+    parts.forEach(function(part) {
+      fn = DATE_FORMATS[part];
+      text += fn ? fn(date, locale) : part === '\'\'' ? '\'' : part.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
+    });
+    return text;
+  }
+  var slice = [].slice;
+  function concat(array1, array2, index) {
+    return array1.concat(slice.call(array2, index));
+  }
+  var DateFormatter = (function() {
+    function DateFormatter() {}
+    DateFormatter.format = function(date, locale, pattern) {
+      return dateFormatter(pattern, date, locale);
+    };
+    return DateFormatter;
+  }());
+  var DatePipe = (function() {
+    function DatePipe(_locale) {
+      this._locale = _locale;
+    }
+    DatePipe.prototype.transform = function(value, pattern) {
+      if (pattern === void 0) {
+        pattern = 'mediumDate';
+      }
+      if (isBlank(value))
+        return null;
+      if (!this.supports(value)) {
+        throw new InvalidPipeArgumentError(DatePipe, value);
+      }
+      if (NumberWrapper.isNumeric(value)) {
+        value = DateWrapper.fromMillis(parseFloat(value));
+      } else if (isString(value)) {
+        value = DateWrapper.fromISOString(value);
+      }
+      if (StringMapWrapper.contains(DatePipe._ALIASES, pattern)) {
+        pattern = StringMapWrapper.get(DatePipe._ALIASES, pattern);
+      }
+      return DateFormatter.format(value, this._locale, pattern);
+    };
+    DatePipe.prototype.supports = function(obj) {
+      if (isDate(obj) || NumberWrapper.isNumeric(obj)) {
+        return true;
+      }
+      if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) {
+        return true;
+      }
+      return false;
+    };
+    DatePipe._ALIASES = {
+      'medium': 'yMMMdjms',
+      'short': 'yMdjm',
+      'fullDate': 'yMMMMEEEEd',
+      'longDate': 'yMMMMd',
+      'mediumDate': 'yMMMd',
+      'shortDate': 'yMd',
+      'mediumTime': 'jms',
+      'shortTime': 'jm'
+    };
+    DatePipe.decorators = [{
+      type: _angular_core.Pipe,
+      args: [{
+        name: 'date',
+        pure: true
+      }]
+    }];
+    DatePipe.ctorParameters = [{
+      type: undefined,
+      decorators: [{
+        type: _angular_core.Inject,
+        args: [_angular_core.LOCALE_ID]
+      }]
+    }];
+    return DatePipe;
+  }());
   var _INTERPOLATION_REGEXP = /#/g;
   var I18nPluralPipe = (function() {
     function I18nPluralPipe(_localization) {
@@ -25744,849 +26587,6 @@ var define = System.amdDefine;
     UpperCasePipe.ctorParameters = [];
     return UpperCasePipe;
   }());
-  var NgClass = (function() {
-    function NgClass(_iterableDiffers, _keyValueDiffers, _ngEl, _renderer) {
-      this._iterableDiffers = _iterableDiffers;
-      this._keyValueDiffers = _keyValueDiffers;
-      this._ngEl = _ngEl;
-      this._renderer = _renderer;
-      this._initialClasses = [];
-    }
-    Object.defineProperty(NgClass.prototype, "initialClasses", {
-      set: function(v) {
-        this._applyInitialClasses(true);
-        this._initialClasses = isPresent(v) && isString(v) ? v.split(' ') : [];
-        this._applyInitialClasses(false);
-        this._applyClasses(this._rawClass, false);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(NgClass.prototype, "ngClass", {
-      set: function(v) {
-        this._cleanupClasses(this._rawClass);
-        if (isString(v)) {
-          v = v.split(' ');
-        }
-        this._rawClass = v;
-        this._iterableDiffer = null;
-        this._keyValueDiffer = null;
-        if (isPresent(v)) {
-          if (isListLikeIterable(v)) {
-            this._iterableDiffer = this._iterableDiffers.find(v).create(null);
-          } else {
-            this._keyValueDiffer = this._keyValueDiffers.find(v).create(null);
-          }
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgClass.prototype.ngDoCheck = function() {
-      if (isPresent(this._iterableDiffer)) {
-        var changes = this._iterableDiffer.diff(this._rawClass);
-        if (isPresent(changes)) {
-          this._applyIterableChanges(changes);
-        }
-      }
-      if (isPresent(this._keyValueDiffer)) {
-        var changes = this._keyValueDiffer.diff(this._rawClass);
-        if (isPresent(changes)) {
-          this._applyKeyValueChanges(changes);
-        }
-      }
-    };
-    NgClass.prototype._cleanupClasses = function(rawClassVal) {
-      this._applyClasses(rawClassVal, true);
-      this._applyInitialClasses(false);
-    };
-    NgClass.prototype._applyKeyValueChanges = function(changes) {
-      var _this = this;
-      changes.forEachAddedItem(function(record) {
-        _this._toggleClass(record.key, record.currentValue);
-      });
-      changes.forEachChangedItem(function(record) {
-        _this._toggleClass(record.key, record.currentValue);
-      });
-      changes.forEachRemovedItem(function(record) {
-        if (record.previousValue) {
-          _this._toggleClass(record.key, false);
-        }
-      });
-    };
-    NgClass.prototype._applyIterableChanges = function(changes) {
-      var _this = this;
-      changes.forEachAddedItem(function(record) {
-        _this._toggleClass(record.item, true);
-      });
-      changes.forEachRemovedItem(function(record) {
-        _this._toggleClass(record.item, false);
-      });
-    };
-    NgClass.prototype._applyInitialClasses = function(isCleanup) {
-      var _this = this;
-      this._initialClasses.forEach(function(className) {
-        return _this._toggleClass(className, !isCleanup);
-      });
-    };
-    NgClass.prototype._applyClasses = function(rawClassVal, isCleanup) {
-      var _this = this;
-      if (isPresent(rawClassVal)) {
-        if (isArray(rawClassVal)) {
-          rawClassVal.forEach(function(className) {
-            return _this._toggleClass(className, !isCleanup);
-          });
-        } else if (rawClassVal instanceof Set) {
-          rawClassVal.forEach(function(className) {
-            return _this._toggleClass(className, !isCleanup);
-          });
-        } else {
-          StringMapWrapper.forEach(rawClassVal, function(expVal, className) {
-            if (isPresent(expVal))
-              _this._toggleClass(className, !isCleanup);
-          });
-        }
-      }
-    };
-    NgClass.prototype._toggleClass = function(className, enabled) {
-      className = className.trim();
-      if (className.length > 0) {
-        if (className.indexOf(' ') > -1) {
-          var classes = className.split(/\s+/g);
-          for (var i = 0,
-              len = classes.length; i < len; i++) {
-            this._renderer.setElementClass(this._ngEl.nativeElement, classes[i], enabled);
-          }
-        } else {
-          this._renderer.setElementClass(this._ngEl.nativeElement, className, enabled);
-        }
-      }
-    };
-    NgClass.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngClass]'}]
-    }];
-    NgClass.ctorParameters = [{type: _angular_core.IterableDiffers}, {type: _angular_core.KeyValueDiffers}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
-    NgClass.propDecorators = {
-      'initialClasses': [{
-        type: _angular_core.Input,
-        args: ['class']
-      }],
-      'ngClass': [{type: _angular_core.Input}]
-    };
-    return NgClass;
-  }());
-  var NgForRow = (function() {
-    function NgForRow($implicit, index, count) {
-      this.$implicit = $implicit;
-      this.index = index;
-      this.count = count;
-    }
-    Object.defineProperty(NgForRow.prototype, "first", {
-      get: function() {
-        return this.index === 0;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(NgForRow.prototype, "last", {
-      get: function() {
-        return this.index === this.count - 1;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(NgForRow.prototype, "even", {
-      get: function() {
-        return this.index % 2 === 0;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(NgForRow.prototype, "odd", {
-      get: function() {
-        return !this.even;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return NgForRow;
-  }());
-  var NgFor = (function() {
-    function NgFor(_viewContainer, _templateRef, _iterableDiffers, _cdr) {
-      this._viewContainer = _viewContainer;
-      this._templateRef = _templateRef;
-      this._iterableDiffers = _iterableDiffers;
-      this._cdr = _cdr;
-    }
-    Object.defineProperty(NgFor.prototype, "ngForTemplate", {
-      set: function(value) {
-        if (isPresent(value)) {
-          this._templateRef = value;
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgFor.prototype.ngOnChanges = function(changes) {
-      if ('ngForOf' in changes) {
-        var value = changes['ngForOf'].currentValue;
-        if (isBlank(this._differ) && isPresent(value)) {
-          try {
-            this._differ = this._iterableDiffers.find(value).create(this._cdr, this.ngForTrackBy);
-          } catch (e) {
-            throw new Error("Cannot find a differ supporting object '" + value + "' of type '" + getTypeNameForDebugging(value) + "'. NgFor only supports binding to Iterables such as Arrays.");
-          }
-        }
-      }
-    };
-    NgFor.prototype.ngDoCheck = function() {
-      if (isPresent(this._differ)) {
-        var changes = this._differ.diff(this.ngForOf);
-        if (isPresent(changes))
-          this._applyChanges(changes);
-      }
-    };
-    NgFor.prototype._applyChanges = function(changes) {
-      var _this = this;
-      var insertTuples = [];
-      changes.forEachOperation(function(item, adjustedPreviousIndex, currentIndex) {
-        if (item.previousIndex == null) {
-          var view = _this._viewContainer.createEmbeddedView(_this._templateRef, new NgForRow(null, null, null), currentIndex);
-          var tuple = new RecordViewTuple(item, view);
-          insertTuples.push(tuple);
-        } else if (currentIndex == null) {
-          _this._viewContainer.remove(adjustedPreviousIndex);
-        } else {
-          var view = _this._viewContainer.get(adjustedPreviousIndex);
-          _this._viewContainer.move(view, currentIndex);
-          var tuple = new RecordViewTuple(item, view);
-          insertTuples.push(tuple);
-        }
-      });
-      for (var i = 0; i < insertTuples.length; i++) {
-        this._perViewChange(insertTuples[i].view, insertTuples[i].record);
-      }
-      for (var i = 0,
-          ilen = this._viewContainer.length; i < ilen; i++) {
-        var viewRef = this._viewContainer.get(i);
-        viewRef.context.index = i;
-        viewRef.context.count = ilen;
-      }
-      changes.forEachIdentityChange(function(record) {
-        var viewRef = _this._viewContainer.get(record.currentIndex);
-        viewRef.context.$implicit = record.item;
-      });
-    };
-    NgFor.prototype._perViewChange = function(view, record) {
-      view.context.$implicit = record.item;
-    };
-    NgFor.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngFor][ngForOf]'}]
-    }];
-    NgFor.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {type: _angular_core.IterableDiffers}, {type: _angular_core.ChangeDetectorRef}];
-    NgFor.propDecorators = {
-      'ngForOf': [{type: _angular_core.Input}],
-      'ngForTrackBy': [{type: _angular_core.Input}],
-      'ngForTemplate': [{type: _angular_core.Input}]
-    };
-    return NgFor;
-  }());
-  var RecordViewTuple = (function() {
-    function RecordViewTuple(record, view) {
-      this.record = record;
-      this.view = view;
-    }
-    return RecordViewTuple;
-  }());
-  var NgIf = (function() {
-    function NgIf(_viewContainer, _templateRef) {
-      this._viewContainer = _viewContainer;
-      this._templateRef = _templateRef;
-      this._prevCondition = null;
-    }
-    Object.defineProperty(NgIf.prototype, "ngIf", {
-      set: function(newCondition) {
-        if (newCondition && (isBlank(this._prevCondition) || !this._prevCondition)) {
-          this._prevCondition = true;
-          this._viewContainer.createEmbeddedView(this._templateRef);
-        } else if (!newCondition && (isBlank(this._prevCondition) || this._prevCondition)) {
-          this._prevCondition = false;
-          this._viewContainer.clear();
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgIf.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngIf]'}]
-    }];
-    NgIf.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}];
-    NgIf.propDecorators = {'ngIf': [{type: _angular_core.Input}]};
-    return NgIf;
-  }());
-  var _CASE_DEFAULT = new Object();
-  var SwitchView = (function() {
-    function SwitchView(_viewContainerRef, _templateRef) {
-      this._viewContainerRef = _viewContainerRef;
-      this._templateRef = _templateRef;
-    }
-    SwitchView.prototype.create = function() {
-      this._viewContainerRef.createEmbeddedView(this._templateRef);
-    };
-    SwitchView.prototype.destroy = function() {
-      this._viewContainerRef.clear();
-    };
-    return SwitchView;
-  }());
-  var NgSwitch = (function() {
-    function NgSwitch() {
-      this._useDefault = false;
-      this._valueViews = new Map();
-      this._activeViews = [];
-    }
-    Object.defineProperty(NgSwitch.prototype, "ngSwitch", {
-      set: function(value) {
-        this._emptyAllActiveViews();
-        this._useDefault = false;
-        var views = this._valueViews.get(value);
-        if (isBlank(views)) {
-          this._useDefault = true;
-          views = normalizeBlank(this._valueViews.get(_CASE_DEFAULT));
-        }
-        this._activateViews(views);
-        this._switchValue = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgSwitch.prototype._onCaseValueChanged = function(oldCase, newCase, view) {
-      this._deregisterView(oldCase, view);
-      this._registerView(newCase, view);
-      if (oldCase === this._switchValue) {
-        view.destroy();
-        ListWrapper.remove(this._activeViews, view);
-      } else if (newCase === this._switchValue) {
-        if (this._useDefault) {
-          this._useDefault = false;
-          this._emptyAllActiveViews();
-        }
-        view.create();
-        this._activeViews.push(view);
-      }
-      if (this._activeViews.length === 0 && !this._useDefault) {
-        this._useDefault = true;
-        this._activateViews(this._valueViews.get(_CASE_DEFAULT));
-      }
-    };
-    NgSwitch.prototype._emptyAllActiveViews = function() {
-      var activeContainers = this._activeViews;
-      for (var i = 0; i < activeContainers.length; i++) {
-        activeContainers[i].destroy();
-      }
-      this._activeViews = [];
-    };
-    NgSwitch.prototype._activateViews = function(views) {
-      if (isPresent(views)) {
-        for (var i = 0; i < views.length; i++) {
-          views[i].create();
-        }
-        this._activeViews = views;
-      }
-    };
-    NgSwitch.prototype._registerView = function(value, view) {
-      var views = this._valueViews.get(value);
-      if (isBlank(views)) {
-        views = [];
-        this._valueViews.set(value, views);
-      }
-      views.push(view);
-    };
-    NgSwitch.prototype._deregisterView = function(value, view) {
-      if (value === _CASE_DEFAULT)
-        return;
-      var views = this._valueViews.get(value);
-      if (views.length == 1) {
-        this._valueViews.delete(value);
-      } else {
-        ListWrapper.remove(views, view);
-      }
-    };
-    NgSwitch.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngSwitch]'}]
-    }];
-    NgSwitch.ctorParameters = [];
-    NgSwitch.propDecorators = {'ngSwitch': [{type: _angular_core.Input}]};
-    return NgSwitch;
-  }());
-  var NgSwitchCase = (function() {
-    function NgSwitchCase(viewContainer, templateRef, ngSwitch) {
-      this._value = _CASE_DEFAULT;
-      this._switch = ngSwitch;
-      this._view = new SwitchView(viewContainer, templateRef);
-    }
-    Object.defineProperty(NgSwitchCase.prototype, "ngSwitchCase", {
-      set: function(value) {
-        this._switch._onCaseValueChanged(this._value, value, this._view);
-        this._value = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgSwitchCase.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngSwitchCase]'}]
-    }];
-    NgSwitchCase.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {
-      type: NgSwitch,
-      decorators: [{type: _angular_core.Host}]
-    }];
-    NgSwitchCase.propDecorators = {'ngSwitchCase': [{type: _angular_core.Input}]};
-    return NgSwitchCase;
-  }());
-  var NgSwitchDefault = (function() {
-    function NgSwitchDefault(viewContainer, templateRef, sswitch) {
-      sswitch._registerView(_CASE_DEFAULT, new SwitchView(viewContainer, templateRef));
-    }
-    NgSwitchDefault.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngSwitchDefault]'}]
-    }];
-    NgSwitchDefault.ctorParameters = [{type: _angular_core.ViewContainerRef}, {type: _angular_core.TemplateRef}, {
-      type: NgSwitch,
-      decorators: [{type: _angular_core.Host}]
-    }];
-    return NgSwitchDefault;
-  }());
-  var NgPlural = (function() {
-    function NgPlural(_localization) {
-      this._localization = _localization;
-      this._caseViews = {};
-    }
-    Object.defineProperty(NgPlural.prototype, "ngPlural", {
-      set: function(value) {
-        this._switchValue = value;
-        this._updateView();
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgPlural.prototype.addCase = function(value, switchView) {
-      this._caseViews[value] = switchView;
-    };
-    NgPlural.prototype._updateView = function() {
-      this._clearViews();
-      var key = getPluralCategory(this._switchValue, Object.keys(this._caseViews), this._localization);
-      this._activateView(this._caseViews[key]);
-    };
-    NgPlural.prototype._clearViews = function() {
-      if (isPresent(this._activeView))
-        this._activeView.destroy();
-    };
-    NgPlural.prototype._activateView = function(view) {
-      if (!isPresent(view))
-        return;
-      this._activeView = view;
-      this._activeView.create();
-    };
-    NgPlural.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngPlural]'}]
-    }];
-    NgPlural.ctorParameters = [{type: NgLocalization}];
-    NgPlural.propDecorators = {'ngPlural': [{type: _angular_core.Input}]};
-    return NgPlural;
-  }());
-  var NgPluralCase = (function() {
-    function NgPluralCase(value, template, viewContainer, ngPlural) {
-      this.value = value;
-      ngPlural.addCase(value, new SwitchView(viewContainer, template));
-    }
-    NgPluralCase.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngPluralCase]'}]
-    }];
-    NgPluralCase.ctorParameters = [{
-      type: undefined,
-      decorators: [{
-        type: _angular_core.Attribute,
-        args: ['ngPluralCase']
-      }]
-    }, {type: _angular_core.TemplateRef}, {type: _angular_core.ViewContainerRef}, {
-      type: NgPlural,
-      decorators: [{type: _angular_core.Host}]
-    }];
-    return NgPluralCase;
-  }());
-  var NgStyle = (function() {
-    function NgStyle(_differs, _ngEl, _renderer) {
-      this._differs = _differs;
-      this._ngEl = _ngEl;
-      this._renderer = _renderer;
-    }
-    Object.defineProperty(NgStyle.prototype, "ngStyle", {
-      set: function(v) {
-        this._ngStyle = v;
-        if (isBlank(this._differ) && isPresent(v)) {
-          this._differ = this._differs.find(this._ngStyle).create(null);
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgStyle.prototype.ngDoCheck = function() {
-      if (isPresent(this._differ)) {
-        var changes = this._differ.diff(this._ngStyle);
-        if (isPresent(changes)) {
-          this._applyChanges(changes);
-        }
-      }
-    };
-    NgStyle.prototype._applyChanges = function(changes) {
-      var _this = this;
-      changes.forEachRemovedItem(function(record) {
-        _this._setStyle(record.key, null);
-      });
-      changes.forEachAddedItem(function(record) {
-        _this._setStyle(record.key, record.currentValue);
-      });
-      changes.forEachChangedItem(function(record) {
-        _this._setStyle(record.key, record.currentValue);
-      });
-    };
-    NgStyle.prototype._setStyle = function(name, val) {
-      var nameParts = name.split('.');
-      var nameToSet = nameParts[0];
-      var valToSet = isPresent(val) && nameParts.length === 2 ? "" + val + nameParts[1] : val;
-      this._renderer.setElementStyle(this._ngEl.nativeElement, nameToSet, valToSet);
-    };
-    NgStyle.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngStyle]'}]
-    }];
-    NgStyle.ctorParameters = [{type: _angular_core.KeyValueDiffers}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
-    NgStyle.propDecorators = {'ngStyle': [{type: _angular_core.Input}]};
-    return NgStyle;
-  }());
-  var NgTemplateOutlet = (function() {
-    function NgTemplateOutlet(_viewContainerRef) {
-      this._viewContainerRef = _viewContainerRef;
-    }
-    Object.defineProperty(NgTemplateOutlet.prototype, "ngOutletContext", {
-      set: function(context) {
-        this._context = context;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(NgTemplateOutlet.prototype, "ngTemplateOutlet", {
-      set: function(templateRef) {
-        this._templateRef = templateRef;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NgTemplateOutlet.prototype.ngOnChanges = function() {
-      if (this._viewRef) {
-        this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._viewRef));
-      }
-      if (this._templateRef) {
-        this._viewRef = this._viewContainerRef.createEmbeddedView(this._templateRef, this._context);
-      }
-    };
-    NgTemplateOutlet.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[ngTemplateOutlet]'}]
-    }];
-    NgTemplateOutlet.ctorParameters = [{type: _angular_core.ViewContainerRef}];
-    NgTemplateOutlet.propDecorators = {
-      'ngOutletContext': [{type: _angular_core.Input}],
-      'ngTemplateOutlet': [{type: _angular_core.Input}]
-    };
-    return NgTemplateOutlet;
-  }());
-  var PlatformLocation = (function() {
-    function PlatformLocation() {}
-    Object.defineProperty(PlatformLocation.prototype, "pathname", {
-      get: function() {
-        return null;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(PlatformLocation.prototype, "search", {
-      get: function() {
-        return null;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(PlatformLocation.prototype, "hash", {
-      get: function() {
-        return null;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return PlatformLocation;
-  }());
-  var LocationStrategy = (function() {
-    function LocationStrategy() {}
-    return LocationStrategy;
-  }());
-  var APP_BASE_HREF = new _angular_core.OpaqueToken('appBaseHref');
-  var Location = (function() {
-    function Location(platformStrategy) {
-      var _this = this;
-      this._subject = new _angular_core.EventEmitter();
-      this._platformStrategy = platformStrategy;
-      var browserBaseHref = this._platformStrategy.getBaseHref();
-      this._baseHref = Location.stripTrailingSlash(_stripIndexHtml(browserBaseHref));
-      this._platformStrategy.onPopState(function(ev) {
-        _this._subject.emit({
-          'url': _this.path(true),
-          'pop': true,
-          'type': ev.type
-        });
-      });
-    }
-    Location.prototype.path = function(includeHash) {
-      if (includeHash === void 0) {
-        includeHash = false;
-      }
-      return this.normalize(this._platformStrategy.path(includeHash));
-    };
-    Location.prototype.isCurrentPathEqualTo = function(path, query) {
-      if (query === void 0) {
-        query = '';
-      }
-      return this.path() == this.normalize(path + Location.normalizeQueryParams(query));
-    };
-    Location.prototype.normalize = function(url) {
-      return Location.stripTrailingSlash(_stripBaseHref(this._baseHref, _stripIndexHtml(url)));
-    };
-    Location.prototype.prepareExternalUrl = function(url) {
-      if (url.length > 0 && !url.startsWith('/')) {
-        url = '/' + url;
-      }
-      return this._platformStrategy.prepareExternalUrl(url);
-    };
-    Location.prototype.go = function(path, query) {
-      if (query === void 0) {
-        query = '';
-      }
-      this._platformStrategy.pushState(null, '', path, query);
-    };
-    Location.prototype.replaceState = function(path, query) {
-      if (query === void 0) {
-        query = '';
-      }
-      this._platformStrategy.replaceState(null, '', path, query);
-    };
-    Location.prototype.forward = function() {
-      this._platformStrategy.forward();
-    };
-    Location.prototype.back = function() {
-      this._platformStrategy.back();
-    };
-    Location.prototype.subscribe = function(onNext, onThrow, onReturn) {
-      if (onThrow === void 0) {
-        onThrow = null;
-      }
-      if (onReturn === void 0) {
-        onReturn = null;
-      }
-      return this._subject.subscribe({
-        next: onNext,
-        error: onThrow,
-        complete: onReturn
-      });
-    };
-    Location.normalizeQueryParams = function(params) {
-      return (params.length > 0 && params.substring(0, 1) != '?') ? ('?' + params) : params;
-    };
-    Location.joinWithSlash = function(start, end) {
-      if (start.length == 0) {
-        return end;
-      }
-      if (end.length == 0) {
-        return start;
-      }
-      var slashes = 0;
-      if (start.endsWith('/')) {
-        slashes++;
-      }
-      if (end.startsWith('/')) {
-        slashes++;
-      }
-      if (slashes == 2) {
-        return start + end.substring(1);
-      }
-      if (slashes == 1) {
-        return start + end;
-      }
-      return start + '/' + end;
-    };
-    Location.stripTrailingSlash = function(url) {
-      if (/\/$/g.test(url)) {
-        url = url.substring(0, url.length - 1);
-      }
-      return url;
-    };
-    Location.decorators = [{type: _angular_core.Injectable}];
-    Location.ctorParameters = [{type: LocationStrategy}];
-    return Location;
-  }());
-  function _stripBaseHref(baseHref, url) {
-    if (baseHref.length > 0 && url.startsWith(baseHref)) {
-      return url.substring(baseHref.length);
-    }
-    return url;
-  }
-  function _stripIndexHtml(url) {
-    if (/\/index.html$/g.test(url)) {
-      return url.substring(0, url.length - 11);
-    }
-    return url;
-  }
-  var __extends$3 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var HashLocationStrategy = (function(_super) {
-    __extends$3(HashLocationStrategy, _super);
-    function HashLocationStrategy(_platformLocation, _baseHref) {
-      _super.call(this);
-      this._platformLocation = _platformLocation;
-      this._baseHref = '';
-      if (isPresent(_baseHref)) {
-        this._baseHref = _baseHref;
-      }
-    }
-    HashLocationStrategy.prototype.onPopState = function(fn) {
-      this._platformLocation.onPopState(fn);
-      this._platformLocation.onHashChange(fn);
-    };
-    HashLocationStrategy.prototype.getBaseHref = function() {
-      return this._baseHref;
-    };
-    HashLocationStrategy.prototype.path = function(includeHash) {
-      if (includeHash === void 0) {
-        includeHash = false;
-      }
-      var path = this._platformLocation.hash;
-      if (!isPresent(path))
-        path = '#';
-      return path.length > 0 ? path.substring(1) : path;
-    };
-    HashLocationStrategy.prototype.prepareExternalUrl = function(internal) {
-      var url = Location.joinWithSlash(this._baseHref, internal);
-      return url.length > 0 ? ('#' + url) : url;
-    };
-    HashLocationStrategy.prototype.pushState = function(state, title, path, queryParams) {
-      var url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
-      if (url.length == 0) {
-        url = this._platformLocation.pathname;
-      }
-      this._platformLocation.pushState(state, title, url);
-    };
-    HashLocationStrategy.prototype.replaceState = function(state, title, path, queryParams) {
-      var url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
-      if (url.length == 0) {
-        url = this._platformLocation.pathname;
-      }
-      this._platformLocation.replaceState(state, title, url);
-    };
-    HashLocationStrategy.prototype.forward = function() {
-      this._platformLocation.forward();
-    };
-    HashLocationStrategy.prototype.back = function() {
-      this._platformLocation.back();
-    };
-    HashLocationStrategy.decorators = [{type: _angular_core.Injectable}];
-    HashLocationStrategy.ctorParameters = [{type: PlatformLocation}, {
-      type: undefined,
-      decorators: [{type: _angular_core.Optional}, {
-        type: _angular_core.Inject,
-        args: [APP_BASE_HREF]
-      }]
-    }];
-    return HashLocationStrategy;
-  }(LocationStrategy));
-  var __extends$4 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var PathLocationStrategy = (function(_super) {
-    __extends$4(PathLocationStrategy, _super);
-    function PathLocationStrategy(_platformLocation, href) {
-      _super.call(this);
-      this._platformLocation = _platformLocation;
-      if (isBlank(href)) {
-        href = this._platformLocation.getBaseHrefFromDOM();
-      }
-      if (isBlank(href)) {
-        throw new Error("No base href set. Please provide a value for the APP_BASE_HREF token or add a base element to the document.");
-      }
-      this._baseHref = href;
-    }
-    PathLocationStrategy.prototype.onPopState = function(fn) {
-      this._platformLocation.onPopState(fn);
-      this._platformLocation.onHashChange(fn);
-    };
-    PathLocationStrategy.prototype.getBaseHref = function() {
-      return this._baseHref;
-    };
-    PathLocationStrategy.prototype.prepareExternalUrl = function(internal) {
-      return Location.joinWithSlash(this._baseHref, internal);
-    };
-    PathLocationStrategy.prototype.path = function(includeHash) {
-      if (includeHash === void 0) {
-        includeHash = false;
-      }
-      var pathname = this._platformLocation.pathname + Location.normalizeQueryParams(this._platformLocation.search);
-      var hash = this._platformLocation.hash;
-      return hash && includeHash ? "" + pathname + hash : pathname;
-    };
-    PathLocationStrategy.prototype.pushState = function(state, title, url, queryParams) {
-      var externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
-      this._platformLocation.pushState(state, title, externalUrl);
-    };
-    PathLocationStrategy.prototype.replaceState = function(state, title, url, queryParams) {
-      var externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
-      this._platformLocation.replaceState(state, title, externalUrl);
-    };
-    PathLocationStrategy.prototype.forward = function() {
-      this._platformLocation.forward();
-    };
-    PathLocationStrategy.prototype.back = function() {
-      this._platformLocation.back();
-    };
-    PathLocationStrategy.decorators = [{type: _angular_core.Injectable}];
-    PathLocationStrategy.ctorParameters = [{type: PlatformLocation}, {
-      type: undefined,
-      decorators: [{type: _angular_core.Optional}, {
-        type: _angular_core.Inject,
-        args: [APP_BASE_HREF]
-      }]
-    }];
-    return PathLocationStrategy;
-  }(LocationStrategy));
-  var CORE_DIRECTIVES = [NgClass, NgFor, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase];
-  var COMMON_DIRECTIVES = CORE_DIRECTIVES;
   var COMMON_PIPES = [AsyncPipe, UpperCasePipe, LowerCasePipe, JsonPipe, SlicePipe, DecimalPipe, PercentPipe, CurrencyPipe, DatePipe, I18nPluralPipe, I18nSelectPipe];
   var CommonModule = (function() {
     function CommonModule() {}
@@ -26606,6 +26606,16 @@ var define = System.amdDefine;
   }());
   exports.NgLocalization = NgLocalization;
   exports.CommonModule = CommonModule;
+  exports.NgClass = NgClass;
+  exports.NgFor = NgFor;
+  exports.NgIf = NgIf;
+  exports.NgPlural = NgPlural;
+  exports.NgPluralCase = NgPluralCase;
+  exports.NgStyle = NgStyle;
+  exports.NgSwitch = NgSwitch;
+  exports.NgSwitchCase = NgSwitchCase;
+  exports.NgSwitchDefault = NgSwitchDefault;
+  exports.NgTemplateOutlet = NgTemplateOutlet;
   exports.AsyncPipe = AsyncPipe;
   exports.DatePipe = DatePipe;
   exports.I18nPluralPipe = I18nPluralPipe;
@@ -26617,16 +26627,6 @@ var define = System.amdDefine;
   exports.PercentPipe = PercentPipe;
   exports.SlicePipe = SlicePipe;
   exports.UpperCasePipe = UpperCasePipe;
-  exports.NgClass = NgClass;
-  exports.NgFor = NgFor;
-  exports.NgIf = NgIf;
-  exports.NgPlural = NgPlural;
-  exports.NgPluralCase = NgPluralCase;
-  exports.NgStyle = NgStyle;
-  exports.NgSwitch = NgSwitch;
-  exports.NgSwitchCase = NgSwitchCase;
-  exports.NgSwitchDefault = NgSwitchDefault;
-  exports.NgTemplateOutlet = NgTemplateOutlet;
   exports.PlatformLocation = PlatformLocation;
   exports.LocationStrategy = LocationStrategy;
   exports.APP_BASE_HREF = APP_BASE_HREF;
@@ -27488,9 +27488,6 @@ System.registerDynamic('npm:rxjs/util/root.js', [], true, function ($__require, 
         'undefined': false
     };
     exports.root = objectTypes[typeof self] && self || objectTypes[typeof window] && window;
-    /* tslint:disable:no-unused-variable */
-    var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
-    var freeModule = objectTypes[typeof module] && module && !module.nodeType && module;
     var freeGlobal = objectTypes[typeof global] && global;
     if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
         exports.root = freeGlobal;
@@ -27843,9 +27840,6 @@ var define = System.amdDefine;
       }
       throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
     };
-    NumberWrapper.parseFloat = function(text) {
-      return parseFloat(text);
-    };
     Object.defineProperty(NumberWrapper, "NaN", {
       get: function() {
         return NaN;
@@ -27899,72 +27893,6 @@ var define = System.amdDefine;
   function isPrimitive(obj) {
     return !isJsObject(obj);
   }
-  function forwardRef(forwardRefFn) {
-    forwardRefFn.__forward_ref__ = forwardRef;
-    forwardRefFn.toString = function() {
-      return stringify(this());
-    };
-    return forwardRefFn;
-  }
-  function resolveForwardRef(type) {
-    if (isFunction(type) && type.hasOwnProperty('__forward_ref__') && type.__forward_ref__ === forwardRef) {
-      return type();
-    } else {
-      return type;
-    }
-  }
-  var InjectMetadata = (function() {
-    function InjectMetadata(token) {
-      this.token = token;
-    }
-    InjectMetadata.prototype.toString = function() {
-      return "@Inject(" + stringify(this.token) + ")";
-    };
-    return InjectMetadata;
-  }());
-  var OptionalMetadata = (function() {
-    function OptionalMetadata() {}
-    OptionalMetadata.prototype.toString = function() {
-      return "@Optional()";
-    };
-    return OptionalMetadata;
-  }());
-  var DependencyMetadata = (function() {
-    function DependencyMetadata() {}
-    Object.defineProperty(DependencyMetadata.prototype, "token", {
-      get: function() {
-        return null;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return DependencyMetadata;
-  }());
-  var InjectableMetadata = (function() {
-    function InjectableMetadata() {}
-    return InjectableMetadata;
-  }());
-  var SelfMetadata = (function() {
-    function SelfMetadata() {}
-    SelfMetadata.prototype.toString = function() {
-      return "@Self()";
-    };
-    return SelfMetadata;
-  }());
-  var SkipSelfMetadata = (function() {
-    function SkipSelfMetadata() {}
-    SkipSelfMetadata.prototype.toString = function() {
-      return "@SkipSelf()";
-    };
-    return SkipSelfMetadata;
-  }());
-  var HostMetadata = (function() {
-    function HostMetadata() {}
-    HostMetadata.prototype.toString = function() {
-      return "@Host()";
-    };
-    return HostMetadata;
-  }());
   var _nextClassId = 0;
   function extractAnnotation(annotation) {
     if (isFunction(annotation) && annotation.hasOwnProperty('annotation')) {
@@ -28035,23 +27963,25 @@ var define = System.amdDefine;
     return constructor;
   }
   var Reflect = global$1.Reflect;
-  function makeDecorator(annotationCls, chainFn) {
+  function makeDecorator(name, props, parentClass, chainFn) {
     if (chainFn === void 0) {
       chainFn = null;
     }
+    var metaCtor = makeMetadataCtor([props]);
     function DecoratorFactory(objOrType) {
       if (!(Reflect && Reflect.getMetadata)) {
         throw 'reflect-metadata shim is required when using class decorators';
       }
-      var annotationInstance = new annotationCls(objOrType);
-      if (this instanceof annotationCls) {
-        return annotationInstance;
+      if (this instanceof DecoratorFactory) {
+        metaCtor.call(this, objOrType);
+        return this;
       } else {
+        var annotationInstance_1 = new DecoratorFactory(objOrType);
         var chainAnnotation = isFunction(this) && this.annotations instanceof Array ? this.annotations : [];
-        chainAnnotation.push(annotationInstance);
+        chainAnnotation.push(annotationInstance_1);
         var TypeDecorator = function TypeDecorator(cls) {
           var annotations = Reflect.getOwnMetadata('annotations', cls) || [];
-          annotations.push(annotationInstance);
+          annotations.push(annotationInstance_1);
           Reflect.defineMetadata('annotations', annotations, cls);
           return cls;
         };
@@ -28062,24 +27992,51 @@ var define = System.amdDefine;
         return TypeDecorator;
       }
     }
-    DecoratorFactory.prototype = Object.create(annotationCls.prototype);
-    DecoratorFactory.annotationCls = annotationCls;
+    if (parentClass) {
+      DecoratorFactory.prototype = Object.create(parentClass.prototype);
+    }
+    DecoratorFactory.prototype.toString = function() {
+      return ("@" + name);
+    };
+    DecoratorFactory.annotationCls = DecoratorFactory;
     return DecoratorFactory;
   }
-  function makeParamDecorator(annotationCls) {
+  function makeMetadataCtor(props) {
+    function ctor() {
+      var _this = this;
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i - 0] = arguments[_i];
+      }
+      props.forEach(function(prop, i) {
+        var argVal = args[i];
+        if (Array.isArray(prop)) {
+          var val = !argVal || argVal === undefined ? prop[1] : argVal;
+          _this[prop[0]] = val;
+        } else {
+          for (var propName in prop) {
+            var val = !argVal || argVal[propName] === undefined ? prop[propName] : argVal[propName];
+            _this[propName] = val;
+          }
+        }
+      });
+    }
+    return ctor;
+  }
+  function makeParamDecorator(name, props, parentClass) {
+    var metaCtor = makeMetadataCtor(props);
     function ParamDecoratorFactory() {
       var args = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i - 0] = arguments[_i];
       }
-      var annotationInstance = Object.create(annotationCls.prototype);
-      annotationCls.apply(annotationInstance, args);
-      if (this instanceof annotationCls) {
-        return annotationInstance;
-      } else {
-        ParamDecorator.annotation = annotationInstance;
-        return ParamDecorator;
+      if (this instanceof ParamDecoratorFactory) {
+        metaCtor.apply(this, args);
+        return this;
       }
+      var annotationInstance = new ((_a = ParamDecoratorFactory).bind.apply(_a, [void 0].concat(args)))();
+      ParamDecorator.annotation = annotationInstance;
+      return ParamDecorator;
       function ParamDecorator(cls, unusedKey, index) {
         var parameters = Reflect.getMetadata('parameters', cls) || [];
         while (parameters.length <= index) {
@@ -28091,22 +28048,29 @@ var define = System.amdDefine;
         Reflect.defineMetadata('parameters', parameters, cls);
         return cls;
       }
+      var _a;
     }
-    ParamDecoratorFactory.prototype = Object.create(annotationCls.prototype);
-    ParamDecoratorFactory.annotationCls = annotationCls;
+    if (parentClass) {
+      ParamDecoratorFactory.prototype = Object.create(parentClass.prototype);
+    }
+    ParamDecoratorFactory.prototype.toString = function() {
+      return ("@" + name);
+    };
+    ParamDecoratorFactory.annotationCls = ParamDecoratorFactory;
     return ParamDecoratorFactory;
   }
-  function makePropDecorator(annotationCls) {
+  function makePropDecorator(name, props, parentClass) {
+    var metaCtor = makeMetadataCtor(props);
     function PropDecoratorFactory() {
       var args = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i - 0] = arguments[_i];
       }
-      var decoratorInstance = Object.create(annotationCls.prototype);
-      annotationCls.apply(decoratorInstance, args);
-      if (this instanceof annotationCls) {
-        return decoratorInstance;
+      if (this instanceof PropDecoratorFactory) {
+        metaCtor.apply(this, args);
+        return this;
       } else {
+        var decoratorInstance = new ((_a = PropDecoratorFactory).bind.apply(_a, [void 0].concat(args)))();
         return function PropDecorator(target, name) {
           var meta = Reflect.getOwnMetadata('propMetadata', target.constructor) || {};
           meta[name] = meta[name] || [];
@@ -28114,17 +28078,23 @@ var define = System.amdDefine;
           Reflect.defineMetadata('propMetadata', meta, target.constructor);
         };
       }
+      var _a;
     }
-    PropDecoratorFactory.prototype = Object.create(annotationCls.prototype);
-    PropDecoratorFactory.annotationCls = annotationCls;
+    if (parentClass) {
+      PropDecoratorFactory.prototype = Object.create(parentClass.prototype);
+    }
+    PropDecoratorFactory.prototype.toString = function() {
+      return ("@" + name);
+    };
+    PropDecoratorFactory.annotationCls = PropDecoratorFactory;
     return PropDecoratorFactory;
   }
-  var Inject = makeParamDecorator(InjectMetadata);
-  var Optional = makeParamDecorator(OptionalMetadata);
-  var Injectable = makeDecorator(InjectableMetadata);
-  var Self = makeParamDecorator(SelfMetadata);
-  var Host = makeParamDecorator(HostMetadata);
-  var SkipSelf = makeParamDecorator(SkipSelfMetadata);
+  var Inject = makeParamDecorator('Inject', [['token', undefined]]);
+  var Optional = makeParamDecorator('Optional', []);
+  var Injectable = makeParamDecorator('Injectable', []);
+  var Self = makeParamDecorator('Self', []);
+  var SkipSelf = makeParamDecorator('SkipSelf', []);
+  var Host = makeParamDecorator('Host', []);
   var OpaqueToken = (function() {
     function OpaqueToken(_desc) {
       this._desc = _desc;
@@ -28136,164 +28106,36 @@ var define = System.amdDefine;
     OpaqueToken.ctorParameters = [null];
     return OpaqueToken;
   }());
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
   var ANALYZE_FOR_ENTRY_COMPONENTS = new OpaqueToken('AnalyzeForEntryComponents');
-  var AttributeMetadata = (function(_super) {
-    __extends(AttributeMetadata, _super);
-    function AttributeMetadata(attributeName) {
-      _super.call(this);
-      this.attributeName = attributeName;
-    }
-    Object.defineProperty(AttributeMetadata.prototype, "token", {
-      get: function() {
-        return this;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    AttributeMetadata.prototype.toString = function() {
-      return "@Attribute(" + stringify(this.attributeName) + ")";
-    };
-    return AttributeMetadata;
-  }(DependencyMetadata));
-  var QueryMetadata = (function(_super) {
-    __extends(QueryMetadata, _super);
-    function QueryMetadata(_selector, _a) {
-      var _b = _a === void 0 ? {} : _a,
-          _c = _b.descendants,
-          descendants = _c === void 0 ? false : _c,
-          _d = _b.first,
-          first = _d === void 0 ? false : _d,
-          _e = _b.read,
-          read = _e === void 0 ? null : _e;
-      _super.call(this);
-      this._selector = _selector;
-      this.descendants = descendants;
-      this.first = first;
-      this.read = read;
-    }
-    Object.defineProperty(QueryMetadata.prototype, "isViewQuery", {
-      get: function() {
-        return false;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(QueryMetadata.prototype, "selector", {
-      get: function() {
-        return resolveForwardRef(this._selector);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(QueryMetadata.prototype, "isVarBindingQuery", {
-      get: function() {
-        return isString(this.selector);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(QueryMetadata.prototype, "varBindings", {
-      get: function() {
-        return StringWrapper.split(this.selector, /\s*,\s*/g);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    QueryMetadata.prototype.toString = function() {
-      return "@Query(" + stringify(this.selector) + ")";
-    };
-    return QueryMetadata;
-  }(DependencyMetadata));
-  var ContentChildrenMetadata = (function(_super) {
-    __extends(ContentChildrenMetadata, _super);
-    function ContentChildrenMetadata(_selector, _a) {
-      var _b = _a === void 0 ? {} : _a,
-          _c = _b.descendants,
-          descendants = _c === void 0 ? false : _c,
-          _d = _b.read,
-          read = _d === void 0 ? null : _d;
-      _super.call(this, _selector, {
-        descendants: descendants,
-        read: read
-      });
-    }
-    return ContentChildrenMetadata;
-  }(QueryMetadata));
-  var ContentChildMetadata = (function(_super) {
-    __extends(ContentChildMetadata, _super);
-    function ContentChildMetadata(_selector, _a) {
-      var _b = (_a === void 0 ? {} : _a).read,
-          read = _b === void 0 ? null : _b;
-      _super.call(this, _selector, {
-        descendants: true,
-        first: true,
-        read: read
-      });
-    }
-    return ContentChildMetadata;
-  }(QueryMetadata));
-  var ViewQueryMetadata = (function(_super) {
-    __extends(ViewQueryMetadata, _super);
-    function ViewQueryMetadata(_selector, _a) {
-      var _b = _a === void 0 ? {} : _a,
-          _c = _b.descendants,
-          descendants = _c === void 0 ? false : _c,
-          _d = _b.first,
-          first = _d === void 0 ? false : _d,
-          _e = _b.read,
-          read = _e === void 0 ? null : _e;
-      _super.call(this, _selector, {
-        descendants: descendants,
-        first: first,
-        read: read
-      });
-    }
-    Object.defineProperty(ViewQueryMetadata.prototype, "isViewQuery", {
-      get: function() {
-        return true;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return ViewQueryMetadata;
-  }(QueryMetadata));
-  var ViewChildrenMetadata = (function(_super) {
-    __extends(ViewChildrenMetadata, _super);
-    function ViewChildrenMetadata(_selector, _a) {
-      var _b = (_a === void 0 ? {} : _a).read,
-          read = _b === void 0 ? null : _b;
-      _super.call(this, _selector, {
-        descendants: true,
-        read: read
-      });
-    }
-    ViewChildrenMetadata.prototype.toString = function() {
-      return "@ViewChildren(" + stringify(this.selector) + ")";
-    };
-    return ViewChildrenMetadata;
-  }(ViewQueryMetadata));
-  var ViewChildMetadata = (function(_super) {
-    __extends(ViewChildMetadata, _super);
-    function ViewChildMetadata(_selector, _a) {
-      var _b = (_a === void 0 ? {} : _a).read,
-          read = _b === void 0 ? null : _b;
-      _super.call(this, _selector, {
-        descendants: true,
-        first: true,
-        read: read
-      });
-    }
-    return ViewChildMetadata;
-  }(ViewQueryMetadata));
+  var Attribute = makeParamDecorator('Attribute', [['attributeName', undefined]]);
+  var Query = (function() {
+    function Query() {}
+    return Query;
+  }());
+  var ContentChildren = makePropDecorator('ContentChildren', [['selector', undefined], {
+    first: false,
+    isViewQuery: false,
+    descendants: false,
+    read: undefined
+  }], Query);
+  var ContentChild = makePropDecorator('ContentChild', [['selector', undefined], {
+    first: true,
+    isViewQuery: false,
+    descendants: false,
+    read: undefined
+  }], Query);
+  var ViewChildren = makePropDecorator('ViewChildren', [['selector', undefined], {
+    first: false,
+    isViewQuery: true,
+    descendants: true,
+    read: undefined
+  }], Query);
+  var ViewChild = makePropDecorator('ViewChild', [['selector', undefined], {
+    first: true,
+    isViewQuery: true,
+    descendants: true,
+    read: undefined
+  }], Query);
   exports.ChangeDetectionStrategy;
   (function(ChangeDetectionStrategy) {
     ChangeDetectionStrategy[ChangeDetectionStrategy["OnPush"] = 0] = "OnPush";
@@ -28312,7 +28154,141 @@ var define = System.amdDefine;
   function isDefaultChangeDetectionStrategy(changeDetectionStrategy) {
     return isBlank(changeDetectionStrategy) || changeDetectionStrategy === exports.ChangeDetectionStrategy.Default;
   }
-  var __extends$2 = (this && this.__extends) || function(d, b) {
+  var Directive = makeDecorator('Directive', {
+    selector: undefined,
+    inputs: undefined,
+    outputs: undefined,
+    host: undefined,
+    providers: undefined,
+    exportAs: undefined,
+    queries: undefined
+  });
+  var Component = makeDecorator('Component', {
+    selector: undefined,
+    inputs: undefined,
+    outputs: undefined,
+    host: undefined,
+    exportAs: undefined,
+    moduleId: undefined,
+    providers: undefined,
+    viewProviders: undefined,
+    changeDetection: exports.ChangeDetectionStrategy.Default,
+    queries: undefined,
+    templateUrl: undefined,
+    template: undefined,
+    styleUrls: undefined,
+    styles: undefined,
+    animations: undefined,
+    encapsulation: undefined,
+    interpolation: undefined,
+    entryComponents: undefined
+  }, Directive);
+  var Pipe = makeDecorator('Pipe', {
+    name: undefined,
+    pure: true
+  });
+  var Input = makePropDecorator('Input', [['bindingPropertyName', undefined]]);
+  var Output = makePropDecorator('Output', [['bindingPropertyName', undefined]]);
+  var HostBinding = makePropDecorator('HostBinding', [['hostPropertyName', undefined]]);
+  var HostListener = makePropDecorator('HostListener', [['eventName', undefined], ['args', []]]);
+  var LifecycleHooks;
+  (function(LifecycleHooks) {
+    LifecycleHooks[LifecycleHooks["OnInit"] = 0] = "OnInit";
+    LifecycleHooks[LifecycleHooks["OnDestroy"] = 1] = "OnDestroy";
+    LifecycleHooks[LifecycleHooks["DoCheck"] = 2] = "DoCheck";
+    LifecycleHooks[LifecycleHooks["OnChanges"] = 3] = "OnChanges";
+    LifecycleHooks[LifecycleHooks["AfterContentInit"] = 4] = "AfterContentInit";
+    LifecycleHooks[LifecycleHooks["AfterContentChecked"] = 5] = "AfterContentChecked";
+    LifecycleHooks[LifecycleHooks["AfterViewInit"] = 6] = "AfterViewInit";
+    LifecycleHooks[LifecycleHooks["AfterViewChecked"] = 7] = "AfterViewChecked";
+  })(LifecycleHooks || (LifecycleHooks = {}));
+  var LIFECYCLE_HOOKS_VALUES = [LifecycleHooks.OnInit, LifecycleHooks.OnDestroy, LifecycleHooks.DoCheck, LifecycleHooks.OnChanges, LifecycleHooks.AfterContentInit, LifecycleHooks.AfterContentChecked, LifecycleHooks.AfterViewInit, LifecycleHooks.AfterViewChecked];
+  var OnChanges = (function() {
+    function OnChanges() {}
+    return OnChanges;
+  }());
+  var OnInit = (function() {
+    function OnInit() {}
+    return OnInit;
+  }());
+  var DoCheck = (function() {
+    function DoCheck() {}
+    return DoCheck;
+  }());
+  var OnDestroy = (function() {
+    function OnDestroy() {}
+    return OnDestroy;
+  }());
+  var AfterContentInit = (function() {
+    function AfterContentInit() {}
+    return AfterContentInit;
+  }());
+  var AfterContentChecked = (function() {
+    function AfterContentChecked() {}
+    return AfterContentChecked;
+  }());
+  var AfterViewInit = (function() {
+    function AfterViewInit() {}
+    return AfterViewInit;
+  }());
+  var AfterViewChecked = (function() {
+    function AfterViewChecked() {}
+    return AfterViewChecked;
+  }());
+  var CUSTOM_ELEMENTS_SCHEMA = {name: 'custom-elements'};
+  var NO_ERRORS_SCHEMA = {name: 'no-errors-schema'};
+  var NgModule = makeDecorator('NgModule', {
+    providers: undefined,
+    declarations: undefined,
+    imports: undefined,
+    exports: undefined,
+    entryComponents: undefined,
+    bootstrap: undefined,
+    schemas: undefined,
+    id: undefined
+  });
+  exports.ViewEncapsulation;
+  (function(ViewEncapsulation) {
+    ViewEncapsulation[ViewEncapsulation["Emulated"] = 0] = "Emulated";
+    ViewEncapsulation[ViewEncapsulation["Native"] = 1] = "Native";
+    ViewEncapsulation[ViewEncapsulation["None"] = 2] = "None";
+  })(exports.ViewEncapsulation || (exports.ViewEncapsulation = {}));
+  var VIEW_ENCAPSULATION_VALUES = [exports.ViewEncapsulation.Emulated, exports.ViewEncapsulation.Native, exports.ViewEncapsulation.None];
+  var ViewMetadata = (function() {
+    function ViewMetadata(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          templateUrl = _b.templateUrl,
+          template = _b.template,
+          encapsulation = _b.encapsulation,
+          styles = _b.styles,
+          styleUrls = _b.styleUrls,
+          animations = _b.animations,
+          interpolation = _b.interpolation;
+      this.templateUrl = templateUrl;
+      this.template = template;
+      this.styleUrls = styleUrls;
+      this.styles = styles;
+      this.encapsulation = encapsulation;
+      this.animations = animations;
+      this.interpolation = interpolation;
+    }
+    return ViewMetadata;
+  }());
+  function forwardRef(forwardRefFn) {
+    forwardRefFn.__forward_ref__ = forwardRef;
+    forwardRefFn.toString = function() {
+      return stringify(this());
+    };
+    return forwardRefFn;
+  }
+  function resolveForwardRef(type) {
+    if (isFunction(type) && type.hasOwnProperty('__forward_ref__') && type.__forward_ref__ === forwardRef) {
+      return type();
+    } else {
+      return type;
+    }
+  }
+  var __extends = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -28325,7 +28301,7 @@ var define = System.amdDefine;
     throw new Error('unimplemented');
   }
   var BaseError = (function(_super) {
-    __extends$2(BaseError, _super);
+    __extends(BaseError, _super);
     function BaseError(message) {
       var nativeError = _super.call(this, message);
       this._nativeError = nativeError;
@@ -28363,7 +28339,7 @@ var define = System.amdDefine;
     return BaseError;
   }(Error));
   var WrappedError = (function(_super) {
-    __extends$2(WrappedError, _super);
+    __extends(WrappedError, _super);
     function WrappedError(message, error) {
       _super.call(this, message + " caused by: " + (error instanceof Error ? error.message : error));
       this.originalError = error;
@@ -28565,9 +28541,8 @@ var define = System.amdDefine;
       if (k1.length != k2.length) {
         return false;
       }
-      var key;
       for (var i = 0; i < k1.length; i++) {
-        key = k1[i];
+        var key = k1[i];
         if (m1[key] !== m2[key]) {
           return false;
         }
@@ -28796,7 +28771,7 @@ var define = System.amdDefine;
     };
     return SetWrapper;
   }());
-  var __extends$3 = (this && this.__extends) || function(d, b) {
+  var __extends$1 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -28827,7 +28802,7 @@ var define = System.amdDefine;
     return '';
   }
   var AbstractProviderError = (function(_super) {
-    __extends$3(AbstractProviderError, _super);
+    __extends$1(AbstractProviderError, _super);
     function AbstractProviderError(injector, key, constructResolvingMessage) {
       _super.call(this, 'DI Error');
       this.keys = [key];
@@ -28843,7 +28818,7 @@ var define = System.amdDefine;
     return AbstractProviderError;
   }(BaseError));
   var NoProviderError = (function(_super) {
-    __extends$3(NoProviderError, _super);
+    __extends$1(NoProviderError, _super);
     function NoProviderError(injector, key) {
       _super.call(this, injector, key, function(keys) {
         var first = stringify(ListWrapper.first(keys).token);
@@ -28853,7 +28828,7 @@ var define = System.amdDefine;
     return NoProviderError;
   }(AbstractProviderError));
   var CyclicDependencyError = (function(_super) {
-    __extends$3(CyclicDependencyError, _super);
+    __extends$1(CyclicDependencyError, _super);
     function CyclicDependencyError(injector, key) {
       _super.call(this, injector, key, function(keys) {
         return "Cannot instantiate cyclic dependency!" + constructResolvingPath(keys);
@@ -28862,7 +28837,7 @@ var define = System.amdDefine;
     return CyclicDependencyError;
   }(AbstractProviderError));
   var InstantiationError = (function(_super) {
-    __extends$3(InstantiationError, _super);
+    __extends$1(InstantiationError, _super);
     function InstantiationError(injector, originalException, originalStack, key) {
       _super.call(this, 'DI Error', originalException);
       this.keys = [key];
@@ -28890,14 +28865,14 @@ var define = System.amdDefine;
     return InstantiationError;
   }(WrappedError));
   var InvalidProviderError = (function(_super) {
-    __extends$3(InvalidProviderError, _super);
+    __extends$1(InvalidProviderError, _super);
     function InvalidProviderError(provider) {
       _super.call(this, "Invalid provider - only instances of Provider and Type are allowed, got: " + provider);
     }
     return InvalidProviderError;
   }(BaseError));
   var NoAnnotationError = (function(_super) {
-    __extends$3(NoAnnotationError, _super);
+    __extends$1(NoAnnotationError, _super);
     function NoAnnotationError(typeOrFunc, params) {
       _super.call(this, NoAnnotationError._genMessage(typeOrFunc, params));
     }
@@ -28917,14 +28892,14 @@ var define = System.amdDefine;
     return NoAnnotationError;
   }(BaseError));
   var OutOfBoundsError = (function(_super) {
-    __extends$3(OutOfBoundsError, _super);
+    __extends$1(OutOfBoundsError, _super);
     function OutOfBoundsError(index) {
       _super.call(this, "Index " + index + " is out-of-bounds.");
     }
     return OutOfBoundsError;
   }(BaseError));
   var MixingMultiProvidersWithRegularProvidersError = (function(_super) {
-    __extends$3(MixingMultiProvidersWithRegularProvidersError, _super);
+    __extends$1(MixingMultiProvidersWithRegularProvidersError, _super);
     function MixingMultiProvidersWithRegularProvidersError(provider1, provider2) {
       _super.call(this, 'Cannot mix multi providers and regular providers, got: ' + provider1.toString() + ' ' + provider2.toString());
     }
@@ -29129,16 +29104,14 @@ var define = System.amdDefine;
       var decoratorType = decoratorInvocation.type;
       var annotationCls = decoratorType.annotationCls;
       var annotationArgs = decoratorInvocation.args ? decoratorInvocation.args : [];
-      var annotation = Object.create(annotationCls.prototype);
-      annotationCls.apply(annotation, annotationArgs);
-      return annotation;
+      return new (annotationCls.bind.apply(annotationCls, [void 0].concat(annotationArgs)))();
     });
   }
   var ReflectorReader = (function() {
     function ReflectorReader() {}
     return ReflectorReader;
   }());
-  var __extends$4 = (this && this.__extends) || function(d, b) {
+  var __extends$2 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -29148,7 +29121,7 @@ var define = System.amdDefine;
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var Reflector = (function(_super) {
-    __extends$4(Reflector, _super);
+    __extends$2(Reflector, _super);
     function Reflector(reflectionCapabilities) {
       _super.call(this);
       this._injectableInfo = new Map$1();
@@ -29426,7 +29399,7 @@ var define = System.amdDefine;
     var token = null;
     var optional = false;
     if (!isArray(metadata)) {
-      if (metadata instanceof InjectMetadata) {
+      if (metadata instanceof Inject) {
         return _createDependency(metadata.token, optional, null, null, depProps);
       } else {
         return _createDependency(metadata, optional, null, null, depProps);
@@ -29438,21 +29411,16 @@ var define = System.amdDefine;
       var paramMetadata = metadata[i];
       if (paramMetadata instanceof Type) {
         token = paramMetadata;
-      } else if (paramMetadata instanceof InjectMetadata) {
+      } else if (paramMetadata instanceof Inject) {
         token = paramMetadata.token;
-      } else if (paramMetadata instanceof OptionalMetadata) {
+      } else if (paramMetadata instanceof Optional) {
         optional = true;
-      } else if (paramMetadata instanceof SelfMetadata) {
+      } else if (paramMetadata instanceof Self) {
         upperBoundVisibility = paramMetadata;
-      } else if (paramMetadata instanceof HostMetadata) {
+      } else if (paramMetadata instanceof Host) {
         upperBoundVisibility = paramMetadata;
-      } else if (paramMetadata instanceof SkipSelfMetadata) {
+      } else if (paramMetadata instanceof SkipSelf) {
         lowerBoundVisibility = paramMetadata;
-      } else if (paramMetadata instanceof DependencyMetadata) {
-        if (isPresent(paramMetadata.token)) {
-          token = paramMetadata.token;
-        }
-        depProps.push(paramMetadata);
       }
     }
     token = resolveForwardRef(token);
@@ -29979,7 +29947,7 @@ var define = System.amdDefine;
       if (key === INJECTOR_KEY) {
         return this;
       }
-      if (upperBoundVisibility instanceof SelfMetadata) {
+      if (upperBoundVisibility instanceof Self) {
         return this._getByKeySelf(key, notFoundValue);
       } else {
         return this._getByKeyDefault(key, notFoundValue, lowerBoundVisibility);
@@ -29998,7 +29966,7 @@ var define = System.amdDefine;
     };
     ReflectiveInjector_.prototype._getByKeyDefault = function(key, notFoundValue, lowerBoundVisibility) {
       var inj;
-      if (lowerBoundVisibility instanceof SkipSelfMetadata) {
+      if (lowerBoundVisibility instanceof SkipSelf) {
         inj = this._parent;
       } else {
         inj = this;
@@ -30039,273 +30007,6 @@ var define = System.amdDefine;
     }
     return res;
   }
-  var __extends$1 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var DirectiveMetadata = (function(_super) {
-    __extends$1(DirectiveMetadata, _super);
-    function DirectiveMetadata(_a) {
-      var _b = _a === void 0 ? {} : _a,
-          selector = _b.selector,
-          inputs = _b.inputs,
-          outputs = _b.outputs,
-          host = _b.host,
-          providers = _b.providers,
-          exportAs = _b.exportAs,
-          queries = _b.queries;
-      _super.call(this);
-      this.selector = selector;
-      this._inputs = inputs;
-      this._outputs = outputs;
-      this.host = host;
-      this.exportAs = exportAs;
-      this.queries = queries;
-      this._providers = providers;
-    }
-    Object.defineProperty(DirectiveMetadata.prototype, "inputs", {
-      get: function() {
-        return this._inputs;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(DirectiveMetadata.prototype, "outputs", {
-      get: function() {
-        return this._outputs;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(DirectiveMetadata.prototype, "providers", {
-      get: function() {
-        return this._providers;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return DirectiveMetadata;
-  }(InjectableMetadata));
-  var ComponentMetadata = (function(_super) {
-    __extends$1(ComponentMetadata, _super);
-    function ComponentMetadata(_a) {
-      var _b = _a === void 0 ? {} : _a,
-          selector = _b.selector,
-          inputs = _b.inputs,
-          outputs = _b.outputs,
-          host = _b.host,
-          exportAs = _b.exportAs,
-          moduleId = _b.moduleId,
-          providers = _b.providers,
-          viewProviders = _b.viewProviders,
-          _c = _b.changeDetection,
-          changeDetection = _c === void 0 ? exports.ChangeDetectionStrategy.Default : _c,
-          queries = _b.queries,
-          templateUrl = _b.templateUrl,
-          template = _b.template,
-          styleUrls = _b.styleUrls,
-          styles = _b.styles,
-          animations = _b.animations,
-          encapsulation = _b.encapsulation,
-          interpolation = _b.interpolation,
-          entryComponents = _b.entryComponents;
-      _super.call(this, {
-        selector: selector,
-        inputs: inputs,
-        outputs: outputs,
-        host: host,
-        exportAs: exportAs,
-        providers: providers,
-        queries: queries
-      });
-      this.changeDetection = changeDetection;
-      this._viewProviders = viewProviders;
-      this.templateUrl = templateUrl;
-      this.template = template;
-      this.styleUrls = styleUrls;
-      this.styles = styles;
-      this.encapsulation = encapsulation;
-      this.moduleId = moduleId;
-      this.animations = animations;
-      this.interpolation = interpolation;
-      this.entryComponents = entryComponents;
-    }
-    Object.defineProperty(ComponentMetadata.prototype, "viewProviders", {
-      get: function() {
-        return this._viewProviders;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return ComponentMetadata;
-  }(DirectiveMetadata));
-  var PipeMetadata = (function(_super) {
-    __extends$1(PipeMetadata, _super);
-    function PipeMetadata(_a) {
-      var name = _a.name,
-          pure = _a.pure;
-      _super.call(this);
-      this.name = name;
-      this._pure = pure;
-    }
-    Object.defineProperty(PipeMetadata.prototype, "pure", {
-      get: function() {
-        return isPresent(this._pure) ? this._pure : true;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return PipeMetadata;
-  }(InjectableMetadata));
-  var InputMetadata = (function() {
-    function InputMetadata(bindingPropertyName) {
-      this.bindingPropertyName = bindingPropertyName;
-    }
-    return InputMetadata;
-  }());
-  var OutputMetadata = (function() {
-    function OutputMetadata(bindingPropertyName) {
-      this.bindingPropertyName = bindingPropertyName;
-    }
-    return OutputMetadata;
-  }());
-  var HostBindingMetadata = (function() {
-    function HostBindingMetadata(hostPropertyName) {
-      this.hostPropertyName = hostPropertyName;
-    }
-    return HostBindingMetadata;
-  }());
-  var HostListenerMetadata = (function() {
-    function HostListenerMetadata(eventName, args) {
-      this.eventName = eventName;
-      this.args = args;
-    }
-    return HostListenerMetadata;
-  }());
-  var __extends$5 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var CUSTOM_ELEMENTS_SCHEMA = {name: 'custom-elements'};
-  var NO_ERRORS_SCHEMA = {name: 'no-errors-schema'};
-  var NgModuleMetadata = (function(_super) {
-    __extends$5(NgModuleMetadata, _super);
-    function NgModuleMetadata(options) {
-      if (options === void 0) {
-        options = {};
-      }
-      _super.call(this);
-      this._providers = options.providers;
-      this.declarations = options.declarations;
-      this.imports = options.imports;
-      this.exports = options.exports;
-      this.entryComponents = options.entryComponents;
-      this.bootstrap = options.bootstrap;
-      this.schemas = options.schemas;
-    }
-    Object.defineProperty(NgModuleMetadata.prototype, "providers", {
-      get: function() {
-        return this._providers;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return NgModuleMetadata;
-  }(InjectableMetadata));
-  var LifecycleHooks;
-  (function(LifecycleHooks) {
-    LifecycleHooks[LifecycleHooks["OnInit"] = 0] = "OnInit";
-    LifecycleHooks[LifecycleHooks["OnDestroy"] = 1] = "OnDestroy";
-    LifecycleHooks[LifecycleHooks["DoCheck"] = 2] = "DoCheck";
-    LifecycleHooks[LifecycleHooks["OnChanges"] = 3] = "OnChanges";
-    LifecycleHooks[LifecycleHooks["AfterContentInit"] = 4] = "AfterContentInit";
-    LifecycleHooks[LifecycleHooks["AfterContentChecked"] = 5] = "AfterContentChecked";
-    LifecycleHooks[LifecycleHooks["AfterViewInit"] = 6] = "AfterViewInit";
-    LifecycleHooks[LifecycleHooks["AfterViewChecked"] = 7] = "AfterViewChecked";
-  })(LifecycleHooks || (LifecycleHooks = {}));
-  var LIFECYCLE_HOOKS_VALUES = [LifecycleHooks.OnInit, LifecycleHooks.OnDestroy, LifecycleHooks.DoCheck, LifecycleHooks.OnChanges, LifecycleHooks.AfterContentInit, LifecycleHooks.AfterContentChecked, LifecycleHooks.AfterViewInit, LifecycleHooks.AfterViewChecked];
-  var OnChanges = (function() {
-    function OnChanges() {}
-    return OnChanges;
-  }());
-  var OnInit = (function() {
-    function OnInit() {}
-    return OnInit;
-  }());
-  var DoCheck = (function() {
-    function DoCheck() {}
-    return DoCheck;
-  }());
-  var OnDestroy = (function() {
-    function OnDestroy() {}
-    return OnDestroy;
-  }());
-  var AfterContentInit = (function() {
-    function AfterContentInit() {}
-    return AfterContentInit;
-  }());
-  var AfterContentChecked = (function() {
-    function AfterContentChecked() {}
-    return AfterContentChecked;
-  }());
-  var AfterViewInit = (function() {
-    function AfterViewInit() {}
-    return AfterViewInit;
-  }());
-  var AfterViewChecked = (function() {
-    function AfterViewChecked() {}
-    return AfterViewChecked;
-  }());
-  exports.ViewEncapsulation;
-  (function(ViewEncapsulation) {
-    ViewEncapsulation[ViewEncapsulation["Emulated"] = 0] = "Emulated";
-    ViewEncapsulation[ViewEncapsulation["Native"] = 1] = "Native";
-    ViewEncapsulation[ViewEncapsulation["None"] = 2] = "None";
-  })(exports.ViewEncapsulation || (exports.ViewEncapsulation = {}));
-  var VIEW_ENCAPSULATION_VALUES = [exports.ViewEncapsulation.Emulated, exports.ViewEncapsulation.Native, exports.ViewEncapsulation.None];
-  var ViewMetadata = (function() {
-    function ViewMetadata(_a) {
-      var _b = _a === void 0 ? {} : _a,
-          templateUrl = _b.templateUrl,
-          template = _b.template,
-          encapsulation = _b.encapsulation,
-          styles = _b.styles,
-          styleUrls = _b.styleUrls,
-          animations = _b.animations,
-          interpolation = _b.interpolation;
-      this.templateUrl = templateUrl;
-      this.template = template;
-      this.styleUrls = styleUrls;
-      this.styles = styles;
-      this.encapsulation = encapsulation;
-      this.animations = animations;
-      this.interpolation = interpolation;
-    }
-    return ViewMetadata;
-  }());
-  var Component = makeDecorator(ComponentMetadata);
-  var Directive = makeDecorator(DirectiveMetadata);
-  var Attribute = makeParamDecorator(AttributeMetadata);
-  var ContentChildren = makePropDecorator(ContentChildrenMetadata);
-  var ContentChild = makePropDecorator(ContentChildMetadata);
-  var ViewChildren = makePropDecorator(ViewChildrenMetadata);
-  var ViewChild = makePropDecorator(ViewChildMetadata);
-  var Pipe = makeDecorator(PipeMetadata);
-  var Input = makePropDecorator(InputMetadata);
-  var Output = makePropDecorator(OutputMetadata);
-  var HostBinding = makePropDecorator(HostBindingMetadata);
-  var HostListener = makePropDecorator(HostListenerMetadata);
-  var NgModule = makeDecorator(NgModuleMetadata);
   var ErrorHandler = (function() {
     function ErrorHandler(rethrowError) {
       if (rethrowError === void 0) {
@@ -30437,7 +30138,7 @@ var define = System.amdDefine;
     Console.ctorParameters = [];
     return Console;
   }());
-  var __extends$7 = (this && this.__extends) || function(d, b) {
+  var __extends$4 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -30447,7 +30148,7 @@ var define = System.amdDefine;
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var ComponentStillLoadingError = (function(_super) {
-    __extends$7(ComponentStillLoadingError, _super);
+    __extends$4(ComponentStillLoadingError, _super);
     function ComponentStillLoadingError(compType) {
       _super.call(this, "Can't compile synchronously as " + stringify(compType) + " is still being loaded!");
       this.compType = compType;
@@ -31299,7 +31000,7 @@ var define = System.amdDefine;
           }
           return IterableDiffers.create(factories, parent);
         },
-        deps: [[IterableDiffers, new SkipSelfMetadata(), new OptionalMetadata()]]
+        deps: [[IterableDiffers, new SkipSelf(), new Optional()]]
       };
     };
     IterableDiffers.prototype.find = function(iterable) {
@@ -31336,7 +31037,7 @@ var define = System.amdDefine;
           }
           return KeyValueDiffers.create(factories, parent);
         },
-        deps: [[KeyValueDiffers, new SkipSelfMetadata(), new OptionalMetadata()]]
+        deps: [[KeyValueDiffers, new SkipSelf(), new Optional()]]
       };
     };
     KeyValueDiffers.prototype.find = function(kv) {
@@ -31801,7 +31502,7 @@ var define = System.amdDefine;
     };
     return AppElement;
   }());
-  var __extends$9 = (this && this.__extends) || function(d, b) {
+  var __extends$6 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -31811,7 +31512,7 @@ var define = System.amdDefine;
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var ExpressionChangedAfterItHasBeenCheckedError = (function(_super) {
-    __extends$9(ExpressionChangedAfterItHasBeenCheckedError, _super);
+    __extends$6(ExpressionChangedAfterItHasBeenCheckedError, _super);
     function ExpressionChangedAfterItHasBeenCheckedError(oldValue, currValue) {
       var msg = "Expression has changed after it was checked. Previous value: '" + oldValue + "'. Current value: '" + currValue + "'.";
       if (oldValue === UNINITIALIZED) {
@@ -31822,7 +31523,7 @@ var define = System.amdDefine;
     return ExpressionChangedAfterItHasBeenCheckedError;
   }(BaseError));
   var ViewWrappedError = (function(_super) {
-    __extends$9(ViewWrappedError, _super);
+    __extends$6(ViewWrappedError, _super);
     function ViewWrappedError(originalError, context) {
       _super.call(this, "Error in " + context.source, originalError);
       this.context = context;
@@ -31830,7 +31531,7 @@ var define = System.amdDefine;
     return ViewWrappedError;
   }(WrappedError));
   var ViewDestroyedError = (function(_super) {
-    __extends$9(ViewDestroyedError, _super);
+    __extends$6(ViewDestroyedError, _super);
     function ViewDestroyedError(details) {
       _super.call(this, "Attempt to use a destroyed view: " + details);
     }
@@ -32145,7 +31846,7 @@ var define = System.amdDefine;
       return result;
     };
   }
-  var __extends$8 = (this && this.__extends) || function(d, b) {
+  var __extends$5 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -32203,7 +31904,7 @@ var define = System.amdDefine;
     return ComponentRef;
   }());
   var ComponentRef_ = (function(_super) {
-    __extends$8(ComponentRef_, _super);
+    __extends$5(ComponentRef_, _super);
     function ComponentRef_(_hostElement, _componentType) {
       _super.call(this);
       this._hostElement = _hostElement;
@@ -32293,7 +31994,7 @@ var define = System.amdDefine;
     };
     return ComponentFactory;
   }());
-  var __extends$10 = (this && this.__extends) || function(d, b) {
+  var __extends$7 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -32303,7 +32004,7 @@ var define = System.amdDefine;
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var NoComponentFactoryError = (function(_super) {
-    __extends$10(NoComponentFactoryError, _super);
+    __extends$7(NoComponentFactoryError, _super);
     function NoComponentFactoryError(component) {
       _super.call(this, "No component factory found for " + stringify(component));
       this.component = component;
@@ -32340,7 +32041,7 @@ var define = System.amdDefine;
     };
     return CodegenComponentFactoryResolver;
   }());
-  var __extends$11 = (this && this.__extends) || function(d, b) {
+  var __extends$8 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -32350,7 +32051,7 @@ var define = System.amdDefine;
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
   };
   var EventEmitter = (function(_super) {
-    __extends$11(EventEmitter, _super);
+    __extends$8(EventEmitter, _super);
     function EventEmitter(isAsync) {
       if (isAsync === void 0) {
         isAsync = false;
@@ -32440,52 +32141,52 @@ var define = System.amdDefine;
       this.setMicrotask = setMicrotask;
       this.setMacrotask = setMacrotask;
       this.onError = onError;
-      if (Zone) {
-        this.outer = this.inner = Zone.current;
-        if (Zone['wtfZoneSpec']) {
-          this.inner = this.inner.fork(Zone['wtfZoneSpec']);
-        }
-        if (trace && Zone['longStackTraceZoneSpec']) {
-          this.inner = this.inner.fork(Zone['longStackTraceZoneSpec']);
-        }
-        this.inner = this.inner.fork({
-          name: 'angular',
-          properties: {'isAngularZone': true},
-          onInvokeTask: function(delegate, current, target, task, applyThis, applyArgs) {
-            try {
-              _this.onEnter();
-              return delegate.invokeTask(target, task, applyThis, applyArgs);
-            } finally {
-              _this.onLeave();
-            }
-          },
-          onInvoke: function(delegate, current, target, callback, applyThis, applyArgs, source) {
-            try {
-              _this.onEnter();
-              return delegate.invoke(target, callback, applyThis, applyArgs, source);
-            } finally {
-              _this.onLeave();
-            }
-          },
-          onHasTask: function(delegate, current, target, hasTaskState) {
-            delegate.hasTask(target, hasTaskState);
-            if (current == target) {
-              if (hasTaskState.change == 'microTask') {
-                _this.setMicrotask(hasTaskState.microTask);
-              } else if (hasTaskState.change == 'macroTask') {
-                _this.setMacrotask(hasTaskState.macroTask);
-              }
-            }
-          },
-          onHandleError: function(delegate, current, target, error) {
-            delegate.handleError(target, error);
-            _this.onError(error);
-            return false;
-          }
-        });
-      } else {
-        throw new Error('Angular requires Zone.js polyfill.');
+      if (typeof Zone == 'undefined') {
+        throw new Error('Angular requires Zone.js prolyfill.');
       }
+      Zone.assertZonePatched();
+      this.outer = this.inner = Zone.current;
+      if (Zone['wtfZoneSpec']) {
+        this.inner = this.inner.fork(Zone['wtfZoneSpec']);
+      }
+      if (trace && Zone['longStackTraceZoneSpec']) {
+        this.inner = this.inner.fork(Zone['longStackTraceZoneSpec']);
+      }
+      this.inner = this.inner.fork({
+        name: 'angular',
+        properties: {'isAngularZone': true},
+        onInvokeTask: function(delegate, current, target, task, applyThis, applyArgs) {
+          try {
+            _this.onEnter();
+            return delegate.invokeTask(target, task, applyThis, applyArgs);
+          } finally {
+            _this.onLeave();
+          }
+        },
+        onInvoke: function(delegate, current, target, callback, applyThis, applyArgs, source) {
+          try {
+            _this.onEnter();
+            return delegate.invoke(target, callback, applyThis, applyArgs, source);
+          } finally {
+            _this.onLeave();
+          }
+        },
+        onHasTask: function(delegate, current, target, hasTaskState) {
+          delegate.hasTask(target, hasTaskState);
+          if (current === target) {
+            if (hasTaskState.change == 'microTask') {
+              _this.setMicrotask(hasTaskState.microTask);
+            } else if (hasTaskState.change == 'macroTask') {
+              _this.setMacrotask(hasTaskState.macroTask);
+            }
+          }
+        },
+        onHandleError: function(delegate, current, target, error) {
+          delegate.handleError(target, error);
+          _this.onError(error);
+          return false;
+        }
+      });
     }
     NgZoneImpl.isInAngularZone = function() {
       return Zone.current.get('isAngularZone') === true;
@@ -32748,7 +32449,7 @@ var define = System.amdDefine;
     _testabilityGetter = getter;
   }
   var _testabilityGetter = new _NoopGetTestability();
-  var __extends$6 = (this && this.__extends) || function(d, b) {
+  var __extends$3 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -32870,7 +32571,7 @@ var define = System.amdDefine;
     }
   }
   var PlatformRef_ = (function(_super) {
-    __extends$6(PlatformRef_, _super);
+    __extends$3(PlatformRef_, _super);
     function PlatformRef_(_injector) {
       _super.call(this);
       this._injector = _injector;
@@ -33001,7 +32702,7 @@ var define = System.amdDefine;
     return ApplicationRef;
   }());
   var ApplicationRef_ = (function(_super) {
-    __extends$6(ApplicationRef_, _super);
+    __extends$3(ApplicationRef_, _super);
     function ApplicationRef_(_zone, _console, _injector, _exceptionHandler, _componentFactoryResolver, _initStatus, _testabilityRegistry, _testability) {
       var _this = this;
       _super.call(this);
@@ -33124,7 +32825,7 @@ var define = System.amdDefine;
     }];
     return ApplicationRef_;
   }(ApplicationRef));
-  var __extends$12 = (this && this.__extends) || function(d, b) {
+  var __extends$9 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -33182,7 +32883,7 @@ var define = System.amdDefine;
   }());
   var _UNDEFINED = new Object();
   var NgModuleInjector = (function(_super) {
-    __extends$12(NgModuleInjector, _super);
+    __extends$9(NgModuleInjector, _super);
     function NgModuleInjector(parent, factories, bootstrapFactories) {
       _super.call(this, factories, parent.get(ComponentFactoryResolver, ComponentFactoryResolver.NULL));
       this.parent = parent;
@@ -33236,6 +32937,20 @@ var define = System.amdDefine;
     function NgModuleFactoryLoader() {}
     return NgModuleFactoryLoader;
   }());
+  var moduleFactories = new Map();
+  function registerModuleFactory(id, factory) {
+    var existing = moduleFactories.get(id);
+    if (existing) {
+      throw new Error("Duplicate module registered for " + id + " - " + existing.moduleType.name + " vs " + factory.moduleType.name);
+    }
+    moduleFactories.set(id, factory);
+  }
+  function getModuleFactory(id) {
+    var factory = moduleFactories.get(id);
+    if (!factory)
+      throw new Error("No module with ID " + id + " loaded");
+    return factory;
+  }
   var QueryList = (function() {
     function QueryList() {
       this._dirty = true;
@@ -33326,9 +33041,6 @@ var define = System.amdDefine;
   var SystemJsNgModuleLoader = (function() {
     function SystemJsNgModuleLoader(_compiler, config) {
       this._compiler = _compiler;
-      this._system = function() {
-        return System;
-      };
       this._config = config || DEFAULT_CONFIG;
     }
     SystemJsNgModuleLoader.prototype.load = function(path) {
@@ -33342,7 +33054,7 @@ var define = System.amdDefine;
           exportName = _a[1];
       if (exportName === undefined)
         exportName = 'default';
-      return this._system().import(module).then(function(module) {
+      return System.import(module).then(function(module) {
         return module[exportName];
       }).then(function(type) {
         return checkNotEmpty(type, module, exportName);
@@ -33359,7 +33071,7 @@ var define = System.amdDefine;
         exportName = 'default';
         factoryClassSuffix = '';
       }
-      return this._system().import(this._config.factoryPathPrefix + module + this._config.factoryPathSuffix).then(function(module) {
+      return System.import(this._config.factoryPathPrefix + module + this._config.factoryPathSuffix).then(function(module) {
         return module[exportName + factoryClassSuffix];
       }).then(function(factory) {
         return checkNotEmpty(factory, module, exportName);
@@ -33378,7 +33090,7 @@ var define = System.amdDefine;
     }
     return value;
   }
-  var __extends$13 = (this && this.__extends) || function(d, b) {
+  var __extends$10 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -33399,7 +33111,7 @@ var define = System.amdDefine;
     return TemplateRef;
   }());
   var TemplateRef_ = (function(_super) {
-    __extends$13(TemplateRef_, _super);
+    __extends$10(TemplateRef_, _super);
     function TemplateRef_(_appElement, _viewFactory) {
       _super.call(this);
       this._appElement = _appElement;
@@ -33419,7 +33131,18 @@ var define = System.amdDefine;
     });
     return TemplateRef_;
   }(TemplateRef));
-  var __extends$14 = (this && this.__extends) || function(d, b) {
+  var _queuedAnimations = [];
+  function queueAnimation(player) {
+    _queuedAnimations.push(player);
+  }
+  function triggerQueuedAnimations() {
+    for (var i = 0; i < _queuedAnimations.length; i++) {
+      var player = _queuedAnimations[i];
+      player.play();
+    }
+    _queuedAnimations = [];
+  }
+  var __extends$11 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -33440,7 +33163,7 @@ var define = System.amdDefine;
     return ViewRef;
   }());
   var EmbeddedViewRef = (function(_super) {
-    __extends$14(EmbeddedViewRef, _super);
+    __extends$11(EmbeddedViewRef, _super);
     function EmbeddedViewRef() {
       _super.apply(this, arguments);
     }
@@ -33503,6 +33226,7 @@ var define = System.amdDefine;
     };
     ViewRef_.prototype.detectChanges = function() {
       this._view.detectChanges(false);
+      triggerQueuedAnimations();
     };
     ViewRef_.prototype.checkNoChanges = function() {
       this._view.detectChanges(true);
@@ -33519,7 +33243,7 @@ var define = System.amdDefine;
     };
     return ViewRef_;
   }());
-  var __extends$15 = (this && this.__extends) || function(d, b) {
+  var __extends$12 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -33592,7 +33316,7 @@ var define = System.amdDefine;
     return DebugNode;
   }());
   var DebugElement = (function(_super) {
-    __extends$15(DebugElement, _super);
+    __extends$12(DebugElement, _super);
     function DebugElement(nativeNode, parent, _debugInfo) {
       _super.call(this, nativeNode, parent, _debugInfo);
       this.properties = {};
@@ -34051,7 +33775,7 @@ var define = System.amdDefine;
     };
     return AnimationSequencePlayer;
   }());
-  var __extends$16 = (this && this.__extends) || function(d, b) {
+  var __extends$13 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -34073,7 +33797,7 @@ var define = System.amdDefine;
     return AnimationStateMetadata;
   }());
   var AnimationStateDeclarationMetadata = (function(_super) {
-    __extends$16(AnimationStateDeclarationMetadata, _super);
+    __extends$13(AnimationStateDeclarationMetadata, _super);
     function AnimationStateDeclarationMetadata(stateNameExpr, styles) {
       _super.call(this);
       this.stateNameExpr = stateNameExpr;
@@ -34082,7 +33806,7 @@ var define = System.amdDefine;
     return AnimationStateDeclarationMetadata;
   }(AnimationStateMetadata));
   var AnimationStateTransitionMetadata = (function(_super) {
-    __extends$16(AnimationStateTransitionMetadata, _super);
+    __extends$13(AnimationStateTransitionMetadata, _super);
     function AnimationStateTransitionMetadata(stateChangeExpr, steps) {
       _super.call(this);
       this.stateChangeExpr = stateChangeExpr;
@@ -34095,7 +33819,7 @@ var define = System.amdDefine;
     return AnimationMetadata;
   }());
   var AnimationKeyframesSequenceMetadata = (function(_super) {
-    __extends$16(AnimationKeyframesSequenceMetadata, _super);
+    __extends$13(AnimationKeyframesSequenceMetadata, _super);
     function AnimationKeyframesSequenceMetadata(steps) {
       _super.call(this);
       this.steps = steps;
@@ -34103,7 +33827,7 @@ var define = System.amdDefine;
     return AnimationKeyframesSequenceMetadata;
   }(AnimationMetadata));
   var AnimationStyleMetadata = (function(_super) {
-    __extends$16(AnimationStyleMetadata, _super);
+    __extends$13(AnimationStyleMetadata, _super);
     function AnimationStyleMetadata(styles, offset) {
       if (offset === void 0) {
         offset = null;
@@ -34115,7 +33839,7 @@ var define = System.amdDefine;
     return AnimationStyleMetadata;
   }(AnimationMetadata));
   var AnimationAnimateMetadata = (function(_super) {
-    __extends$16(AnimationAnimateMetadata, _super);
+    __extends$13(AnimationAnimateMetadata, _super);
     function AnimationAnimateMetadata(timings, styles) {
       _super.call(this);
       this.timings = timings;
@@ -34124,7 +33848,7 @@ var define = System.amdDefine;
     return AnimationAnimateMetadata;
   }(AnimationMetadata));
   var AnimationWithStepsMetadata = (function(_super) {
-    __extends$16(AnimationWithStepsMetadata, _super);
+    __extends$13(AnimationWithStepsMetadata, _super);
     function AnimationWithStepsMetadata() {
       _super.call(this);
     }
@@ -34138,7 +33862,7 @@ var define = System.amdDefine;
     return AnimationWithStepsMetadata;
   }(AnimationMetadata));
   var AnimationSequenceMetadata = (function(_super) {
-    __extends$16(AnimationSequenceMetadata, _super);
+    __extends$13(AnimationSequenceMetadata, _super);
     function AnimationSequenceMetadata(_steps) {
       _super.call(this);
       this._steps = _steps;
@@ -34153,7 +33877,7 @@ var define = System.amdDefine;
     return AnimationSequenceMetadata;
   }(AnimationWithStepsMetadata));
   var AnimationGroupMetadata = (function(_super) {
-    __extends$16(AnimationGroupMetadata, _super);
+    __extends$13(AnimationGroupMetadata, _super);
     function AnimationGroupMetadata(_steps) {
       _super.call(this);
       this._steps = _steps;
@@ -34198,7 +33922,7 @@ var define = System.amdDefine;
       input.forEach(function(entry) {
         var entryOffset = entry['offset'];
         if (isPresent(entryOffset)) {
-          offset = offset == null ? NumberWrapper.parseFloat(entryOffset) : offset;
+          offset = offset == null ? parseFloat(entryOffset) : offset;
         }
       });
     }
@@ -34617,7 +34341,7 @@ var define = System.amdDefine;
     };
     return ViewAnimationMap;
   }());
-  var __extends$18 = (this && this.__extends) || function(d, b) {
+  var __extends$15 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -34628,7 +34352,7 @@ var define = System.amdDefine;
   };
   var _UNDEFINED$1 = new Object();
   var ElementInjector = (function(_super) {
-    __extends$18(ElementInjector, _super);
+    __extends$15(ElementInjector, _super);
     function ElementInjector(_view, _nodeIndex) {
       _super.call(this);
       this._view = _view;
@@ -34649,7 +34373,7 @@ var define = System.amdDefine;
     };
     return ElementInjector;
   }(Injector));
-  var __extends$17 = (this && this.__extends) || function(d, b) {
+  var __extends$14 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
         d[p] = b[p];
@@ -34705,6 +34429,7 @@ var define = System.amdDefine;
     };
     AppView.prototype.queueAnimation = function(element, animationName, player, totalTime, fromState, toState) {
       var _this = this;
+      queueAnimation(player);
       var event = new AnimationTransitionEvent({
         'fromState': fromState,
         'toState': toState,
@@ -34717,13 +34442,6 @@ var define = System.amdDefine;
       });
       player.onStart(function() {
         _this.triggerAnimationOutput(element, animationName, 'start', event);
-      });
-    };
-    AppView.prototype.triggerQueuedAnimations = function() {
-      this.animationPlayers.getAllPlayers().forEach(function(player) {
-        if (!player.hasStarted()) {
-          player.play();
-        }
       });
     };
     AppView.prototype.triggerAnimationOutput = function(element, animationName, phase, event) {
@@ -34954,7 +34672,7 @@ var define = System.amdDefine;
     return AppView;
   }());
   var DebugAppView = (function(_super) {
-    __extends$17(DebugAppView, _super);
+    __extends$14(DebugAppView, _super);
     function DebugAppView(clazz, componentType, type, viewUtils, parentInjector, declarationAppElement, cdMode, staticNodeDebugInfos) {
       _super.call(this, clazz, componentType, type, viewUtils, parentInjector, declarationAppElement, cdMode);
       this.staticNodeDebugInfos = staticNodeDebugInfos;
@@ -35074,6 +34792,7 @@ var define = System.amdDefine;
     AppView: AppView,
     DebugAppView: DebugAppView,
     NgModuleInjector: NgModuleInjector,
+    registerModuleFactory: registerModuleFactory,
     ViewType: ViewType,
     MAX_INTERPOLATION_VALUES: MAX_INTERPOLATION_VALUES,
     checkBinding: checkBinding,
@@ -35163,34 +34882,20 @@ var define = System.amdDefine;
   exports.AnimationTransitionEvent = AnimationTransitionEvent;
   exports.AnimationPlayer = AnimationPlayer;
   exports.Sanitizer = Sanitizer;
+  exports.ANALYZE_FOR_ENTRY_COMPONENTS = ANALYZE_FOR_ENTRY_COMPONENTS;
+  exports.Attribute = Attribute;
+  exports.ContentChild = ContentChild;
+  exports.ContentChildren = ContentChildren;
+  exports.Query = Query;
+  exports.ViewChild = ViewChild;
+  exports.ViewChildren = ViewChildren;
   exports.Component = Component;
   exports.Directive = Directive;
-  exports.Attribute = Attribute;
-  exports.ContentChildren = ContentChildren;
-  exports.ContentChild = ContentChild;
-  exports.ViewChildren = ViewChildren;
-  exports.ViewChild = ViewChild;
-  exports.Pipe = Pipe;
-  exports.Input = Input;
-  exports.Output = Output;
   exports.HostBinding = HostBinding;
   exports.HostListener = HostListener;
-  exports.NgModule = NgModule;
-  exports.ANALYZE_FOR_ENTRY_COMPONENTS = ANALYZE_FOR_ENTRY_COMPONENTS;
-  exports.AttributeMetadata = AttributeMetadata;
-  exports.ContentChildMetadata = ContentChildMetadata;
-  exports.ContentChildrenMetadata = ContentChildrenMetadata;
-  exports.QueryMetadata = QueryMetadata;
-  exports.ViewChildMetadata = ViewChildMetadata;
-  exports.ViewChildrenMetadata = ViewChildrenMetadata;
-  exports.ViewQueryMetadata = ViewQueryMetadata;
-  exports.ComponentMetadata = ComponentMetadata;
-  exports.DirectiveMetadata = DirectiveMetadata;
-  exports.HostBindingMetadata = HostBindingMetadata;
-  exports.HostListenerMetadata = HostListenerMetadata;
-  exports.InputMetadata = InputMetadata;
-  exports.OutputMetadata = OutputMetadata;
-  exports.PipeMetadata = PipeMetadata;
+  exports.Input = Input;
+  exports.Output = Output;
+  exports.Pipe = Pipe;
   exports.AfterContentChecked = AfterContentChecked;
   exports.AfterContentInit = AfterContentInit;
   exports.AfterViewChecked = AfterViewChecked;
@@ -35201,14 +34906,8 @@ var define = System.amdDefine;
   exports.OnInit = OnInit;
   exports.CUSTOM_ELEMENTS_SCHEMA = CUSTOM_ELEMENTS_SCHEMA;
   exports.NO_ERRORS_SCHEMA = NO_ERRORS_SCHEMA;
-  exports.NgModuleMetadata = NgModuleMetadata;
+  exports.NgModule = NgModule;
   exports.Class = Class;
-  exports.HostMetadata = HostMetadata;
-  exports.InjectMetadata = InjectMetadata;
-  exports.InjectableMetadata = InjectableMetadata;
-  exports.OptionalMetadata = OptionalMetadata;
-  exports.SelfMetadata = SelfMetadata;
-  exports.SkipSelfMetadata = SkipSelfMetadata;
   exports.forwardRef = forwardRef;
   exports.resolveForwardRef = resolveForwardRef;
   exports.Injector = Injector;
@@ -35220,8 +34919,8 @@ var define = System.amdDefine;
   exports.Optional = Optional;
   exports.Injectable = Injectable;
   exports.Self = Self;
-  exports.Host = Host;
   exports.SkipSelf = SkipSelf;
+  exports.Host = Host;
   exports.NgZone = NgZone;
   exports.RenderComponentType = RenderComponentType;
   exports.Renderer = Renderer;
@@ -35237,6 +34936,7 @@ var define = System.amdDefine;
   exports.NgModuleFactory = NgModuleFactory;
   exports.NgModuleRef = NgModuleRef;
   exports.NgModuleFactoryLoader = NgModuleFactoryLoader;
+  exports.getModuleFactory = getModuleFactory;
   exports.QueryList = QueryList;
   exports.SystemJsNgModuleLoader = SystemJsNgModuleLoader;
   exports.SystemJsNgModuleLoaderConfig = SystemJsNgModuleLoaderConfig;
@@ -35454,9 +35154,6 @@ var define = System.amdDefine;
       }
       throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
     };
-    NumberWrapper.parseFloat = function(text) {
-      return parseFloat(text);
-    };
     Object.defineProperty(NumberWrapper, "NaN", {
       get: function() {
         return NaN;
@@ -35669,9 +35366,8 @@ var define = System.amdDefine;
       if (k1.length != k2.length) {
         return false;
       }
-      var key;
       for (var i = 0; i < k1.length; i++) {
-        key = k1[i];
+        var key = k1[i];
         if (m1[key] !== m2[key]) {
           return false;
         }
@@ -36872,7 +36568,7 @@ var define = System.amdDefine;
       plugins.forEach(function(p) {
         return p.manager = _this;
       });
-      this._plugins = ListWrapper.reversed(plugins);
+      this._plugins = plugins.slice().reverse();
     }
     EventManager.prototype.addEventListener = function(element, eventName, handler) {
       var plugin = this._findPluginFor(eventName);
@@ -38190,9 +37886,6 @@ var define = System.amdDefine;
         }
       }
       throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
-    };
-    NumberWrapper.parseFloat = function(text) {
-      return parseFloat(text);
     };
     Object.defineProperty(NumberWrapper, "NaN", {
       get: function() {
