@@ -8,7 +8,7 @@
 System.config({
     baseURL: '/web-audio-conference-2016',
                         bundles: {
-        'app/e8cbe9b4.bundle.js': [
+        'app/3b852e83.bundle.js': [
             'app/main.js'
         ]
     },
@@ -20,27 +20,21 @@ System.config({
     },
     packages: {
         '@angular/common': {
-            defaultExtension: 'js',
             main: 'bundles/common.umd.js'
         },
         '@angular/compiler': {
-            defaultExtension: 'js',
             main: 'bundles/compiler.umd.js'
         },
         '@angular/core': {
-            defaultExtension: 'js',
             main: 'bundles/core.umd.js'
         },
         '@angular/platform-browser': {
-            defaultExtension: 'js',
             main: 'bundles/platform-browser.umd.js'
         },
         '@angular/platform-browser-dynamic': {
-            defaultExtension: 'js',
             main: 'bundles/platform-browser-dynamic.umd.js'
         },
         '@angular/router': {
-            defaultExtension: 'js',
             main: 'bundles/router.umd.js'
         },
         'app': {

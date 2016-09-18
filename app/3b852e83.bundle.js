@@ -938,48 +938,7 @@ System.registerDynamic("npm:reflect-metadata/Reflect.js", [], false, function ($
 
     return _retrieveGlobal();
 });
-System.register('app/components/app/routes.js', ['../slides/component', '../slides/routes'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var component_1, routes_1;
-    var appRoutes;
-    return {
-        setters: [function (component_1_1) {
-            component_1 = component_1_1;
-        }, function (routes_1_1) {
-            routes_1 = routes_1_1;
-        }],
-        execute: function () {
-            exports_1("appRoutes", appRoutes = [{
-                children: routes_1.slidesRoutes.slice(),
-                component: component_1.SlidesComponent,
-                path: 'slides'
-            }, {
-                path: '**',
-                redirectTo: 'slides/1'
-            }]);
-        }
-    };
-});
-
-System.register("app/routes.js", ['./components/app/routes'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var routes_1;
-    var routes;
-    return {
-        setters: [function (routes_1_1) {
-            routes_1 = routes_1_1;
-        }],
-        execute: function () {
-            exports_1("routes", routes = routes_1.appRoutes.slice());
-        }
-    };
-});
-
-System.register("app/components/prism/component.js", ['@angular/core'], function (exports_1, context_1) {
+System.register("app/modules/slides/components/prism/component.js", ['@angular/core'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -1026,7 +985,7 @@ System.register("app/components/prism/component.js", ['@angular/core'], function
     };
 });
 
-System.register("app/components/slide-eight/component.js", ['@angular/core'], function (exports_1, context_1) {
+System.register('app/modules/slides/module.js', ['./components/prism/component', './components/slide-eight/component', './components/slide-eighteen/component', './components/slide-eleven/component', './components/slide-fifteen/component', './components/slide-five/component', './components/slide-four/component', './components/slide-fourteen/component', './components/slide-nine/component', './components/slide-nineteen/component', './components/slide-one/component', './components/slide-seven/component', './components/slide-seventeen/component', './components/slide-six/component', './components/slide-sixteen/component', './components/slide-ten/component', './components/slide-thirteen/component', './components/slide-three/component', './components/slide-twelve/component', './components/slide-twenty-one/component', './components/slide-twenty-three/component', './components/slide-twenty-two/component', './components/slide-twenty/component', './components/slide-two/component', './components/slides/component', '@angular/core', '@angular/platform-browser', '@angular/router'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -1040,816 +999,8 @@ System.register("app/components/slide-eight/component.js", ['@angular/core'], fu
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
-    var SlideEightComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideEightComponent = function () {
-                function SlideEightComponent() {}
-                SlideEightComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Downsampling</h2><wac-prism language="javascript">var downsampleContext = new OfflineAudioContext(
-        anyValidNumber,
-        anyValidNumber,
-        11025
-    );
-
-downsampleContext.decodeAudioData(arrayBuffer);
-// will resolve with the downsampled audioBuffer</wac-prism>`
-                }), __metadata('design:paramtypes', [])], SlideEightComponent);
-                return SlideEightComponent;
-            }();
-            exports_1("SlideEightComponent", SlideEightComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-eighteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideEighteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideEighteenComponent = function () {
-                function SlideEighteenComponent() {}
-                SlideEighteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Not so good parts</h2><ul><li>current state is broken</li><li>no worker support</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideEighteenComponent);
-                return SlideEighteenComponent;
-            }();
-            exports_1("SlideEighteenComponent", SlideEighteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-eleven/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideElevenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideElevenComponent = function () {
-                function SlideElevenComponent() {}
-                SlideElevenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Apply FFT</h2><ul><li>will not work</li><li>the AnalyserNode is only designed to be used for real time usage</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideElevenComponent);
-                return SlideElevenComponent;
-            }();
-            exports_1("SlideElevenComponent", SlideElevenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-fifteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFifteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFifteenComponent = function () {
-                function SlideFifteenComponent() {}
-                SlideFifteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Apply Gate</h2><ul><li>no native support (yet)</li><li>ScriptProcessorNode does not fire each onaudioprocess event</li><li>ScriptProcessorNode does not have any output in all browsers</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideFifteenComponent);
-                return SlideFifteenComponent;
-            }();
-            exports_1("SlideFifteenComponent", SlideFifteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-five/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFiveComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFiveComponent = function () {
-                function SlideFiveComponent() {}
-                SlideFiveComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>audfprint</h2><ul><li>uses landmark based fingerprinting</li><li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li><li>open sourced in Python</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideFiveComponent);
-                return SlideFiveComponent;
-            }();
-            exports_1("SlideFiveComponent", SlideFiveComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-four/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFourComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFourComponent = function () {
-                function SlideFourComponent() {}
-                SlideFourComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Audio Fingerprinting</h2><ul><li>retrieve (a) unique value(s) from an audio signal</li><li>match and query audio signals</li><li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideFourComponent);
-                return SlideFourComponent;
-            }();
-            exports_1("SlideFourComponent", SlideFourComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-fourteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideFourteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideFourteenComponent = function () {
-                function SlideFourteenComponent() {}
-                SlideFourteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Find Maximum</h2><ul><li>no native support</li><li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideFourteenComponent);
-                return SlideFourteenComponent;
-            }();
-            exports_1("SlideFourteenComponent", SlideFourteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-nine/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideNineComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideNineComponent = function () {
-                function SlideNineComponent() {}
-                SlideNineComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Downmixing</h2><ul><li>works as well</li><li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideNineComponent);
-                return SlideNineComponent;
-            }();
-            exports_1("SlideNineComponent", SlideNineComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-nineteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideNineteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideNineteenComponent = function () {
-                function SlideNineteenComponent() {}
-                SlideNineteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2><ul><li>sends serial data via the audio output</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideNineteenComponent);
-                return SlideNineteenComponent;
-            }();
-            exports_1("SlideNineteenComponent", SlideNineteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-one/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideOneComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideOneComponent = function () {
-                function SlideOneComponent() {}
-                SlideOneComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    styles: ["a,h1,h2,span{text-align:center}a,span{display:block}"],
-                    template: `<h1>Non Audio Signal Processing</h1><span>or</span><h2>What else can we do<br>with the Web Audio API?</h2><a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>`
-                }), __metadata('design:paramtypes', [])], SlideOneComponent);
-                return SlideOneComponent;
-            }();
-            exports_1("SlideOneComponent", SlideOneComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-seven/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSevenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSevenComponent = function () {
-                function SlideSevenComponent() {}
-                SlideSevenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Downsampling</h2><ul><li>can be done easily</li><li>each browser uses a different algorithm</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideSevenComponent);
-                return SlideSevenComponent;
-            }();
-            exports_1("SlideSevenComponent", SlideSevenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-seventeen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSeventeenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSeventeenComponent = function () {
-                function SlideSeventeenComponent() {}
-                SlideSeventeenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Good parts</h2><ul><li>runs possibly faster because it's natively implemented</li><li>it is already implemented</li><li>AudioWorklets will solve all current problems</li><li>suspend()/resume() allow the usage as a stream</li><li>values from -4294967296 to 4294967296 are supported</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideSeventeenComponent);
-                return SlideSeventeenComponent;
-            }();
-            exports_1("SlideSeventeenComponent", SlideSeventeenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-six/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSixComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSixComponent = function () {
-                function SlideSixComponent() {}
-                SlideSixComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>audfprint's algorithm</h2><ul><li>downsample audio to 11025 Hz</li><li>downmix audio to mono</li><li>apply the FFT each 256 samples</li><li>find the largest magnitude</li><li>apply a gate</li><li>...</li><li>apply an IIR filter</li><li>... and much more</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideSixComponent);
-                return SlideSixComponent;
-            }();
-            exports_1("SlideSixComponent", SlideSixComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-sixteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideSixteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideSixteenComponent = function () {
-                function SlideSixteenComponent() {}
-                SlideSixteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Apply IIR Filter</h2><ul><li>works now in Chrome &amp; Opera</li><li>can't be reliably reimplemted</li><li>10 times faster</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideSixteenComponent);
-                return SlideSixteenComponent;
-            }();
-            exports_1("SlideSixteenComponent", SlideSixteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-ten/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTenComponent = function () {
-                function SlideTenComponent() {}
-                SlideTenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Downmixing</h2><wac-prism language="javascript">var downmixContext = new OfflineAudioContext(
-        1,
-        audioBuffer.length,
-        11025
-    );
-var bufferSource = downmixContext.createBufferSource();
-
-bufferSource.buffer = audioBuffer;
-bufferSource.connect(downmixContext.destination);
-bufferSource.start();
-
-downmixContext.startRendering();
-// will resolve with the downmixed audioBuffer</wac-prism>`
-                }), __metadata('design:paramtypes', [])], SlideTenComponent);
-                return SlideTenComponent;
-            }();
-            exports_1("SlideTenComponent", SlideTenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-thirteen/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideThirteenComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideThirteenComponent = function () {
-                function SlideThirteenComponent() {}
-                SlideThirteenComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Apply FFT</h2><ul><li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li><li>increased performance by 400% for me</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideThirteenComponent);
-                return SlideThirteenComponent;
-            }();
-            exports_1("SlideThirteenComponent", SlideThirteenComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-three/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideThreeComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideThreeComponent = function () {
-                function SlideThreeComponent() {}
-                SlideThreeComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Agenda</h2><ul><li>Audio Fingerprinting with audfprint</li><li>Non Audio Signal Processing</li><li>Bonus track: webaudio-serial-tx</li><li>Bonus track: doppler</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideThreeComponent);
-                return SlideThreeComponent;
-            }();
-            exports_1("SlideThreeComponent", SlideThreeComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twelve/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwelveComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwelveComponent = function () {
-                function SlideTwelveComponent() {}
-                SlideTwelveComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Apply FFT</h2><wac-prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
-var buffer = new Float32Array(analyser.fftSize);
-var scriptProcessor = offlineAudioContext.createScriptProcessor();
-
-scriptProcessor.onaudioprocess = () =&gt; {{ '{' }}
-    analyser.getFloatFrequencyData(buffer);
-    // CAUTION: buffer will contain random data
-};
-
-anyNodeThatOutputsSound
-    .connect(analyser)
-    .connect(scriptProcessor)
-    .connect(offlineAudioContext.destination);
-
-offlineAudioContext.startRendering();</wac-prism>`
-                }), __metadata('design:paramtypes', [])], SlideTwelveComponent);
-                return SlideTwelveComponent;
-            }();
-            exports_1("SlideTwelveComponent", SlideTwelveComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-one/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyOneComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyOneComponent = function () {
-                function SlideTwentyOneComponent() {}
-                SlideTwentyOneComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    styles: ["h1{text-align:center}"],
-                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>`
-                }), __metadata('design:paramtypes', [])], SlideTwentyOneComponent);
-                return SlideTwentyOneComponent;
-            }();
-            exports_1("SlideTwentyOneComponent", SlideTwentyOneComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-three/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyThreeComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyThreeComponent = function () {
-                function SlideTwentyThreeComponent() {}
-                SlideTwentyThreeComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Thank you</h2><h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3><h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3><h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>`
-                }), __metadata('design:paramtypes', [])], SlideTwentyThreeComponent);
-                return SlideTwentyThreeComponent;
-            }();
-            exports_1("SlideTwentyThreeComponent", SlideTwentyThreeComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty-two/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyTwoComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyTwoComponent = function () {
-                function SlideTwentyTwoComponent() {}
-                SlideTwentyTwoComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    styles: ["h1{text-align:center}"],
-                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>`
-                }), __metadata('design:paramtypes', [])], SlideTwentyTwoComponent);
-                return SlideTwentyTwoComponent;
-            }();
-            exports_1("SlideTwentyTwoComponent", SlideTwentyTwoComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-twenty/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwentyComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwentyComponent = function () {
-                function SlideTwentyComponent() {}
-                SlideTwentyComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2><ul><li>detecting motion by playing frequencies above the audible range and analyzing their response</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideTwentyComponent);
-                return SlideTwentyComponent;
-            }();
-            exports_1("SlideTwentyComponent", SlideTwentyComponent);
-        }
-    };
-});
-
-System.register("app/components/slide-two/component.js", ['@angular/core'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1;
-    var SlideTwoComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }],
-        execute: function () {
-            SlideTwoComponent = function () {
-                function SlideTwoComponent() {}
-                SlideTwoComponent = __decorate([core_1.Component({
-                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    template: `<h2>About me</h2><h3>Christoph Guttandin</h3><ul><li>based in Berlin</li><li>self employed at Media Codings</li><li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li><li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li></ul>`
-                }), __metadata('design:paramtypes', [])], SlideTwoComponent);
-                return SlideTwoComponent;
-            }();
-            exports_1("SlideTwoComponent", SlideTwoComponent);
-        }
-    };
-});
-
-System.register('app/components/slides/routes.js', ['../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-twenty/component', '../slide-two/component'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23;
-    var SLIDES, slideComponentsRoutes, slidesRoutes;
+    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23, component_24, component_25, core_1, platform_browser_1, router_1;
+    var SlidesModule;
     return {
         setters: [function (component_1_1) {
             component_1 = component_1_1;
@@ -1897,24 +1048,67 @@ System.register('app/components/slides/routes.js', ['../slide-eight/component', 
             component_22 = component_22_1;
         }, function (component_23_1) {
             component_23 = component_23_1;
+        }, function (component_24_1) {
+            component_24 = component_24_1;
+        }, function (component_25_1) {
+            component_25 = component_25_1;
+        }, function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (platform_browser_1_1) {
+            platform_browser_1 = platform_browser_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
         }],
         execute: function () {
-            SLIDES = [component_10.SlideOneComponent, component_23.SlideTwoComponent, component_17.SlideThreeComponent, component_6.SlideFourComponent, component_5.SlideFiveComponent, component_13.SlideSixComponent, component_11.SlideSevenComponent, component_1.SlideEightComponent, component_8.SlideNineComponent, component_15.SlideTenComponent, component_3.SlideElevenComponent, component_18.SlideTwelveComponent, component_16.SlideThirteenComponent, component_7.SlideFourteenComponent, component_4.SlideFifteenComponent, component_14.SlideSixteenComponent, component_12.SlideSeventeenComponent, component_2.SlideEighteenComponent, component_9.SlideNineteenComponent, component_22.SlideTwentyComponent, component_19.SlideTwentyOneComponent, component_21.SlideTwentyTwoComponent, component_20.SlideTwentyThreeComponent];
-            slideComponentsRoutes = SLIDES.map(function (slide, index) {
-                return {
-                    component: slide,
-                    path: "" + (index + 1)
-                };
-            });
-            exports_1("slidesRoutes", slidesRoutes = slideComponentsRoutes.concat([{
-                path: '**',
-                redirectTo: '1'
-            }]));
+            SlidesModule = function () {
+                function SlidesModule() {}
+                SlidesModule = __decorate([core_1.NgModule({
+                    declarations: [component_1.PrismComponent, component_2.SlideEightComponent, component_3.SlideEighteenComponent, component_4.SlideElevenComponent, component_5.SlideFifteenComponent, component_6.SlideFiveComponent, component_7.SlideFourComponent, component_8.SlideFourteenComponent, component_9.SlideNineComponent, component_10.SlideNineteenComponent, component_11.SlideOneComponent, component_12.SlideSevenComponent, component_13.SlideSeventeenComponent, component_14.SlideSixComponent, component_15.SlideSixteenComponent, component_16.SlideTenComponent, component_17.SlideThirteenComponent, component_18.SlideThreeComponent, component_19.SlideTwelveComponent, component_23.SlideTwentyComponent, component_20.SlideTwentyOneComponent, component_21.SlideTwentyThreeComponent, component_22.SlideTwentyTwoComponent, component_24.SlideTwoComponent, component_25.SlidesComponent],
+                    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forChild([])]
+                }), __metadata('design:paramtypes', [])], SlidesModule);
+                return SlidesModule;
+            }();
+            exports_1("SlidesModule", SlidesModule);
         }
     };
 });
 
-System.register('app/components/slides/component.js', ['./routes', '@angular/core', '@angular/router'], function (exports_1, context_1) {
+System.register("app/modules/app/components/app/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var AppComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            AppComponent = function () {
+                function AppComponent() {}
+                AppComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    selector: 'wac-talk',
+                    template: `<router-outlet></router-outlet>`
+                }), __metadata('design:paramtypes', [])], AppComponent);
+                return AppComponent;
+            }();
+            exports_1("AppComponent", AppComponent);
+        }
+    };
+});
+
+System.register('app/modules/slides/components/slides/component.js', ['../../routes', '@angular/core', '@angular/router'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -1989,7 +1183,7 @@ System.register('app/components/slides/component.js', ['./routes', '@angular/cor
     };
 });
 
-System.register("app/components/app/component.js", ['@angular/core'], function (exports_1, context_1) {
+System.register("app/modules/slides/components/slide-eight/component.js", ['@angular/core'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -2004,22 +1198,900 @@ System.register("app/components/app/component.js", ['@angular/core'], function (
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var AppComponent;
+    var SlideEightComponent;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
         }],
         execute: function () {
-            AppComponent = function () {
-                function AppComponent() {}
-                AppComponent = __decorate([core_1.Component({
+            SlideEightComponent = function () {
+                function SlideEightComponent() {}
+                SlideEightComponent = __decorate([core_1.Component({
                     changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-                    selector: 'wac-talk',
-                    template: `<router-outlet></router-outlet>`
-                }), __metadata('design:paramtypes', [])], AppComponent);
-                return AppComponent;
+                    template: `<h2>Downsampling</h2><wac-prism language="javascript">var downsampleContext = new OfflineAudioContext(
+        anyValidNumber,
+        anyValidNumber,
+        11025
+    );
+
+downsampleContext.decodeAudioData(arrayBuffer);
+// will resolve with the downsampled audioBuffer</wac-prism>`
+                }), __metadata('design:paramtypes', [])], SlideEightComponent);
+                return SlideEightComponent;
             }();
-            exports_1("AppComponent", AppComponent);
+            exports_1("SlideEightComponent", SlideEightComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-eighteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideEighteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideEighteenComponent = function () {
+                function SlideEighteenComponent() {}
+                SlideEighteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Not so good parts</h2><ul><li>current state is broken</li><li>no worker support</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideEighteenComponent);
+                return SlideEighteenComponent;
+            }();
+            exports_1("SlideEighteenComponent", SlideEighteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-eleven/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideElevenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideElevenComponent = function () {
+                function SlideElevenComponent() {}
+                SlideElevenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Apply FFT</h2><ul><li>will not work</li><li>the AnalyserNode is only designed to be used for real time usage</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideElevenComponent);
+                return SlideElevenComponent;
+            }();
+            exports_1("SlideElevenComponent", SlideElevenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-fifteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFifteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFifteenComponent = function () {
+                function SlideFifteenComponent() {}
+                SlideFifteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Apply Gate</h2><ul><li>no native support (yet)</li><li>ScriptProcessorNode does not fire each onaudioprocess event</li><li>ScriptProcessorNode does not have any output in all browsers</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideFifteenComponent);
+                return SlideFifteenComponent;
+            }();
+            exports_1("SlideFifteenComponent", SlideFifteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-five/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFiveComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFiveComponent = function () {
+                function SlideFiveComponent() {}
+                SlideFiveComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>audfprint</h2><ul><li>uses landmark based fingerprinting</li><li>used by the <a href="https://archive.org/post/1027794/new-music-analysis-files">Internet Archive</a></li><li>open sourced in Python</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideFiveComponent);
+                return SlideFiveComponent;
+            }();
+            exports_1("SlideFiveComponent", SlideFiveComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-four/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFourComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFourComponent = function () {
+                function SlideFourComponent() {}
+                SlideFourComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Audio Fingerprinting</h2><ul><li>retrieve (a) unique value(s) from an audio signal</li><li>match and query audio signals</li><li>open source implementations: <a href="https://acoustid.org">AcousticID</a>, <a href="https://github.com/dpwe/audfprint">audfprint</a>, <a href="http://echoprint.me/">Echoprint</a>, <a href="http://panako.be/">Panako</a></li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideFourComponent);
+                return SlideFourComponent;
+            }();
+            exports_1("SlideFourComponent", SlideFourComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-fourteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideFourteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideFourteenComponent = function () {
+                function SlideFourteenComponent() {}
+                SlideFourteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Find Maximum</h2><ul><li>no native support</li><li>ScriptProcessorNode does not fire each onaudioprocess event in <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/chrome/current/offline-audio-context-constructor.js#L65">Chrome</a>, <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/opera/offline-audio-context-constructor.js#L65">Opera</a> & <a href="https://github.com/chrisguttandin/standardized-audio-context/blob/master/test/expectation/safari/offline-audio-context-constructor.js#L65">Safari</a></li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideFourteenComponent);
+                return SlideFourteenComponent;
+            }();
+            exports_1("SlideFourteenComponent", SlideFourteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-nine/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideNineComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideNineComponent = function () {
+                function SlideNineComponent() {}
+                SlideNineComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Downmixing</h2><ul><li>works as well</li><li>specified for common cases by the <a href="https://webaudio.github.io/web-audio-api/#down-mix">API</a></li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideNineComponent);
+                return SlideNineComponent;
+            }();
+            exports_1("SlideNineComponent", SlideNineComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-nineteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideNineteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideNineteenComponent = function () {
+                function SlideNineteenComponent() {}
+                SlideNineteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Bonus track: <a href="https://github.com/substack/webaudio-serial-tx">webaudio-serial-tx</a></h2><ul><li>sends serial data via the audio output</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideNineteenComponent);
+                return SlideNineteenComponent;
+            }();
+            exports_1("SlideNineteenComponent", SlideNineteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-one/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideOneComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideOneComponent = function () {
+                function SlideOneComponent() {}
+                SlideOneComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    styles: ["a,h1,h2,span{text-align:center}a,span{display:block}"],
+                    template: `<h1>Non Audio Signal Processing</h1><span>or</span><h2>What else can we do<br>with the Web Audio API?</h2><a href="https://chrisguttandin.github.io/web-audio-conference-2016">bit.ly/wac-2016</a>`
+                }), __metadata('design:paramtypes', [])], SlideOneComponent);
+                return SlideOneComponent;
+            }();
+            exports_1("SlideOneComponent", SlideOneComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-seven/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSevenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSevenComponent = function () {
+                function SlideSevenComponent() {}
+                SlideSevenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Downsampling</h2><ul><li>can be done easily</li><li>each browser uses a different algorithm</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideSevenComponent);
+                return SlideSevenComponent;
+            }();
+            exports_1("SlideSevenComponent", SlideSevenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-seventeen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSeventeenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSeventeenComponent = function () {
+                function SlideSeventeenComponent() {}
+                SlideSeventeenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Good parts</h2><ul><li>runs possibly faster because it's natively implemented</li><li>it is already implemented</li><li>AudioWorklets will solve all current problems</li><li>suspend()/resume() allow the usage as a stream</li><li>values from -4294967296 to 4294967296 are supported</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideSeventeenComponent);
+                return SlideSeventeenComponent;
+            }();
+            exports_1("SlideSeventeenComponent", SlideSeventeenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-six/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSixComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSixComponent = function () {
+                function SlideSixComponent() {}
+                SlideSixComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>audfprint's algorithm</h2><ul><li>downsample audio to 11025 Hz</li><li>downmix audio to mono</li><li>apply the FFT each 256 samples</li><li>find the largest magnitude</li><li>apply a gate</li><li>...</li><li>apply an IIR filter</li><li>... and much more</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideSixComponent);
+                return SlideSixComponent;
+            }();
+            exports_1("SlideSixComponent", SlideSixComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-sixteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideSixteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideSixteenComponent = function () {
+                function SlideSixteenComponent() {}
+                SlideSixteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Apply IIR Filter</h2><ul><li>works now in Chrome &amp; Opera</li><li>can't be reliably reimplemted</li><li>10 times faster</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideSixteenComponent);
+                return SlideSixteenComponent;
+            }();
+            exports_1("SlideSixteenComponent", SlideSixteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-ten/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTenComponent = function () {
+                function SlideTenComponent() {}
+                SlideTenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Downmixing</h2><wac-prism language="javascript">var downmixContext = new OfflineAudioContext(
+        1,
+        audioBuffer.length,
+        11025
+    );
+var bufferSource = downmixContext.createBufferSource();
+
+bufferSource.buffer = audioBuffer;
+bufferSource.connect(downmixContext.destination);
+bufferSource.start();
+
+downmixContext.startRendering();
+// will resolve with the downmixed audioBuffer</wac-prism>`
+                }), __metadata('design:paramtypes', [])], SlideTenComponent);
+                return SlideTenComponent;
+            }();
+            exports_1("SlideTenComponent", SlideTenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-thirteen/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideThirteenComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideThirteenComponent = function () {
+                function SlideThirteenComponent() {}
+                SlideThirteenComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Apply FFT</h2><ul><li>use <a href="https://chinpen.net/webaudiofftperf/">WebAudio FFT Performance Test</a> to pick the fastest FFT library for your needs</li><li>increased performance by 400% for me</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideThirteenComponent);
+                return SlideThirteenComponent;
+            }();
+            exports_1("SlideThirteenComponent", SlideThirteenComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-three/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideThreeComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideThreeComponent = function () {
+                function SlideThreeComponent() {}
+                SlideThreeComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Agenda</h2><ul><li>Audio Fingerprinting with audfprint</li><li>Non Audio Signal Processing</li><li>Bonus track: webaudio-serial-tx</li><li>Bonus track: doppler</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideThreeComponent);
+                return SlideThreeComponent;
+            }();
+            exports_1("SlideThreeComponent", SlideThreeComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-twelve/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwelveComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwelveComponent = function () {
+                function SlideTwelveComponent() {}
+                SlideTwelveComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Apply FFT</h2><wac-prism language="javascript">var analyser = offlineAudioContext.createAnalyser();
+var buffer = new Float32Array(analyser.fftSize);
+var scriptProcessor = offlineAudioContext.createScriptProcessor();
+
+scriptProcessor.onaudioprocess = () =&gt; {{ '{' }}
+    analyser.getFloatFrequencyData(buffer);
+    // CAUTION: buffer will contain random data
+};
+
+anyNodeThatOutputsSound
+    .connect(analyser)
+    .connect(scriptProcessor)
+    .connect(offlineAudioContext.destination);
+
+offlineAudioContext.startRendering();</wac-prism>`
+                }), __metadata('design:paramtypes', [])], SlideTwelveComponent);
+                return SlideTwelveComponent;
+            }();
+            exports_1("SlideTwelveComponent", SlideTwelveComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-twenty-one/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyOneComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyOneComponent = function () {
+                function SlideTwentyOneComponent() {}
+                SlideTwentyOneComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    styles: ["h1{text-align:center}"],
+                    template: `<h1 class="center">To a man with a hammer,<br>everything looks like a nail.</h1>`
+                }), __metadata('design:paramtypes', [])], SlideTwentyOneComponent);
+                return SlideTwentyOneComponent;
+            }();
+            exports_1("SlideTwentyOneComponent", SlideTwentyOneComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-twenty-three/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyThreeComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyThreeComponent = function () {
+                function SlideTwentyThreeComponent() {}
+                SlideTwentyThreeComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Thank you</h2><h3><a href="https://web-audio-slackin.herokuapp.com">Slack Channel (web-audio-slackin.herokuapp.com)</a></h3><h3><a href="https://chrisguttandin.github.io/web-audio-conference-2016">Slides (bit.ly/wac-2016)</a></h3><h3><a href="http://webaudio.berlin">Berlin Web Audio Meetup (webaudio.berlin)</a></h3>`
+                }), __metadata('design:paramtypes', [])], SlideTwentyThreeComponent);
+                return SlideTwentyThreeComponent;
+            }();
+            exports_1("SlideTwentyThreeComponent", SlideTwentyThreeComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-twenty-two/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyTwoComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyTwoComponent = function () {
+                function SlideTwentyTwoComponent() {}
+                SlideTwentyTwoComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    styles: ["h1{text-align:center}"],
+                    template: `<h1 class="center">To a developer with<br>the Web Audio API,<br>everything looks like<br>an audio graph.</h1>`
+                }), __metadata('design:paramtypes', [])], SlideTwentyTwoComponent);
+                return SlideTwentyTwoComponent;
+            }();
+            exports_1("SlideTwentyTwoComponent", SlideTwentyTwoComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-twenty/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwentyComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwentyComponent = function () {
+                function SlideTwentyComponent() {}
+                SlideTwentyComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>Bonus track: <a href="https://danielrapp.github.io/doppler/">doppler</a></h2><ul><li>detecting motion by playing frequencies above the audible range and analyzing their response</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideTwentyComponent);
+                return SlideTwentyComponent;
+            }();
+            exports_1("SlideTwentyComponent", SlideTwentyComponent);
+        }
+    };
+});
+
+System.register("app/modules/slides/components/slide-two/component.js", ['@angular/core'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1;
+    var SlideTwoComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }],
+        execute: function () {
+            SlideTwoComponent = function () {
+                function SlideTwoComponent() {}
+                SlideTwoComponent = __decorate([core_1.Component({
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush,
+                    template: `<h2>About me</h2><h3>Christoph Guttandin</h3><ul><li>based in Berlin</li><li>self employed at Media Codings</li><li>develops a browser based DJ mixer called <a href="https://shffl.mx">Shffl.mx</a></li><li>usually named chrisguttandin at <a href="https://web-audio-slackin.herokuapp.com">Slack</a>, <a href="https://github.com/chrisguttandin">Github</a>, <a href="https://www.npmjs.com/~chrisguttandin">NPM</a>, ...</li></ul>`
+                }), __metadata('design:paramtypes', [])], SlideTwoComponent);
+                return SlideTwoComponent;
+            }();
+            exports_1("SlideTwoComponent", SlideTwoComponent);
+        }
+    };
+});
+
+System.register('app/modules/slides/routes.js', ['./components/slide-eight/component', './components/slide-eighteen/component', './components/slide-eleven/component', './components/slide-fifteen/component', './components/slide-five/component', './components/slide-four/component', './components/slide-fourteen/component', './components/slide-nine/component', './components/slide-nineteen/component', './components/slide-one/component', './components/slide-seven/component', './components/slide-seventeen/component', './components/slide-six/component', './components/slide-sixteen/component', './components/slide-ten/component', './components/slide-thirteen/component', './components/slide-three/component', './components/slide-twelve/component', './components/slide-twenty-one/component', './components/slide-twenty-three/component', './components/slide-twenty-two/component', './components/slide-twenty/component', './components/slide-two/component'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23;
+    var SLIDES, slideComponentsRoutes, slidesRoutes;
+    return {
+        setters: [function (component_1_1) {
+            component_1 = component_1_1;
+        }, function (component_2_1) {
+            component_2 = component_2_1;
+        }, function (component_3_1) {
+            component_3 = component_3_1;
+        }, function (component_4_1) {
+            component_4 = component_4_1;
+        }, function (component_5_1) {
+            component_5 = component_5_1;
+        }, function (component_6_1) {
+            component_6 = component_6_1;
+        }, function (component_7_1) {
+            component_7 = component_7_1;
+        }, function (component_8_1) {
+            component_8 = component_8_1;
+        }, function (component_9_1) {
+            component_9 = component_9_1;
+        }, function (component_10_1) {
+            component_10 = component_10_1;
+        }, function (component_11_1) {
+            component_11 = component_11_1;
+        }, function (component_12_1) {
+            component_12 = component_12_1;
+        }, function (component_13_1) {
+            component_13 = component_13_1;
+        }, function (component_14_1) {
+            component_14 = component_14_1;
+        }, function (component_15_1) {
+            component_15 = component_15_1;
+        }, function (component_16_1) {
+            component_16 = component_16_1;
+        }, function (component_17_1) {
+            component_17 = component_17_1;
+        }, function (component_18_1) {
+            component_18 = component_18_1;
+        }, function (component_19_1) {
+            component_19 = component_19_1;
+        }, function (component_20_1) {
+            component_20 = component_20_1;
+        }, function (component_21_1) {
+            component_21 = component_21_1;
+        }, function (component_22_1) {
+            component_22 = component_22_1;
+        }, function (component_23_1) {
+            component_23 = component_23_1;
+        }],
+        execute: function () {
+            SLIDES = [component_10.SlideOneComponent, component_23.SlideTwoComponent, component_17.SlideThreeComponent, component_6.SlideFourComponent, component_5.SlideFiveComponent, component_13.SlideSixComponent, component_11.SlideSevenComponent, component_1.SlideEightComponent, component_8.SlideNineComponent, component_15.SlideTenComponent, component_3.SlideElevenComponent, component_18.SlideTwelveComponent, component_16.SlideThirteenComponent, component_7.SlideFourteenComponent, component_4.SlideFifteenComponent, component_14.SlideSixteenComponent, component_12.SlideSeventeenComponent, component_2.SlideEighteenComponent, component_9.SlideNineteenComponent, component_22.SlideTwentyComponent, component_19.SlideTwentyOneComponent, component_21.SlideTwentyTwoComponent, component_20.SlideTwentyThreeComponent];
+            slideComponentsRoutes = SLIDES.map(function (slide, index) {
+                return {
+                    component: slide,
+                    path: "" + (index + 1)
+                };
+            });
+            exports_1("slidesRoutes", slidesRoutes = slideComponentsRoutes.concat([{
+                path: '**',
+                redirectTo: '1'
+            }]));
+        }
+    };
+});
+
+System.register('app/modules/app/routes.js', ['../slides/components/slides/component', '../slides/routes'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var component_1, routes_1;
+    var appRoutes;
+    return {
+        setters: [function (component_1_1) {
+            component_1 = component_1_1;
+        }, function (routes_1_1) {
+            routes_1 = routes_1_1;
+        }],
+        execute: function () {
+            exports_1("appRoutes", appRoutes = [{
+                children: routes_1.slidesRoutes.slice(),
+                component: component_1.SlidesComponent,
+                path: 'slides'
+            }, {
+                path: '**',
+                redirectTo: 'slides/1'
+            }]);
         }
     };
 });
@@ -7352,7 +7424,7 @@ var define = System.amdDefine;
 }));
 
 })();
-System.register('app/components/app/module.js', ['../../routes', '../prism/component', '../slide-eight/component', '../slide-eighteen/component', '../slide-eleven/component', '../slide-fifteen/component', '../slide-five/component', '../slide-four/component', '../slide-fourteen/component', '../slide-nine/component', '../slide-nineteen/component', '../slide-one/component', '../slide-seven/component', '../slide-seventeen/component', '../slide-six/component', '../slide-sixteen/component', '../slide-ten/component', '../slide-thirteen/component', '../slide-three/component', '../slide-twelve/component', '../slide-twenty-one/component', '../slide-twenty-three/component', '../slide-twenty-two/component', '../slide-twenty/component', '../slide-two/component', '../slides/component', './component', '@angular/core', '@angular/platform-browser', '@angular/router'], function (exports_1, context_1) {
+System.register('app/modules/app/module.js', ['../slides/module', './components/app/component', './routes', '@angular/core', '@angular/platform-browser', '@angular/router'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -7366,63 +7438,15 @@ System.register('app/components/app/module.js', ['../../routes', '../prism/compo
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var routes_1, component_1, component_2, component_3, component_4, component_5, component_6, component_7, component_8, component_9, component_10, component_11, component_12, component_13, component_14, component_15, component_16, component_17, component_18, component_19, component_20, component_21, component_22, component_23, component_24, component_25, component_26, core_1, platform_browser_1, router_1;
+    var module_1, component_1, routes_1, core_1, platform_browser_1, router_1;
     var AppModule;
     return {
-        setters: [function (routes_1_1) {
-            routes_1 = routes_1_1;
+        setters: [function (module_1_1) {
+            module_1 = module_1_1;
         }, function (component_1_1) {
             component_1 = component_1_1;
-        }, function (component_2_1) {
-            component_2 = component_2_1;
-        }, function (component_3_1) {
-            component_3 = component_3_1;
-        }, function (component_4_1) {
-            component_4 = component_4_1;
-        }, function (component_5_1) {
-            component_5 = component_5_1;
-        }, function (component_6_1) {
-            component_6 = component_6_1;
-        }, function (component_7_1) {
-            component_7 = component_7_1;
-        }, function (component_8_1) {
-            component_8 = component_8_1;
-        }, function (component_9_1) {
-            component_9 = component_9_1;
-        }, function (component_10_1) {
-            component_10 = component_10_1;
-        }, function (component_11_1) {
-            component_11 = component_11_1;
-        }, function (component_12_1) {
-            component_12 = component_12_1;
-        }, function (component_13_1) {
-            component_13 = component_13_1;
-        }, function (component_14_1) {
-            component_14 = component_14_1;
-        }, function (component_15_1) {
-            component_15 = component_15_1;
-        }, function (component_16_1) {
-            component_16 = component_16_1;
-        }, function (component_17_1) {
-            component_17 = component_17_1;
-        }, function (component_18_1) {
-            component_18 = component_18_1;
-        }, function (component_19_1) {
-            component_19 = component_19_1;
-        }, function (component_20_1) {
-            component_20 = component_20_1;
-        }, function (component_21_1) {
-            component_21 = component_21_1;
-        }, function (component_22_1) {
-            component_22 = component_22_1;
-        }, function (component_23_1) {
-            component_23 = component_23_1;
-        }, function (component_24_1) {
-            component_24 = component_24_1;
-        }, function (component_25_1) {
-            component_25 = component_25_1;
-        }, function (component_26_1) {
-            component_26 = component_26_1;
+        }, function (routes_1_1) {
+            routes_1 = routes_1_1;
         }, function (core_1_1) {
             core_1 = core_1_1;
         }, function (platform_browser_1_1) {
@@ -7434,9 +7458,9 @@ System.register('app/components/app/module.js', ['../../routes', '../prism/compo
             AppModule = function () {
                 function AppModule() {}
                 AppModule = __decorate([core_1.NgModule({
-                    bootstrap: [component_26.AppComponent],
-                    declarations: [component_26.AppComponent, component_1.PrismComponent, component_2.SlideEightComponent, component_3.SlideEighteenComponent, component_4.SlideElevenComponent, component_5.SlideFifteenComponent, component_6.SlideFiveComponent, component_7.SlideFourComponent, component_8.SlideFourteenComponent, component_9.SlideNineComponent, component_10.SlideNineteenComponent, component_11.SlideOneComponent, component_12.SlideSevenComponent, component_13.SlideSeventeenComponent, component_14.SlideSixComponent, component_15.SlideSixteenComponent, component_16.SlideTenComponent, component_17.SlideThirteenComponent, component_18.SlideThreeComponent, component_19.SlideTwelveComponent, component_23.SlideTwentyComponent, component_20.SlideTwentyOneComponent, component_21.SlideTwentyThreeComponent, component_22.SlideTwentyTwoComponent, component_24.SlideTwoComponent, component_25.SlidesComponent],
-                    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(routes_1.routes)]
+                    bootstrap: [component_1.AppComponent],
+                    declarations: [component_1.AppComponent],
+                    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(routes_1.appRoutes), module_1.SlidesModule]
                 }), __metadata('design:paramtypes', [])], AppModule);
                 return AppModule;
             }();
@@ -39391,7 +39415,7 @@ System.registerDynamic('npm:zone.js/dist/zone.js', [], false, function ($__requi
 
     return _retrieveGlobal();
 });
-System.register('app/main.js', ['reflect-metadata', './components/app/module', '@angular/core', '@angular/platform-browser-dynamic', 'zone'], function (exports_1, context_1) {
+System.register('app/main.js', ['reflect-metadata', './modules/app/module', '@angular/core', '@angular/platform-browser-dynamic', 'zone'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
