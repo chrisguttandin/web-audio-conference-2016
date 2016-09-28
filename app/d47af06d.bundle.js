@@ -7899,18 +7899,16 @@ var define = System.amdDefine;
     });
     return result;
   }
-  var Map$1 = global$1.Map;
-  var Set$1 = global$1.Set;
   var createMapFromPairs = (function() {
     try {
-      if (new Map$1([[1, 2]]).size === 1) {
+      if (new Map([[1, 2]]).size === 1) {
         return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
+          return new Map(pairs);
         };
       }
     } catch (e) {}
     return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
+      var map = new Map();
       for (var i = 0; i < pairs.length; i++) {
         var pair = pairs[i];
         map.set(pair[0], pair[1]);
@@ -7918,24 +7916,8 @@ var define = System.amdDefine;
       return map;
     };
   })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
   var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
+    if ((new Map()).keys().next) {
       return function _clearValues(m) {
         var keyIterator = m.keys();
         var k;
@@ -7953,14 +7935,14 @@ var define = System.amdDefine;
   })();
   var _arrayFromMap = (function() {
     try {
-      if ((new Map$1()).values().next) {
+      if ((new Map()).values().next) {
         return function createArrayFromMap(m, getValues) {
           return getValues ? Array.from(m.values()) : Array.from(m.keys());
         };
       }
     } catch (e) {}
     return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
+      var res = new Array(m.size),
           i = 0;
       m.forEach(function(v, k) {
         res[i] = getValues ? v : k;
@@ -7971,11 +7953,8 @@ var define = System.amdDefine;
   })();
   var MapWrapper = (function() {
     function MapWrapper() {}
-    MapWrapper.clone = function(m) {
-      return createMapFromMap(m);
-    };
     MapWrapper.createFromStringMap = function(stringMap) {
-      var result = new Map$1();
+      var result = new Map();
       for (var prop in stringMap) {
         result.set(prop, stringMap[prop]);
       }
@@ -7991,9 +7970,6 @@ var define = System.amdDefine;
     MapWrapper.createFromPairs = function(pairs) {
       return createMapFromPairs(pairs);
     };
-    MapWrapper.clearValues = function(m) {
-      _clearValues(m);
-    };
     MapWrapper.iterable = function(m) {
       return m;
     };
@@ -8007,12 +7983,6 @@ var define = System.amdDefine;
   }());
   var StringMapWrapper = (function() {
     function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
     StringMapWrapper.get = function(map, key) {
       return map.hasOwnProperty(key) ? map[key] : undefined;
     };
@@ -8032,9 +8002,6 @@ var define = System.amdDefine;
         return false;
       }
       return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
     };
     StringMapWrapper.forEach = function(map, callback) {
       for (var _i = 0,
@@ -8231,14 +8198,14 @@ var define = System.amdDefine;
     return target;
   }
   var createSetFromList = (function() {
-    var test = new Set$1([1, 2, 3]);
+    var test = new Set([1, 2, 3]);
     if (test.size === 3) {
       return function createSetFromList(lst) {
-        return new Set$1(lst);
+        return new Set(lst);
       };
     } else {
       return function createSetAndPopulateFromList(lst) {
-        var res = new Set$1(lst);
+        var res = new Set(lst);
         if (res.size !== lst.length) {
           for (var i = 0; i < lst.length; i++) {
             res.add(lst[i]);
@@ -16616,11 +16583,11 @@ var define = System.amdDefine;
           boundPropertyName = this._schemaRegistry.getMappedPropName(partValue);
           securityContext = this._schemaRegistry.securityContext(elementName, boundPropertyName);
           bindingType = exports.PropertyBindingType.Property;
-          this._assertNoEventBinding(boundPropertyName, sourceSpan);
+          this._assertNoEventBinding(boundPropertyName, sourceSpan, false);
           if (!this._schemaRegistry.hasProperty(elementName, boundPropertyName, this._schemas)) {
             var errorMsg = "Can't bind to '" + boundPropertyName + "' since it isn't a known property of '" + elementName + "'.";
             if (elementName.indexOf('-') > -1) {
-              errorMsg += ("\n1. If '" + elementName + "' is an Angular component and it has '" + boundPropertyName + "' input, then verify that it is part of this module.") + ("\n2. If '" + elementName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schema' of this component to suppress this message.\n");
+              errorMsg += ("\n1. If '" + elementName + "' is an Angular component and it has '" + boundPropertyName + "' input, then verify that it is part of this module.") + ("\n2. If '" + elementName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schemas' of this component to suppress this message.\n");
             }
             this._reportError(errorMsg, sourceSpan);
           }
@@ -16628,7 +16595,7 @@ var define = System.amdDefine;
       } else {
         if (parts[0] == ATTRIBUTE_PREFIX) {
           boundPropertyName = parts[1];
-          this._assertNoEventBinding(boundPropertyName, sourceSpan);
+          this._assertNoEventBinding(boundPropertyName, sourceSpan, true);
           var mapPropName = this._schemaRegistry.getMappedPropName(boundPropertyName);
           securityContext = this._schemaRegistry.securityContext(elementName, mapPropName);
           var nsSeparatorIdx = boundPropertyName.indexOf(':');
@@ -16655,9 +16622,13 @@ var define = System.amdDefine;
       }
       return new BoundElementPropertyAst(boundPropertyName, bindingType, securityContext, ast, unit, sourceSpan);
     };
-    TemplateParseVisitor.prototype._assertNoEventBinding = function(propName, sourceSpan) {
+    TemplateParseVisitor.prototype._assertNoEventBinding = function(propName, sourceSpan, isAttr) {
       if (propName.toLowerCase().startsWith('on')) {
-        this._reportError(("Binding to event attribute '" + propName + "' is disallowed ") + ("for security reasons, please use (" + propName.slice(2) + ")=..."), sourceSpan, ParseErrorLevel.FATAL);
+        var msg = ("Binding to event attribute '" + propName + "' is disallowed for security reasons, ") + ("please use (" + propName.slice(2) + ")=...");
+        if (!isAttr) {
+          msg += ("\nIf '" + propName + "' is a directive input, make sure the directive is imported by the") + " current module.";
+        }
+        this._reportError(msg, sourceSpan, ParseErrorLevel.FATAL);
       }
     };
     TemplateParseVisitor.prototype._findComponentDirectiveNames = function(directives) {
@@ -16679,7 +16650,7 @@ var define = System.amdDefine;
     TemplateParseVisitor.prototype._assertElementExists = function(matchElement, element) {
       var elName = element.name.replace(/^:xhtml:/, '');
       if (!matchElement && !this._schemaRegistry.hasElement(elName, this._schemas)) {
-        var errorMsg = ("'" + elName + "' is not a known element:\n") + ("1. If '" + elName + "' is an Angular component, then verify that it is part of this module.\n") + ("2. If '" + elName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schema' of this component to suppress this message.");
+        var errorMsg = ("'" + elName + "' is not a known element:\n") + ("1. If '" + elName + "' is an Angular component, then verify that it is part of this module.\n") + ("2. If '" + elName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schemas' of this component to suppress this message.");
         this._reportError(errorMsg, element.sourceSpan);
       }
     };
@@ -18342,7 +18313,7 @@ var define = System.amdDefine;
     };
     CompileElement.prototype.setComponentView = function(compViewExpr) {
       this._compViewExpr = compViewExpr;
-      this.contentNodesByNgContentIndex = ListWrapper.createFixedSize(this.component.template.ngContentSelectors.length);
+      this.contentNodesByNgContentIndex = new Array(this.component.template.ngContentSelectors.length);
       for (var i = 0; i < this.contentNodesByNgContentIndex.length; i++) {
         this.contentNodesByNgContentIndex[i] = [];
       }
@@ -19052,7 +19023,7 @@ var define = System.amdDefine;
       return (this._nodeMap.get(ast) || ast).visit(this, mode);
     };
     _AstToIrVisitor.prototype.convertSafeAccess = function(ast, leftMostSafe, mode) {
-      var guardedExpression = this.visit(leftMostSafe.receiver, mode);
+      var guardedExpression = this.visit(leftMostSafe.receiver, _Mode.Expression);
       var temporary;
       if (this.needsTemporary(leftMostSafe.receiver)) {
         temporary = this.allocateTemporary();
@@ -19065,12 +19036,12 @@ var define = System.amdDefine;
       } else {
         this._nodeMap.set(leftMostSafe, new PropertyRead(leftMostSafe.span, leftMostSafe.receiver, leftMostSafe.name));
       }
-      var access = this.visit(ast, mode);
+      var access = this.visit(ast, _Mode.Expression);
       this._nodeMap.delete(leftMostSafe);
       if (temporary) {
         this.releaseTemporary(temporary);
       }
-      return condition.conditional(literal(null), access);
+      return convertToStatementIfNeeded(mode, condition.conditional(literal(null), access));
     };
     _AstToIrVisitor.prototype.leftMostSafeNode = function(ast) {
       var _this = this;
@@ -20195,15 +20166,14 @@ var define = System.amdDefine;
         return Promise.all([compMeta].concat(ngModule.transitiveModule.directives).map(function(dirMeta) {
           return _this._directiveNormalizer.normalizeDirective(dirMeta).asyncResult;
         })).then(function(normalizedCompWithDirectives) {
-          var compMeta = normalizedCompWithDirectives[0];
-          var dirMetas = normalizedCompWithDirectives.slice(1);
+          var compMeta = normalizedCompWithDirectives[0],
+              dirMetas = normalizedCompWithDirectives.slice(1);
           _assertComponent(compMeta);
           var stylesCompileResults = _this._styleCompiler.compileComponent(compMeta);
           stylesCompileResults.externalStylesheets.forEach(function(compiledStyleSheet) {
             outputSourceModules.push(_this._codgenStyles(compiledStyleSheet, fileSuffix));
           });
-          exportedVars.push(_this._compileComponentFactory(compMeta, fileSuffix, statements));
-          exportedVars.push(_this._compileComponent(compMeta, dirMetas, ngModule.transitiveModule.pipes, ngModule.schemas, stylesCompileResults.componentStylesheet, fileSuffix, statements));
+          exportedVars.push(_this._compileComponentFactory(compMeta, fileSuffix, statements), _this._compileComponent(compMeta, dirMetas, ngModule.transitiveModule.pipes, ngModule.schemas, stylesCompileResults.componentStylesheet, fileSuffix, statements));
         });
       })).then(function() {
         if (statements.length > 0) {
@@ -20214,13 +20184,20 @@ var define = System.amdDefine;
     };
     OfflineCompiler.prototype._compileModule = function(ngModuleType, targetStatements) {
       var ngModule = this._metadataResolver.getNgModuleMetadata(ngModuleType);
-      var appCompileResult = this._ngModuleCompiler.compile(ngModule, [new CompileProviderMetadata({
-        token: resolveIdentifierToken(Identifiers.LOCALE_ID),
-        useValue: this._localeId
-      }), new CompileProviderMetadata({
-        token: resolveIdentifierToken(Identifiers.TRANSLATIONS_FORMAT),
-        useValue: this._translationFormat
-      })]);
+      var providers = [];
+      if (this._localeId) {
+        providers.push(new CompileProviderMetadata({
+          token: resolveIdentifierToken(Identifiers.LOCALE_ID),
+          useValue: this._localeId
+        }));
+      }
+      if (this._translationFormat) {
+        providers.push(new CompileProviderMetadata({
+          token: resolveIdentifierToken(Identifiers.TRANSLATIONS_FORMAT),
+          useValue: this._translationFormat
+        }));
+      }
+      var appCompileResult = this._ngModuleCompiler.compile(ngModule, providers);
       appCompileResult.dependencies.forEach(function(dep) {
         dep.placeholder.name = _componentFactoryName(dep.comp);
         dep.placeholder.moduleUrl = _ngfactoryModuleUrl(dep.comp.moduleUrl);
@@ -20240,9 +20217,9 @@ var define = System.amdDefine;
       var stylesExpr = componentStyles ? variable(componentStyles.stylesVar) : literalArr([]);
       var viewResult = this._viewCompiler.compileComponent(compMeta, parsedTemplate, stylesExpr, pipes);
       if (componentStyles) {
-        ListWrapper.addAll(targetStatements, _resolveStyleStatements(componentStyles, fileSuffix));
+        targetStatements.push.apply(targetStatements, _resolveStyleStatements(componentStyles, fileSuffix));
       }
-      ListWrapper.addAll(targetStatements, _resolveViewStatements(viewResult));
+      targetStatements.push.apply(targetStatements, _resolveViewStatements(viewResult));
       return viewResult.viewFactoryVar;
     };
     OfflineCompiler.prototype._codgenStyles = function(stylesCompileResult, fileSuffix) {
@@ -20289,15 +20266,14 @@ var define = System.amdDefine;
     }
   }
   function _splitTypescriptSuffix(path) {
-    if (/\.d\.ts$/.test(path)) {
-      return [path.substring(0, path.length - 5), '.ts'];
+    if (path.endsWith('.d.ts')) {
+      return [path.slice(0, -5), '.ts'];
     }
     var lastDot = path.lastIndexOf('.');
     if (lastDot !== -1) {
       return [path.substring(0, lastDot), path.substring(lastDot)];
-    } else {
-      return [path, ''];
     }
+    return [path, ''];
   }
   var ResourceLoader = (function() {
     function ResourceLoader() {}
@@ -20543,21 +20519,21 @@ var define = System.amdDefine;
         styleUrls: visitor.styleUrls,
         moduleUrl: templateAbsUrl
       }));
-      var allStyles = templateMetadataStyles.styles.concat(templateStyles.styles);
-      var allStyleUrls = templateMetadataStyles.styleUrls.concat(templateStyles.styleUrls);
       var encapsulation = templateMeta.encapsulation;
       if (isBlank(encapsulation)) {
         encapsulation = this._config.defaultEncapsulation;
       }
-      if (encapsulation === _angular_core.ViewEncapsulation.Emulated && allStyles.length === 0 && allStyleUrls.length === 0) {
+      var styles = templateMetadataStyles.styles.concat(templateStyles.styles);
+      var styleUrls = templateMetadataStyles.styleUrls.concat(templateStyles.styleUrls);
+      if (encapsulation === _angular_core.ViewEncapsulation.Emulated && styles.length === 0 && styleUrls.length === 0) {
         encapsulation = _angular_core.ViewEncapsulation.None;
       }
       return new CompileTemplateMetadata({
         encapsulation: encapsulation,
         template: template,
         templateUrl: templateAbsUrl,
-        styles: allStyles,
-        styleUrls: allStyleUrls,
+        styles: styles,
+        styleUrls: styleUrls,
         externalStylesheets: templateMeta.externalStylesheets,
         ngContentSelectors: visitor.ngContentSelectors,
         animations: templateMeta.animations,
@@ -20929,7 +20905,7 @@ var define = System.amdDefine;
       var identifier = stringify(token);
       if (identifier.indexOf('(') >= 0) {
         var found = this._anonymousTypes.get(token);
-        if (isBlank(found)) {
+        if (!found) {
           this._anonymousTypes.set(token, this._anonymousTypeIndex++);
           found = this._anonymousTypes.get(token);
         }
@@ -20960,7 +20936,8 @@ var define = System.amdDefine;
       if (value instanceof _angular_core.AnimationStateDeclarationMetadata) {
         var styles = this.getAnimationStyleMetadata(value.styles);
         return new CompileAnimationStateDeclarationMetadata(value.stateNameExpr, styles);
-      } else if (value instanceof _angular_core.AnimationStateTransitionMetadata) {
+      }
+      if (value instanceof _angular_core.AnimationStateTransitionMetadata) {
         return new CompileAnimationStateTransitionMetadata(value.stateChangeExpr, this.getAnimationMetadata(value.steps));
       }
       return null;
@@ -20972,22 +20949,24 @@ var define = System.amdDefine;
       var _this = this;
       if (value instanceof _angular_core.AnimationStyleMetadata) {
         return this.getAnimationStyleMetadata(value);
-      } else if (value instanceof _angular_core.AnimationKeyframesSequenceMetadata) {
+      }
+      if (value instanceof _angular_core.AnimationKeyframesSequenceMetadata) {
         return new CompileAnimationKeyframesSequenceMetadata(value.steps.map(function(entry) {
           return _this.getAnimationStyleMetadata(entry);
         }));
-      } else if (value instanceof _angular_core.AnimationAnimateMetadata) {
+      }
+      if (value instanceof _angular_core.AnimationAnimateMetadata) {
         var animateData = this.getAnimationMetadata(value.styles);
         return new CompileAnimationAnimateMetadata(value.timings, animateData);
-      } else if (value instanceof _angular_core.AnimationWithStepsMetadata) {
+      }
+      if (value instanceof _angular_core.AnimationWithStepsMetadata) {
         var steps = value.steps.map(function(step) {
           return _this.getAnimationMetadata(step);
         });
         if (value instanceof _angular_core.AnimationGroupMetadata) {
           return new CompileAnimationGroupMetadata(steps);
-        } else {
-          return new CompileAnimationSequenceMetadata(steps);
         }
+        return new CompileAnimationSequenceMetadata(steps);
       }
       return null;
     };
@@ -20998,7 +20977,7 @@ var define = System.amdDefine;
       }
       directiveType = _angular_core.resolveForwardRef(directiveType);
       var meta = this._directiveCache.get(directiveType);
-      if (isBlank(meta)) {
+      if (!meta) {
         var dirMeta = this._directiveResolver.resolve(directiveType, throwIfNotFound);
         if (!dirMeta) {
           return null;
@@ -21010,30 +20989,28 @@ var define = System.amdDefine;
         var entryComponentMetadata = [];
         var selector = dirMeta.selector;
         if (dirMeta instanceof _angular_core.Component) {
-          var cmpMeta = dirMeta;
-          assertArrayOfStrings('styles', cmpMeta.styles);
-          assertInterpolationSymbols('interpolation', cmpMeta.interpolation);
-          var animations = isPresent(cmpMeta.animations) ? cmpMeta.animations.map(function(e) {
+          assertArrayOfStrings('styles', dirMeta.styles);
+          assertArrayOfStrings('styleUrls', dirMeta.styleUrls);
+          assertInterpolationSymbols('interpolation', dirMeta.interpolation);
+          var animations = dirMeta.animations ? dirMeta.animations.map(function(e) {
             return _this.getAnimationEntryMetadata(e);
           }) : null;
-          assertArrayOfStrings('styles', cmpMeta.styles);
-          assertArrayOfStrings('styleUrls', cmpMeta.styleUrls);
           templateMeta = new CompileTemplateMetadata({
-            encapsulation: cmpMeta.encapsulation,
-            template: cmpMeta.template,
-            templateUrl: cmpMeta.templateUrl,
-            styles: cmpMeta.styles,
-            styleUrls: cmpMeta.styleUrls,
+            encapsulation: dirMeta.encapsulation,
+            template: dirMeta.template,
+            templateUrl: dirMeta.templateUrl,
+            styles: dirMeta.styles,
+            styleUrls: dirMeta.styleUrls,
             animations: animations,
-            interpolation: cmpMeta.interpolation
+            interpolation: dirMeta.interpolation
           });
-          changeDetectionStrategy = cmpMeta.changeDetection;
-          if (isPresent(dirMeta.viewProviders)) {
+          changeDetectionStrategy = dirMeta.changeDetection;
+          if (dirMeta.viewProviders) {
             viewProviders = this.getProvidersMetadata(dirMeta.viewProviders, entryComponentMetadata, "viewProviders for \"" + stringify(directiveType) + "\"");
           }
-          moduleUrl = componentModuleUrl(this._reflector, directiveType, cmpMeta);
-          if (cmpMeta.entryComponents) {
-            entryComponentMetadata = flattenArray(cmpMeta.entryComponents).map(function(type) {
+          moduleUrl = componentModuleUrl(this._reflector, directiveType, dirMeta);
+          if (dirMeta.entryComponents) {
+            entryComponentMetadata = flattenArray(dirMeta.entryComponents).map(function(type) {
               return _this.getTypeMetadata(type, staticTypeModuleUrl(type));
             }).concat(entryComponentMetadata);
           }
@@ -21058,7 +21035,7 @@ var define = System.amdDefine;
         meta = CompileDirectiveMetadata.create({
           selector: selector,
           exportAs: dirMeta.exportAs,
-          isComponent: isPresent(templateMeta),
+          isComponent: !!templateMeta,
           type: this.getTypeMetadata(directiveType, moduleUrl),
           template: templateMeta,
           changeDetection: changeDetectionStrategy,
@@ -21217,15 +21194,17 @@ var define = System.amdDefine;
     CompileMetadataResolver.prototype._getTypeDescriptor = function(type) {
       if (this._directiveResolver.resolve(type, false) !== null) {
         return 'directive';
-      } else if (this._pipeResolver.resolve(type, false) !== null) {
-        return 'pipe';
-      } else if (this._ngModuleResolver.resolve(type, false) !== null) {
-        return 'module';
-      } else if (type.provide) {
-        return 'provider';
-      } else {
-        return 'value';
       }
+      if (this._pipeResolver.resolve(type, false) !== null) {
+        return 'pipe';
+      }
+      if (this._ngModuleResolver.resolve(type, false) !== null) {
+        return 'module';
+      }
+      if (type.provide) {
+        return 'provider';
+      }
+      return 'value';
     };
     CompileMetadataResolver.prototype._addTypeToModule = function(type, moduleType) {
       var oldModule = this._ngModuleOfTypes.get(type);
@@ -21310,7 +21289,7 @@ var define = System.amdDefine;
       }
       pipeType = _angular_core.resolveForwardRef(pipeType);
       var meta = this._pipeCache.get(pipeType);
-      if (isBlank(meta)) {
+      if (!meta) {
         var pipeMeta = this._pipeResolver.resolve(pipeType, throwIfNotFound);
         if (!pipeMeta) {
           return null;
@@ -21327,10 +21306,7 @@ var define = System.amdDefine;
     CompileMetadataResolver.prototype.getDependenciesMetadata = function(typeOrFunc, dependencies) {
       var _this = this;
       var hasUnknownDeps = false;
-      var params = isPresent(dependencies) ? dependencies : this._reflector.parameters(typeOrFunc);
-      if (isBlank(params)) {
-        params = [];
-      }
+      var params = dependencies || this._reflector.parameters(typeOrFunc) || [];
       var dependenciesMetadata = params.map(function(param) {
         var isAttribute = false;
         var isHost = false;
@@ -21340,7 +21316,7 @@ var define = System.amdDefine;
         var query = null;
         var viewQuery = null;
         var token = null;
-        if (isArray(param)) {
+        if (Array.isArray(param)) {
           param.forEach(function(paramEntry) {
             if (paramEntry instanceof _angular_core.Host) {
               isHost = true;
@@ -21378,8 +21354,8 @@ var define = System.amdDefine;
           isSelf: isSelf,
           isSkipSelf: isSkipSelf,
           isOptional: isOptional,
-          query: isPresent(query) ? _this.getQueryMetadata(query, null, typeOrFunc) : null,
-          viewQuery: isPresent(viewQuery) ? _this.getQueryMetadata(viewQuery, null, typeOrFunc) : null,
+          query: query ? _this.getQueryMetadata(query, null, typeOrFunc) : null,
+          viewQuery: viewQuery ? _this.getQueryMetadata(viewQuery, null, typeOrFunc) : null,
           token: _this.getTokenMetadata(token)
         });
       });
@@ -21414,7 +21390,7 @@ var define = System.amdDefine;
           provider = new ProviderMeta(provider.provide, provider);
         }
         var compileProvider;
-        if (isArray(provider)) {
+        if (Array.isArray(provider)) {
           compileProvider = _this.getProvidersMetadata(provider, targetEntryComponents, debugInfo);
         } else if (provider instanceof ProviderMeta) {
           var tokenMeta = _this.getTokenMetadata(provider.token);
@@ -21467,10 +21443,10 @@ var define = System.amdDefine;
       var compileDeps;
       var compileTypeMetadata = null;
       var compileFactoryMetadata = null;
-      if (isPresent(provider.useClass)) {
+      if (provider.useClass) {
         compileTypeMetadata = this.getTypeMetadata(provider.useClass, staticTypeModuleUrl(provider.useClass), provider.dependencies);
         compileDeps = compileTypeMetadata.diDeps;
-      } else if (isPresent(provider.useFactory)) {
+      } else if (provider.useFactory) {
         compileFactoryMetadata = this.getFactoryMetadata(provider.useFactory, staticTypeModuleUrl(provider.useFactory), provider.dependencies);
         compileDeps = compileFactoryMetadata.diDeps;
       }
@@ -21479,7 +21455,7 @@ var define = System.amdDefine;
         useClass: compileTypeMetadata,
         useValue: convertToCompileValue(provider.useValue, []),
         useFactory: compileFactoryMetadata,
-        useExisting: isPresent(provider.useExisting) ? this.getTokenMetadata(provider.useExisting) : null,
+        useExisting: provider.useExisting ? this.getTokenMetadata(provider.useExisting) : null,
         deps: compileDeps,
         multi: provider.multi
       });
@@ -21487,7 +21463,8 @@ var define = System.amdDefine;
     CompileMetadataResolver.prototype.getQueriesMetadata = function(queries, isViewQuery, directiveType) {
       var _this = this;
       var res = [];
-      StringMapWrapper.forEach(queries, function(query, propertyName) {
+      Object.keys(queries).forEach(function(propertyName) {
+        var query = queries[propertyName];
         if (query.isViewQuery === isViewQuery) {
           res.push(_this.getQueryMetadata(query, propertyName, directiveType));
         }
@@ -21495,17 +21472,17 @@ var define = System.amdDefine;
       return res;
     };
     CompileMetadataResolver.prototype._queryVarBindings = function(selector) {
-      return StringWrapper.split(selector, /\s*,\s*/g);
+      return selector.split(/\s*,\s*/);
     };
     CompileMetadataResolver.prototype.getQueryMetadata = function(q, propertyName, typeOrFunc) {
       var _this = this;
       var selectors;
-      if (isString(q.selector)) {
+      if (typeof q.selector === 'string') {
         selectors = this._queryVarBindings(q.selector).map(function(varName) {
           return _this.getTokenMetadata(varName);
         });
       } else {
-        if (!isPresent(q.selector)) {
+        if (!q.selector) {
           throw new Error("Can't construct a query for the property \"" + propertyName + "\" of \"" + stringify(typeOrFunc) + "\" since the query selector wasn't defined.");
         }
         selectors = [this.getTokenMetadata(q.selector)];
@@ -21515,7 +21492,7 @@ var define = System.amdDefine;
         first: q.first,
         descendants: q.descendants,
         propertyName: propertyName,
-        read: isPresent(q.read) ? this.getTokenMetadata(q.read) : null
+        read: q.read ? this.getTokenMetadata(q.read) : null
       });
     };
     CompileMetadataResolver.decorators = [{type: _angular_core.Injectable}];
@@ -21546,7 +21523,7 @@ var define = System.amdDefine;
     if (tree) {
       for (var i = 0; i < tree.length; i++) {
         var item = _angular_core.resolveForwardRef(tree[i]);
-        if (isArray(item)) {
+        if (Array.isArray(item)) {
           flattenArray(item, out);
         } else {
           out.push(item);
@@ -21565,10 +21542,12 @@ var define = System.amdDefine;
     if (isStaticSymbol(type)) {
       return staticTypeModuleUrl(type);
     }
-    if (isPresent(cmpMetadata.moduleId)) {
-      var moduleId = cmpMetadata.moduleId;
+    var moduleId = cmpMetadata.moduleId;
+    if (typeof moduleId === 'string') {
       var scheme = getUrlScheme(moduleId);
-      return isPresent(scheme) && scheme.length > 0 ? moduleId : "package:" + moduleId + MODULE_SUFFIX;
+      return scheme ? moduleId : "package:" + moduleId + MODULE_SUFFIX;
+    } else if (moduleId !== null && moduleId !== void 0) {
+      throw new Error(("moduleId should be a string in \"" + stringify(type) + "\". See https://goo.gl/wIDDiL for more information.\n") + "If you're using Webpack you should inline the template and the styles, see https://goo.gl/X2J8zc.");
     }
     return reflector.importUri(type);
   }
@@ -23220,7 +23199,7 @@ var define = System.amdDefine;
         }
         return scopedP;
       };
-      var sep = /( |>|\+|~)\s*/g;
+      var sep = /( |>|\+|~(?!=))\s*/g;
       var scopeAfter = selector.indexOf(_polyfillHostNoCombinator);
       var scoped = '';
       var startIndex = 0;
@@ -24145,41 +24124,29 @@ var define = System.amdDefine;
   } else {
     globalScope = window;
   }
-  var global$1 = globalScope;
+  var _global = globalScope;
   function getTypeNameForDebugging(type) {
     if (type['name']) {
       return type['name'];
     }
     return typeof type;
   }
-  var Date = global$1.Date;
-  global$1.assert = function assert(condition) {};
+  var Date$1 = _global.Date;
+  _global.assert = function assert(condition) {};
   function isPresent(obj) {
     return obj !== undefined && obj !== null;
   }
   function isBlank(obj) {
     return obj === undefined || obj === null;
   }
-  function isNumber(obj) {
-    return typeof obj === 'number';
-  }
-  function isString(obj) {
-    return typeof obj === 'string';
-  }
-  function isFunction(obj) {
-    return typeof obj === 'function';
-  }
   function isStringMap(obj) {
     return typeof obj === 'object' && obj !== null;
-  }
-  function isPromise(obj) {
-    return isPresent(obj) && isFunction(obj.then);
   }
   function isArray(obj) {
     return Array.isArray(obj);
   }
   function isDate(obj) {
-    return obj instanceof Date && !isNaN(obj.valueOf());
+    return obj instanceof Date$1 && !isNaN(obj.valueOf());
   }
   function stringify(token) {
     if (typeof token === 'string') {
@@ -24198,83 +24165,6 @@ var define = System.amdDefine;
     var newLineIndex = res.indexOf('\n');
     return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
   }
-  var StringWrapper = (function() {
-    function StringWrapper() {}
-    StringWrapper.fromCharCode = function(code) {
-      return String.fromCharCode(code);
-    };
-    StringWrapper.charCodeAt = function(s, index) {
-      return s.charCodeAt(index);
-    };
-    StringWrapper.split = function(s, regExp) {
-      return s.split(regExp);
-    };
-    StringWrapper.equals = function(s, s2) {
-      return s === s2;
-    };
-    StringWrapper.stripLeft = function(s, charVal) {
-      if (s && s.length) {
-        var pos = 0;
-        for (var i = 0; i < s.length; i++) {
-          if (s[i] != charVal)
-            break;
-          pos++;
-        }
-        s = s.substring(pos);
-      }
-      return s;
-    };
-    StringWrapper.stripRight = function(s, charVal) {
-      if (s && s.length) {
-        var pos = s.length;
-        for (var i = s.length - 1; i >= 0; i--) {
-          if (s[i] != charVal)
-            break;
-          pos--;
-        }
-        s = s.substring(0, pos);
-      }
-      return s;
-    };
-    StringWrapper.replace = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.replaceAll = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.slice = function(s, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return s.slice(from, to === null ? undefined : to);
-    };
-    StringWrapper.replaceAllMapped = function(s, from, cb) {
-      return s.replace(from, function() {
-        var matches = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          matches[_i - 0] = arguments[_i];
-        }
-        matches.splice(-2, 2);
-        return cb(matches);
-      });
-    };
-    StringWrapper.contains = function(s, substr) {
-      return s.indexOf(substr) != -1;
-    };
-    StringWrapper.compare = function(a, b) {
-      if (a < b) {
-        return -1;
-      } else if (a > b) {
-        return 1;
-      } else {
-        return 0;
-      }
-    };
-    return StringWrapper;
-  }());
   var NumberWrapper = (function() {
     function NumberWrapper() {}
     NumberWrapper.toFixed = function(n, fractionDigits) {
@@ -24331,52 +24221,12 @@ var define = System.amdDefine;
   var Json = (function() {
     function Json() {}
     Json.parse = function(s) {
-      return global$1.JSON.parse(s);
+      return _global.JSON.parse(s);
     };
     Json.stringify = function(data) {
-      return global$1.JSON.stringify(data, null, 2);
+      return _global.JSON.stringify(data, null, 2);
     };
     return Json;
-  }());
-  var DateWrapper = (function() {
-    function DateWrapper() {}
-    DateWrapper.create = function(year, month, day, hour, minutes, seconds, milliseconds) {
-      if (month === void 0) {
-        month = 1;
-      }
-      if (day === void 0) {
-        day = 1;
-      }
-      if (hour === void 0) {
-        hour = 0;
-      }
-      if (minutes === void 0) {
-        minutes = 0;
-      }
-      if (seconds === void 0) {
-        seconds = 0;
-      }
-      if (milliseconds === void 0) {
-        milliseconds = 0;
-      }
-      return new Date(year, month - 1, day, hour, minutes, seconds, milliseconds);
-    };
-    DateWrapper.fromISOString = function(str) {
-      return new Date(str);
-    };
-    DateWrapper.fromMillis = function(ms) {
-      return new Date(ms);
-    };
-    DateWrapper.toMillis = function(date) {
-      return date.getTime();
-    };
-    DateWrapper.now = function() {
-      return new Date();
-    };
-    DateWrapper.toJson = function(date) {
-      return date.toJSON();
-    };
-    return DateWrapper;
   }());
   var _symbolIterator = null;
   function getSymbolIterator() {
@@ -25079,43 +24929,8 @@ var define = System.amdDefine;
         return Plural.Other;
     }
   }
-  var Map$1 = global$1.Map;
-  var Set$1 = global$1.Set;
-  var createMapFromPairs = (function() {
-    try {
-      if (new Map$1([[1, 2]]).size === 1) {
-        return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
-      for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        map.set(pair[0], pair[1]);
-      }
-      return map;
-    };
-  })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
   var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
+    if ((new Map()).keys().next) {
       return function _clearValues(m) {
         var keyIterator = m.keys();
         var k;
@@ -25133,14 +24948,14 @@ var define = System.amdDefine;
   })();
   var _arrayFromMap = (function() {
     try {
-      if ((new Map$1()).values().next) {
+      if ((new Map()).values().next) {
         return function createArrayFromMap(m, getValues) {
           return getValues ? Array.from(m.values()) : Array.from(m.keys());
         };
       }
     } catch (e) {}
     return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
+      var res = new Array(m.size),
           i = 0;
       m.forEach(function(v, k) {
         res[i] = getValues ? v : k;
@@ -25149,74 +24964,6 @@ var define = System.amdDefine;
       return res;
     };
   })();
-  var StringMapWrapper = (function() {
-    function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
-    StringMapWrapper.get = function(map, key) {
-      return map.hasOwnProperty(key) ? map[key] : undefined;
-    };
-    StringMapWrapper.set = function(map, key, value) {
-      map[key] = value;
-    };
-    StringMapWrapper.keys = function(map) {
-      return Object.keys(map);
-    };
-    StringMapWrapper.values = function(map) {
-      return Object.keys(map).map(function(k) {
-        return map[k];
-      });
-    };
-    StringMapWrapper.isEmpty = function(map) {
-      for (var prop in map) {
-        return false;
-      }
-      return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
-    };
-    StringMapWrapper.forEach = function(map, callback) {
-      for (var _i = 0,
-          _a = Object.keys(map); _i < _a.length; _i++) {
-        var k = _a[_i];
-        callback(map[k], k);
-      }
-    };
-    StringMapWrapper.merge = function(m1, m2) {
-      var m = {};
-      for (var _i = 0,
-          _a = Object.keys(m1); _i < _a.length; _i++) {
-        var k = _a[_i];
-        m[k] = m1[k];
-      }
-      for (var _b = 0,
-          _c = Object.keys(m2); _b < _c.length; _b++) {
-        var k = _c[_b];
-        m[k] = m2[k];
-      }
-      return m;
-    };
-    StringMapWrapper.equals = function(m1, m2) {
-      var k1 = Object.keys(m1);
-      var k2 = Object.keys(m2);
-      if (k1.length != k2.length) {
-        return false;
-      }
-      for (var i = 0; i < k1.length; i++) {
-        var key = k1[i];
-        if (m1[key] !== m2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    return StringMapWrapper;
-  }());
   var ListWrapper = (function() {
     function ListWrapper() {}
     ListWrapper.createFixedSize = function(size) {
@@ -25377,26 +25124,8 @@ var define = System.amdDefine;
   function isListLikeIterable(obj) {
     if (!isJsObject(obj))
       return false;
-    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
+    return isArray(obj) || (!(obj instanceof Map) && getSymbolIterator() in obj);
   }
-  var createSetFromList = (function() {
-    var test = new Set$1([1, 2, 3]);
-    if (test.size === 3) {
-      return function createSetFromList(lst) {
-        return new Set$1(lst);
-      };
-    } else {
-      return function createSetAndPopulateFromList(lst) {
-        var res = new Set$1(lst);
-        if (res.size !== lst.length) {
-          for (var i = 0; i < lst.length; i++) {
-            res.add(lst[i]);
-          }
-        }
-        return res;
-      };
-    }
-  })();
   var NgClass = (function() {
     function NgClass(_iterableDiffers, _keyValueDiffers, _ngEl, _renderer) {
       this._iterableDiffers = _iterableDiffers;
@@ -25932,7 +25661,7 @@ var define = System.amdDefine;
       enumerable: true,
       configurable: true
     });
-    NgTemplateOutlet.prototype.ngOnChanges = function() {
+    NgTemplateOutlet.prototype.ngOnChanges = function(changes) {
       if (this._viewRef) {
         this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._viewRef));
       }
@@ -25952,6 +25681,7 @@ var define = System.amdDefine;
     return NgTemplateOutlet;
   }());
   var COMMON_DIRECTIVES = [NgClass, NgFor, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase];
+  var isPromise = _angular_core.__core_private__.isPromise;
   var __extends$4 = (this && this.__extends) || function(d, b) {
     for (var p in b)
       if (b.hasOwnProperty(p))
@@ -26063,21 +25793,21 @@ var define = System.amdDefine;
   var _observableStrategy = new ObservableStrategy();
   var AsyncPipe = (function() {
     function AsyncPipe(_ref) {
+      this._ref = _ref;
       this._latestValue = null;
       this._latestReturnedValue = null;
       this._subscription = null;
       this._obj = null;
       this._strategy = null;
-      this._ref = _ref;
     }
     AsyncPipe.prototype.ngOnDestroy = function() {
-      if (isPresent(this._subscription)) {
+      if (this._subscription) {
         this._dispose();
       }
     };
     AsyncPipe.prototype.transform = function(obj) {
-      if (isBlank(this._obj)) {
-        if (isPresent(obj)) {
+      if (!this._obj) {
+        if (obj) {
           this._subscribe(obj);
         }
         this._latestReturnedValue = this._latestValue;
@@ -26089,10 +25819,9 @@ var define = System.amdDefine;
       }
       if (this._latestValue === this._latestReturnedValue) {
         return this._latestReturnedValue;
-      } else {
-        this._latestReturnedValue = this._latestValue;
-        return _angular_core.WrappedValue.wrap(this._latestValue);
       }
+      this._latestReturnedValue = this._latestValue;
+      return _angular_core.WrappedValue.wrap(this._latestValue);
     };
     AsyncPipe.prototype._subscribe = function(obj) {
       var _this = this;
@@ -26105,11 +25834,11 @@ var define = System.amdDefine;
     AsyncPipe.prototype._selectStrategy = function(obj) {
       if (isPromise(obj)) {
         return _promiseStrategy;
-      } else if (obj.subscribe) {
-        return _observableStrategy;
-      } else {
-        throw new InvalidPipeArgumentError(AsyncPipe, obj);
       }
+      if (obj.subscribe) {
+        return _observableStrategy;
+      }
+      throw new InvalidPipeArgumentError(AsyncPipe, obj);
     };
     AsyncPipe.prototype._dispose = function() {
       this._strategy.dispose(this._subscription);
@@ -26325,23 +26054,12 @@ var define = System.amdDefine;
         throw new InvalidPipeArgumentError(DatePipe, value);
       }
       if (NumberWrapper.isNumeric(value)) {
-        value = DateWrapper.fromMillis(parseFloat(value));
-      } else if (isString(value)) {
-        value = DateWrapper.fromISOString(value);
+        value = parseFloat(value);
       }
-      if (StringMapWrapper.contains(DatePipe._ALIASES, pattern)) {
-        pattern = StringMapWrapper.get(DatePipe._ALIASES, pattern);
-      }
-      return DateFormatter.format(value, this._locale, pattern);
+      return DateFormatter.format(new Date(value), this._locale, DatePipe._ALIASES[pattern] || pattern);
     };
     DatePipe.prototype.supports = function(obj) {
-      if (isDate(obj) || NumberWrapper.isNumeric(obj)) {
-        return true;
-      }
-      if (isString(obj) && isDate(DateWrapper.fromISOString(obj))) {
-        return true;
-      }
-      return false;
+      return isDate(obj) || NumberWrapper.isNumeric(obj) || (typeof obj === 'string' && isDate(new Date(obj)));
     };
     DatePipe._ALIASES = {
       'medium': 'yMMMdjms',
@@ -26381,7 +26099,7 @@ var define = System.amdDefine;
         throw new InvalidPipeArgumentError(I18nPluralPipe, pluralMap);
       }
       var key = getPluralCategory(value, Object.keys(pluralMap), this._localization);
-      return StringWrapper.replaceAll(pluralMap[key], _INTERPOLATION_REGEXP, value.toString());
+      return pluralMap[key].replace(_INTERPOLATION_REGEXP, value.toString());
     };
     I18nPluralPipe.decorators = [{
       type: _angular_core.Pipe,
@@ -26433,7 +26151,7 @@ var define = System.amdDefine;
     LowerCasePipe.prototype.transform = function(value) {
       if (isBlank(value))
         return value;
-      if (!isString(value)) {
+      if (typeof value !== 'string') {
         throw new InvalidPipeArgumentError(LowerCasePipe, value);
       }
       return value.toLowerCase();
@@ -26445,7 +26163,7 @@ var define = System.amdDefine;
     LowerCasePipe.ctorParameters = [];
     return LowerCasePipe;
   }());
-  var _NUMBER_FORMAT_REGEXP = /^(\d+)?\.((\d+)(\-(\d+))?)?$/;
+  var _NUMBER_FORMAT_REGEXP = /^(\d+)?\.((\d+)(-(\d+))?)?$/;
   function formatNumber(pipe, locale, value, style, digits, currency, currencyAsSymbol) {
     if (currency === void 0) {
       currency = null;
@@ -26455,8 +26173,8 @@ var define = System.amdDefine;
     }
     if (isBlank(value))
       return null;
-    value = isString(value) && NumberWrapper.isNumeric(value) ? +value : value;
-    if (!isNumber(value)) {
+    value = typeof value === 'string' && NumberWrapper.isNumeric(value) ? +value : value;
+    if (typeof value !== 'number') {
       throw new InvalidPipeArgumentError(pipe, value);
     }
     var minInt;
@@ -26467,7 +26185,7 @@ var define = System.amdDefine;
       minFraction = 0;
       maxFraction = 3;
     }
-    if (isPresent(digits)) {
+    if (digits) {
       var parts = digits.match(_NUMBER_FORMAT_REGEXP);
       if (parts === null) {
         throw new Error(digits + " is not a valid digit info for number pipes");
@@ -26568,21 +26286,15 @@ var define = System.amdDefine;
   var SlicePipe = (function() {
     function SlicePipe() {}
     SlicePipe.prototype.transform = function(value, start, end) {
-      if (end === void 0) {
-        end = null;
-      }
       if (isBlank(value))
         return value;
       if (!this.supports(value)) {
         throw new InvalidPipeArgumentError(SlicePipe, value);
       }
-      if (isString(value)) {
-        return StringWrapper.slice(value, start, end);
-      }
-      return ListWrapper.slice(value, start, end);
+      return value.slice(start, end);
     };
     SlicePipe.prototype.supports = function(obj) {
-      return isString(obj) || isArray(obj);
+      return typeof obj === 'string' || Array.isArray(obj);
     };
     SlicePipe.decorators = [{
       type: _angular_core.Pipe,
@@ -26599,7 +26311,7 @@ var define = System.amdDefine;
     UpperCasePipe.prototype.transform = function(value) {
       if (isBlank(value))
         return value;
-      if (!isString(value)) {
+      if (typeof value !== 'string') {
         throw new InvalidPipeArgumentError(UpperCasePipe, value);
       }
       return value.toUpperCase();
@@ -27732,9 +27444,6 @@ var define = System.amdDefine;
   function isFunction(obj) {
     return typeof obj === 'function';
   }
-  function isPromise(obj) {
-    return isPresent(obj) && isFunction(obj.then);
-  }
   function isArray(obj) {
     return Array.isArray(obj);
   }
@@ -28145,7 +27854,7 @@ var define = System.amdDefine;
   var ContentChild = makePropDecorator('ContentChild', [['selector', undefined], {
     first: true,
     isViewQuery: false,
-    descendants: false,
+    descendants: true,
     read: undefined
   }], Query);
   var ViewChildren = makePropDecorator('ViewChildren', [['selector', undefined], {
@@ -28401,18 +28110,16 @@ var define = System.amdDefine;
     Injector.NULL = new _NullInjector();
     return Injector;
   }());
-  var Map$1 = global$1.Map;
-  var Set = global$1.Set;
   var createMapFromPairs = (function() {
     try {
-      if (new Map$1([[1, 2]]).size === 1) {
+      if (new Map([[1, 2]]).size === 1) {
         return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
+          return new Map(pairs);
         };
       }
     } catch (e) {}
     return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
+      var map = new Map();
       for (var i = 0; i < pairs.length; i++) {
         var pair = pairs[i];
         map.set(pair[0], pair[1]);
@@ -28420,24 +28127,8 @@ var define = System.amdDefine;
       return map;
     };
   })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
   var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
+    if ((new Map()).keys().next) {
       return function _clearValues(m) {
         var keyIterator = m.keys();
         var k;
@@ -28455,14 +28146,14 @@ var define = System.amdDefine;
   })();
   var _arrayFromMap = (function() {
     try {
-      if ((new Map$1()).values().next) {
+      if ((new Map()).values().next) {
         return function createArrayFromMap(m, getValues) {
           return getValues ? Array.from(m.values()) : Array.from(m.keys());
         };
       }
     } catch (e) {}
     return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
+      var res = new Array(m.size),
           i = 0;
       m.forEach(function(v, k) {
         res[i] = getValues ? v : k;
@@ -28473,11 +28164,8 @@ var define = System.amdDefine;
   })();
   var MapWrapper = (function() {
     function MapWrapper() {}
-    MapWrapper.clone = function(m) {
-      return createMapFromMap(m);
-    };
     MapWrapper.createFromStringMap = function(stringMap) {
-      var result = new Map$1();
+      var result = new Map();
       for (var prop in stringMap) {
         result.set(prop, stringMap[prop]);
       }
@@ -28493,9 +28181,6 @@ var define = System.amdDefine;
     MapWrapper.createFromPairs = function(pairs) {
       return createMapFromPairs(pairs);
     };
-    MapWrapper.clearValues = function(m) {
-      _clearValues(m);
-    };
     MapWrapper.iterable = function(m) {
       return m;
     };
@@ -28509,12 +28194,6 @@ var define = System.amdDefine;
   }());
   var StringMapWrapper = (function() {
     function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
     StringMapWrapper.get = function(map, key) {
       return map.hasOwnProperty(key) ? map[key] : undefined;
     };
@@ -28534,9 +28213,6 @@ var define = System.amdDefine;
         return false;
       }
       return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
     };
     StringMapWrapper.forEach = function(map, callback) {
       for (var _i = 0,
@@ -28735,7 +28411,7 @@ var define = System.amdDefine;
   function isListLikeIterable(obj) {
     if (!isJsObject(obj))
       return false;
-    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
+    return isArray(obj) || (!(obj instanceof Map) && getSymbolIterator() in obj);
   }
   function areIterablesEqual(a, b, comparator) {
     var iterator1 = a[getSymbolIterator()]();
@@ -29148,12 +28824,12 @@ var define = System.amdDefine;
     __extends$2(Reflector, _super);
     function Reflector(reflectionCapabilities) {
       _super.call(this);
-      this._injectableInfo = new Map$1();
-      this._getters = new Map$1();
-      this._setters = new Map$1();
-      this._methods = new Map$1();
-      this._usedKeys = null;
       this.reflectionCapabilities = reflectionCapabilities;
+      this._injectableInfo = new Map();
+      this._getters = new Map();
+      this._setters = new Map();
+      this._methods = new Map();
+      this._usedKeys = null;
     }
     Reflector.prototype.updateCapabilities = function(caps) {
       this.reflectionCapabilities = caps;
@@ -29555,7 +29231,7 @@ var define = System.amdDefine;
     function ReflectiveProtoInjectorDynamicStrategy(protoInj, providers) {
       this.providers = providers;
       var len = providers.length;
-      this.keyIds = ListWrapper.createFixedSize(len);
+      this.keyIds = new Array(len);
       for (var i = 0; i < len; i++) {
         this.keyIds[i] = providers[i].key.id;
       }
@@ -29702,7 +29378,7 @@ var define = System.amdDefine;
     function ReflectiveInjectorDynamicStrategy(protoStrategy, injector) {
       this.protoStrategy = protoStrategy;
       this.injector = injector;
-      this.objs = ListWrapper.createFixedSize(protoStrategy.providers.length);
+      this.objs = new Array(protoStrategy.providers.length);
       ListWrapper.fill(this.objs, UNDEFINED);
     }
     ReflectiveInjectorDynamicStrategy.prototype.resetConstructionCounter = function() {
@@ -29830,7 +29506,7 @@ var define = System.amdDefine;
     };
     ReflectiveInjector_.prototype._instantiateProvider = function(provider) {
       if (provider.multiProvider) {
-        var res = ListWrapper.createFixedSize(provider.resolvedFactories.length);
+        var res = new Array(provider.resolvedFactories.length);
         for (var i = 0; i < provider.resolvedFactories.length; ++i) {
           res[i] = this._instantiate(provider, provider.resolvedFactories[i]);
         }
@@ -30090,6 +29766,9 @@ var define = System.amdDefine;
     };
     return ErrorHandler;
   }());
+  function isPromise(obj) {
+    return !!obj && typeof obj.then === 'function';
+  }
   var APP_INITIALIZER = new OpaqueToken('Application Initializer');
   var ApplicationInitStatus = (function() {
     function ApplicationInitStatus(appInits) {
@@ -31611,7 +31290,7 @@ var define = System.amdDefine;
       res = EMPTY_ARR;
     } else if (projectableNodes.length < expectedSlotCount) {
       var givenSlotCount = projectableNodes.length;
-      res = ListWrapper.createFixedSize(expectedSlotCount);
+      res = new Array(expectedSlotCount);
       for (var i = 0; i < expectedSlotCount; i++) {
         res[i] = (i < givenSlotCount) ? projectableNodes[i] : EMPTY_ARR;
       }
@@ -32436,7 +32115,7 @@ var define = System.amdDefine;
   }());
   var TestabilityRegistry = (function() {
     function TestabilityRegistry() {
-      this._applications = new Map$1();
+      this._applications = new Map();
       _testabilityGetter.addToWindow(this);
     }
     TestabilityRegistry.prototype.registerApplication = function(token, testability) {
@@ -32496,12 +32175,12 @@ var define = System.amdDefine;
     return _devMode;
   }
   function createPlatform(injector) {
-    if (isPresent(_platform) && !_platform.destroyed) {
+    if (_platform && !_platform.destroyed) {
       throw new Error('There can be only one platform. Destroy the previous one to create a new one.');
     }
     _platform = injector.get(PlatformRef);
     var inits = injector.get(PLATFORM_INITIALIZER, null);
-    if (isPresent(inits))
+    if (inits)
       inits.forEach(function(init) {
         return init();
       });
@@ -32534,21 +32213,21 @@ var define = System.amdDefine;
   }
   function assertPlatform(requiredToken) {
     var platform = getPlatform();
-    if (isBlank(platform)) {
+    if (!platform) {
       throw new Error('No platform exists!');
     }
-    if (isPresent(platform) && isBlank(platform.injector.get(requiredToken, null))) {
+    if (!platform.injector.get(requiredToken, null)) {
       throw new Error('A platform with a different configuration has been created. Please destroy it first.');
     }
     return platform;
   }
   function destroyPlatform() {
-    if (isPresent(_platform) && !_platform.destroyed) {
+    if (_platform && !_platform.destroyed) {
       _platform.destroy();
     }
   }
   function getPlatform() {
-    return isPresent(_platform) && !_platform.destroyed ? _platform : null;
+    return _platform && !_platform.destroyed ? _platform : null;
   }
   var PlatformRef = (function() {
     function PlatformRef() {}
@@ -32586,9 +32265,8 @@ var define = System.amdDefine;
           errorHandler.handleError(e);
           throw e;
         });
-      } else {
-        return result;
       }
+      return result;
     } catch (e) {
       errorHandler.handleError(e);
       throw e;
@@ -32624,11 +32302,11 @@ var define = System.amdDefine;
       if (this._destroyed) {
         throw new Error('The platform has already been destroyed!');
       }
-      ListWrapper.clone(this._modules).forEach(function(app) {
-        return app.destroy();
+      this._modules.slice().forEach(function(module) {
+        return module.destroy();
       });
-      this._destroyListeners.forEach(function(dispose) {
-        return dispose();
+      this._destroyListeners.forEach(function(listener) {
+        return listener();
       });
       this._destroyed = true;
     };
@@ -32676,7 +32354,7 @@ var define = System.amdDefine;
         compilerOptions = [];
       }
       var compilerFactory = this.injector.get(CompilerFactory);
-      var compiler = compilerFactory.createCompiler(compilerOptions instanceof Array ? compilerOptions : [compilerOptions]);
+      var compiler = compilerFactory.createCompiler(Array.isArray(compilerOptions) ? compilerOptions : [compilerOptions]);
       if (componentFactoryCallback) {
         return compiler.compileModuleAndAllComponentsAsync(moduleType).then(function(_a) {
           var ngModuleFactory = _a.ngModuleFactory,
@@ -32774,7 +32452,7 @@ var define = System.amdDefine;
         _this._unloadComponent(compRef);
       });
       var testability = compRef.injector.get(Testability, null);
-      if (isPresent(testability)) {
+      if (testability) {
         compRef.injector.get(TestabilityRegistry).registerApplication(compRef.location.nativeElement, testability);
       }
       this._loadComponent(compRef);
@@ -32793,7 +32471,7 @@ var define = System.amdDefine;
       });
     };
     ApplicationRef_.prototype._unloadComponent = function(componentRef) {
-      if (!ListWrapper.contains(this._rootComponents, componentRef)) {
+      if (this._rootComponents.indexOf(componentRef) == -1) {
         return;
       }
       this.unregisterChangeDetector(componentRef.changeDetectorRef);
@@ -32803,7 +32481,7 @@ var define = System.amdDefine;
       if (this._runningTick) {
         throw new Error('ApplicationRef.tick is called recursively');
       }
-      var s = ApplicationRef_._tickScope();
+      var scope = ApplicationRef_._tickScope();
       try {
         this._runningTick = true;
         this._changeDetectorRefs.forEach(function(detector) {
@@ -32816,12 +32494,12 @@ var define = System.amdDefine;
         }
       } finally {
         this._runningTick = false;
-        wtfLeave(s);
+        wtfLeave(scope);
       }
     };
     ApplicationRef_.prototype.ngOnDestroy = function() {
-      ListWrapper.clone(this._rootComponents).forEach(function(ref) {
-        return ref.destroy();
+      this._rootComponents.slice().forEach(function(component) {
+        return component.destroy();
       });
     };
     Object.defineProperty(ApplicationRef_.prototype, "componentTypes", {
@@ -34315,7 +33993,7 @@ var define = System.amdDefine;
   }());
   var ViewAnimationMap = (function() {
     function ViewAnimationMap() {
-      this._map = new Map$1();
+      this._map = new Map();
       this._allPlayers = [];
     }
     Object.defineProperty(ViewAnimationMap.prototype, "length", {
@@ -34353,11 +34031,11 @@ var define = System.amdDefine;
     };
     ViewAnimationMap.prototype.remove = function(element, animationName) {
       var playersByAnimation = this._map.get(element);
-      if (isPresent(playersByAnimation)) {
+      if (playersByAnimation) {
         var player = playersByAnimation[animationName];
         delete playersByAnimation[animationName];
         var index = this._allPlayers.indexOf(player);
-        ListWrapper.removeAt(this._allPlayers, index);
+        this._allPlayers.splice(index, 1);
         if (StringMapWrapper.isEmpty(playersByAnimation)) {
           this._map.delete(element);
         }
@@ -34868,7 +34546,8 @@ var define = System.amdDefine;
     DEFAULT_STATE: DEFAULT_STATE,
     EMPTY_STATE: EMPTY_STATE,
     FILL_STYLE_FLAG: FILL_STYLE_FLAG,
-    ComponentStillLoadingError: ComponentStillLoadingError
+    ComponentStillLoadingError: ComponentStillLoadingError,
+    isPromise: isPromise
   };
   exports.createPlatform = createPlatform;
   exports.assertPlatform = assertPlatform;
@@ -35262,43 +34941,8 @@ var define = System.amdDefine;
     }
     obj[parts.shift()] = value;
   }
-  var Map$1 = global$1.Map;
-  var Set$1 = global$1.Set;
-  var createMapFromPairs = (function() {
-    try {
-      if (new Map$1([[1, 2]]).size === 1) {
-        return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
-      for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        map.set(pair[0], pair[1]);
-      }
-      return map;
-    };
-  })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
   var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
+    if ((new Map()).keys().next) {
       return function _clearValues(m) {
         var keyIterator = m.keys();
         var k;
@@ -35316,14 +34960,14 @@ var define = System.amdDefine;
   })();
   var _arrayFromMap = (function() {
     try {
-      if ((new Map$1()).values().next) {
+      if ((new Map()).values().next) {
         return function createArrayFromMap(m, getValues) {
           return getValues ? Array.from(m.values()) : Array.from(m.keys());
         };
       }
     } catch (e) {}
     return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
+      var res = new Array(m.size),
           i = 0;
       m.forEach(function(v, k) {
         res[i] = getValues ? v : k;
@@ -35334,12 +34978,6 @@ var define = System.amdDefine;
   })();
   var StringMapWrapper = (function() {
     function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
     StringMapWrapper.get = function(map, key) {
       return map.hasOwnProperty(key) ? map[key] : undefined;
     };
@@ -35359,9 +34997,6 @@ var define = System.amdDefine;
         return false;
       }
       return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
     };
     StringMapWrapper.forEach = function(map, callback) {
       for (var _i = 0,
@@ -35557,24 +35192,6 @@ var define = System.amdDefine;
     }
     return target;
   }
-  var createSetFromList = (function() {
-    var test = new Set$1([1, 2, 3]);
-    if (test.size === 3) {
-      return function createSetFromList(lst) {
-        return new Set$1(lst);
-      };
-    } else {
-      return function createSetAndPopulateFromList(lst) {
-        var res = new Set$1(lst);
-        if (res.size !== lst.length) {
-          for (var i = 0; i < lst.length; i++) {
-            res.add(lst[i]);
-          }
-        }
-        return res;
-      };
-    }
-  })();
   var CAMEL_CASE_REGEXP = /([A-Z])/g;
   var DASH_CASE_REGEXP = /-([a-z])/g;
   function camelCaseToDashCase(input) {
@@ -36070,7 +35687,7 @@ var define = System.amdDefine;
     };
     BrowserDomAdapter.prototype.childNodesAsList = function(el) {
       var childNodes = el.childNodes;
-      var res = ListWrapper.createFixedSize(childNodes.length);
+      var res = new Array(childNodes.length);
       for (var i = 0; i < childNodes.length; i++) {
         res[i] = childNodes[i];
       }
@@ -37112,8 +36729,7 @@ var define = System.amdDefine;
       _super.call(this);
     }
     HammerGesturesPluginCommon.prototype.supports = function(eventName) {
-      eventName = eventName.toLowerCase();
-      return StringMapWrapper.contains(_eventNames, eventName);
+      return _eventNames.hasOwnProperty(eventName.toLowerCase());
     };
     return HammerGesturesPluginCommon;
   }(EventManagerPlugin));
@@ -37246,7 +36862,7 @@ var define = System.amdDefine;
       if (parts.length != 0 || key.length === 0) {
         return null;
       }
-      var result = StringMapWrapper.create();
+      var result = {};
       StringMapWrapper.set(result, 'domEventName', domEventName);
       StringMapWrapper.set(result, 'fullKey', fullKey);
       return result;
