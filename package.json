@@ -55,7 +55,7 @@
     "stylelint": "^7.5.0",
     "ts-node": "~2.0.0",
     "tslint-config-holy-grail": "^5.0.0",
-    "typescript": "~2.0.0"
+    "typescript": "~2.2.1"
   },
   "homepage": "https://github.com/chrisguttandin/web-audio-conference-2016",
   "license": "MIT",
