@@ -8,12 +8,11 @@
       "updateMode": "prefetch",
       "urls": [
         "/web-audio-conference-2016/index.html",
-        "/web-audio-conference-2016/scripts/0.6b72141a3a4acd5e09a8.chunk.js",
-        "/web-audio-conference-2016/scripts/main.7495363f1e7ecd7d9500.bundle.js",
-        "/web-audio-conference-2016/scripts/polyfills.dfc764c06ff290165fad.bundle.js",
+        "/web-audio-conference-2016/scripts/0.14e49c2cd4369c3278f3.chunk.js",
+        "/web-audio-conference-2016/scripts/main.dd0d31b0254b0be6fce2.bundle.js",
+        "/web-audio-conference-2016/scripts/polyfills.fdc2ecdb8b7b1699327e.bundle.js",
         "/web-audio-conference-2016/scripts/scripts.400c5d3d7995a38066bc.bundle.js",
-        "/web-audio-conference-2016/styles/styles.ae1ead0bc21810fe3d4e.bundle.css",
-        "/web-audio-conference-2016/scripts/vendor.427094ab5539dc5cd128.bundle.js"
+        "/web-audio-conference-2016/styles/styles.ae1ead0bc21810fe3d4e.bundle.css"
       ],
       "patterns": []
     },
@@ -27,12 +26,11 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/web-audio-conference-2016/scripts/0.6b72141a3a4acd5e09a8.chunk.js": "6893f331d740129c60b76720ab9ee86bf7521095",
-    "/web-audio-conference-2016/scripts/main.7495363f1e7ecd7d9500.bundle.js": "b32a0a105cb53d1fcc84aee81aada67b8e659b76",
-    "/web-audio-conference-2016/scripts/polyfills.dfc764c06ff290165fad.bundle.js": "41f5eab463d1e447f708bff40a889e46b04477bf",
-    "/web-audio-conference-2016/scripts/scripts.400c5d3d7995a38066bc.bundle.js": "87ab6f7f9217514d100f19f6471f40732bdffb26",
+    "/web-audio-conference-2016/scripts/0.14e49c2cd4369c3278f3.chunk.js": "ed1fbd641981de4d088ed0cdeefeb30c8a5b58f7",
+    "/web-audio-conference-2016/scripts/main.dd0d31b0254b0be6fce2.bundle.js": "a7c9c39e0c4aa6996bf1d51385b0f77b24df5abe",
+    "/web-audio-conference-2016/scripts/polyfills.fdc2ecdb8b7b1699327e.bundle.js": "04a78ca0c94480743703c07cac6243d89d8b4cbb",
+    "/web-audio-conference-2016/scripts/scripts.400c5d3d7995a38066bc.bundle.js": "b8fe8c74db626da8865127e3be22bc8e9619260e",
     "/web-audio-conference-2016/styles/styles.ae1ead0bc21810fe3d4e.bundle.css": "0262a37ae8b3c1e4e18a25052384a7347cd5dd69",
-    "/web-audio-conference-2016/scripts/vendor.427094ab5539dc5cd128.bundle.js": "b58c8282dabc25ea8899ace4982df8f214cc2595",
-    "/web-audio-conference-2016/index.html": "59811fadd0f21852861e927d8d66dd08a9486968"
+    "/web-audio-conference-2016/index.html": "02824851a8a84ab45f07164377cd6b46bd1ed988"
   }
 }
