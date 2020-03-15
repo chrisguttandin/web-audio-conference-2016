@@ -1,18 +1,18 @@
 {
   "configVersion": 1,
-  "timestamp": 1583524183216,
-  "index": "/web-audio-conference-2016/start.html",
+  "timestamp": 1584269127260,
+  "index": "/web-audio-conference-2016/index.html",
   "assetGroups": [
     {
       "name": "app",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/web-audio-conference-2016/scripts/4.17b6e0ba19dd176d7fa3.js",
-        "/web-audio-conference-2016/scripts/main.c5ba8d1b0b9ee59a23c0.js",
+        "/web-audio-conference-2016/scripts/4.c5b5162d56f377ac676d.js",
+        "/web-audio-conference-2016/index.html",
+        "/web-audio-conference-2016/scripts/main.9df050f40516aae372bb.js",
         "/web-audio-conference-2016/scripts/polyfills.c0594e7aada16583f4ce.js",
         "/web-audio-conference-2016/scripts/scripts.2e1ce7e02614f3c7a0cf.js",
-        "/web-audio-conference-2016/start.html",
         "/web-audio-conference-2016/styles/styles.40fc3f32723b9bcb15bb.css"
       ],
       "patterns": []
@@ -37,11 +37,11 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/web-audio-conference-2016/scripts/4.17b6e0ba19dd176d7fa3.js": "139958221d6b516aae88f8a0406baab443126707",
-    "/web-audio-conference-2016/scripts/main.c5ba8d1b0b9ee59a23c0.js": "fe4d7bfff7724192ac3472f3f062145b4823b55e",
+    "/web-audio-conference-2016/scripts/4.c5b5162d56f377ac676d.js": "67961e9f6c1aee35284c54e488c8ab436fde79ef",
+    "/web-audio-conference-2016/index.html": "e96fd5e80b4e521a6b508ba4148f5cf5915744a6",
+    "/web-audio-conference-2016/scripts/main.9df050f40516aae372bb.js": "3dc4927caabbdda88e3d14f8ce6ee12bb1624e7d",
     "/web-audio-conference-2016/scripts/polyfills.c0594e7aada16583f4ce.js": "fb929778c5522826f6d47a18de7fb1edbdcff3d0",
     "/web-audio-conference-2016/scripts/scripts.2e1ce7e02614f3c7a0cf.js": "41f2ca5aad759554b8f58a7e8fd6766555d9644e",
-    "/web-audio-conference-2016/start.html": "d802eadff9bb216422933329743290b128fce30f",
     "/web-audio-conference-2016/styles/styles.40fc3f32723b9bcb15bb.css": "64df7bf9aab65654f157bc8a2f2827b311d19614"
   },
   "navigationUrls": [
