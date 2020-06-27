@@ -1,17 +1,20 @@
 {
   "configVersion": 1,
-  "timestamp": 1593183327390,
+  "timestamp": 1593291615814,
   "index": "/web-audio-conference-2016/index.html",
   "assetGroups": [
     {
       "name": "app",
       "installMode": "prefetch",
       "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
       "urls": [
-        "/web-audio-conference-2016/scripts/4.3f75d04512d47a8d8ad4.js",
+        "/web-audio-conference-2016/scripts/4.bcbb93cbdf159d5ee893.js",
         "/web-audio-conference-2016/index.html",
-        "/web-audio-conference-2016/scripts/main.32d56d71e8536e7b7277.js",
-        "/web-audio-conference-2016/scripts/polyfills.75a877e5f3cccabb544e.js",
+        "/web-audio-conference-2016/scripts/main.f5d0523deb27cdf90df0.js",
+        "/web-audio-conference-2016/scripts/polyfills.36bfdfbff157f3dc0dac.js",
         "/web-audio-conference-2016/scripts/scripts.1dade9dd63b52cc23955.js",
         "/web-audio-conference-2016/styles/styles.e9f77054198500a07f6b.css"
       ],
@@ -21,6 +24,9 @@
       "name": "assets",
       "installMode": "lazy",
       "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
       "urls": [],
       "patterns": []
     },
@@ -28,6 +34,9 @@
       "name": "fonts",
       "installMode": "lazy",
       "updateMode": "lazy",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
       "urls": [],
       "patterns": [
         "https:\\/\\/fonts\\.googleapis\\.com\\/css",
@@ -37,10 +46,10 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/web-audio-conference-2016/scripts/4.3f75d04512d47a8d8ad4.js": "7bd871a66dca39331df5bbfa5f90c3b3e883fb13",
-    "/web-audio-conference-2016/index.html": "780a56ff868c3be5ca083c30d44522fb9cc7f0a8",
-    "/web-audio-conference-2016/scripts/main.32d56d71e8536e7b7277.js": "ea7b423962d16cbc69aec4817228f9e6354dc2c0",
-    "/web-audio-conference-2016/scripts/polyfills.75a877e5f3cccabb544e.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
+    "/web-audio-conference-2016/scripts/4.bcbb93cbdf159d5ee893.js": "cf38c6ff05a3402412ed91aeb7d9283c448cc7db",
+    "/web-audio-conference-2016/index.html": "1095d8a38498f333bd9ea61cc6a863c8ab8b8410",
+    "/web-audio-conference-2016/scripts/main.f5d0523deb27cdf90df0.js": "97bb5bbf158a20ef4f8e3a8b771030e9e934a86f",
+    "/web-audio-conference-2016/scripts/polyfills.36bfdfbff157f3dc0dac.js": "b47435a9ef2a4829f2f9dfd35599bde3614981b1",
     "/web-audio-conference-2016/scripts/scripts.1dade9dd63b52cc23955.js": "ab1bef7f2bced76497d70482eb1cdd535a942d48",
     "/web-audio-conference-2016/styles/styles.e9f77054198500a07f6b.css": "84fafc25ab4bc3098d59305baeb8e1cfef94e318"
   },
