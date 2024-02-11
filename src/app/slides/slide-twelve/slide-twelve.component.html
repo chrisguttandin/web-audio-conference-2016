@@ -3,10 +3,10 @@
 var buffer = new Float32Array(analyser.fftSize);
 var scriptProcessor = offlineAudioContext.createScriptProcessor();
 
-scriptProcessor.onaudioprocess = () =&gt; {{ '{' }}
+scriptProcessor.onaudioprocess = () =&gt; &lbrace;
     analyser.getFloatFrequencyData(buffer);
     // CAUTION: buffer will contain random data
-&#125;;
+&rbrace;;
 anyNodeThatOutputsSound
     .connect(analyser)
     .connect(scriptProcessor)
