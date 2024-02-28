@@ -3,7 +3,7 @@ module.exports = {
         files: [
             {
                 cwd: 'src/',
-                dest: 'build/web-audio-conference-2016/',
+                dest: 'build/web-audio-conference-2016/browser',
                 expand: true,
                 src: ['404.html']
             }
